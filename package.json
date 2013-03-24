@@ -6,8 +6,8 @@
     "irc": "*",
     "jquery": "*"
   },
-  "description": "ERROR: No README.md file found!",
-  "main": "app.js",
+  "description": "A simple IRC bot written in node",
+  "main": "start.js",
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git://github.com/iernie/node-bot.git"
   },
-  "license": "BSD",
+  "license": "MIT",
   "readmeFilename": "README.md",
   "gitHead": "257d0636fd2bfa75b3d67afc9defc2e0cdf669b1",
   "keywords": [
