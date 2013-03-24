@@ -1,0 +1,17 @@
+{
+  "name": "node-bot",
+  "version": "0.0.1",
+  "author": "ernie",
+  "dependencies": {
+    "irc": "*",
+    "jquery": "*"
+  },
+  "description": "ERROR: No README.md file found!",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "license": "BSD"
+}
