@@ -5,5 +5,4 @@ var config = require('./config.js');
 startStopDaemon(function() {
 	var Bot = App.Bot;
 	Bot = new Bot(config.config);
-	Bot.run();
 });
