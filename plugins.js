@@ -1,4 +1,4 @@
-var plugins = ["title", "8ball"];
+var plugins = ["title", "8ball", "german"];
 
 exports.init = function(client) {
 	for (var i = plugins.length - 1; i >= 0; i--) {
