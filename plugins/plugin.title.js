@@ -33,7 +33,7 @@ exports.init = function(client) {
                         var matches = getTitle(body);
                         if (matches != null) {
                             var title = matches[1];
-                            client.say(to, ">> " + end.decode(title));
+                            client.say(to, ">> " + ent.decode(title));
                         };
                         
                     }
