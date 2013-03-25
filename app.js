@@ -1,7 +1,9 @@
 var startStopDaemon = require('start-stop-daemon');
 var Bot = require('./bot.js');
-var config = require('./config.js');
+var Config = require('./config.js');
 
 startStopDaemon(function() {
-	Bot.init(config.config);
+	for (var i = Config.servers.length - 1; i >= 0; i--) {
+		Bot.init(Config.servers[i]);
+	};
 });

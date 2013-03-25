@@ -24,7 +24,7 @@ exports.init = function(client) {
 				    url = 'http://' + url;
 				}
 				request(url, function(error, response, body) {
-					if(!error && response.statusCode == 200) {
+					if(!error && response.statusCode == 200 && response.headers['content-type'].split(";")[0] == "text/html") {
 						var matches = body.match(/<title>(.*?)<\/title>/);
 		        		var title = matches[1];
 		        		client.say(to, ">> " + title);
