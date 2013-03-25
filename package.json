@@ -5,6 +5,7 @@
   "dependencies": {
     "irc": "*",
     "request": "*",
+    "ent": "*",
     "start-stop-daemon": "*"
   },
   "description": "A simple IRC bot written in node",

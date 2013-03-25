@@ -1,4 +1,5 @@
 var request = require('request');
+var ent = require('ent');
 
 function isURL(str) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -32,7 +33,7 @@ exports.init = function(client) {
                         var matches = getTitle(body);
                         if (matches != null) {
                             var title = matches[1];
-                            client.say(to, ">> " + title);
+                            client.say(to, ">> " + end.decode(title));
                         };
                         
                     }
