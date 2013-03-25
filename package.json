@@ -4,7 +4,8 @@
   "author": "ernie",
   "dependencies": {
     "irc": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "start-stop-daemon": "*"
   },
   "description": "A simple IRC bot written in node",
   "main": "start.js",
