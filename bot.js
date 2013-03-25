@@ -13,18 +13,24 @@ var Bot = function(config) {
 	});
 
 	client.addListener('message', function(nick, to, text, message) {
-		if (isURL(text)) {
-			$.ajax({
-	      		url: text,
-	      		async: true,
-	      		complete: function(data) {
-	      			if (data.responseText != undefined) {
-	      				var matches = data.responseText.match(/<title>(.*?)<\/title>/);
-	        			var title = matches[1];
-	        			client.say(to, ">> " + title);
-	      			};
-	      		}
-			});
+		var texts = text.split(" ");
+		for (var i = texts.length - 1; i >= 0; i--) {
+			if(isURL(texts[i])) {
+				var url = texts[i];
+				if (!url.match(/^[a-zA-Z]+:\/\//)) {
+				    url = 'http://' + url;
+				}
+				$.ajax({
+		      		url: url,
+		      		complete: function(data) {
+		      			if (data.responseText != undefined) {
+		      				var matches = data.responseText.match(/<title>(.*?)<\/title>/);
+		        			var title = matches[1];
+		        			client.say(to, ">> " + title);
+		      			};
+		      		}
+				});
+			}
 		};
 	});
 

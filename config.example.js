@@ -1,3 +1,5 @@
+var config = {};
+
 config.irc = {
 	server: 'irc.quakenet.org',
 	port: 6667,
@@ -8,3 +10,5 @@ config.bot = {
 	nick: 'b0t',
 	name: 'b0tname'
 }
+
+exports.config = config;
