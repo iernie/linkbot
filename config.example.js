@@ -7,7 +7,8 @@ var quakenet = {
 	bot: {
 		nick: 'b0t',
 		name: 'b0tname'
-	}
+	},
+	plugins: ["title"]
 };
 
 var freenode = {
@@ -19,7 +20,8 @@ var freenode = {
 	bot: {
 		nick: 'b0t',
 		name: 'b0tname'
-	}
+	},
+	plugins: ["title"]
 };
 
 exports.servers = [quakenet, freenode];
