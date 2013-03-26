@@ -10,7 +10,14 @@ exports.init = function(config) {
         channels: config.irc.channels
     });
 
-    Plugins.init(client);
+    client.addListener('message', function(from, to, message){
+        if (to.match(/^[#&]/)) {
+            var plugins = config.plugins;
+            for (var i = plugins.length - 1; i >= 0; i--) {
+                Plugins.init(plugins[i], client, from, to, message);
+            }
+        }
+    });
 
     client.addListener('error', function(message) {
         console.log('error: ', message);

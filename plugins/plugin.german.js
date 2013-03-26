@@ -1,7 +1,5 @@
-exports.init = function(client) {
-	client.addListener('message', function(nick, to, text, message) {
-		if (text.substring(0,20) == "!magischemiesmuschel") {
-			client.say(to, nick + ": Frag doch später nochmal!");
-		}
-	});
+exports.init = function(client, from, to, message) {
+	if (message.match(/!magischemiesmuschel/)) {
+		client.say(to, from + ": Frag doch später nochmal!");
+	}
 };
