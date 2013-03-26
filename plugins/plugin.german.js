@@ -4,4 +4,4 @@ exports.init = function(client) {
 			client.say(to, nick + ": Frag doch später nochmal!");
 		}
 	});
-}
+};
