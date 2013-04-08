@@ -10,7 +10,7 @@ function filterAndCleanInput(str) {
 }
 
 exports.init = function(client, from, to, message) {
-    if (message.match(/!8ball/)) {
+    if (message.match(/^!8ball/)) {
         var matches = filterAndCleanInput(message);
         if (matches !== null && matches.length > 1) {
             var random = Math.floor(Math.random() * matches.length);
