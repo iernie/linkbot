@@ -6,7 +6,9 @@
     "irc": "*",
     "request": "*",
     "ent": "*",
-    "start-stop-daemon": "*"
+    "start-stop-daemon": "*",
+    "moment": "*",
+    "mongojs": "*"
   },
   "description": "A simple IRC bot written in node",
   "main": "start.js",
