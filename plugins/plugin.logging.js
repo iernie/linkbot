@@ -7,7 +7,7 @@ exports.init = function(client, from, to, message) {
         'log': {
         	'date': moment().format("YYYY/MM/DD HH:mm:ss"),
             'nick': from,
-            'message': message
+            'message': encodeURIComponent(message)
         }
     });
 };
