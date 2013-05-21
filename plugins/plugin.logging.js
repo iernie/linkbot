@@ -3,12 +3,15 @@ var moment = require("moment");
 var ent = require('ent');
 
 exports.init = function(client, from, to, message) {
+	console.log(message);
+	message = message.toString('utf8');
+	console.log(message);
     db.logs.save({
         'channel': to,
         'log': {
         	'date': moment().format("YYYY/MM/DD HH:mm:ss"),
             'nick': from,
-            'message': ent.encode(message.toString("utf8"))
+            'message': ent.encode(message)
         }
     });
 };
