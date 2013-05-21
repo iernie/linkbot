@@ -3,9 +3,7 @@ var moment = require("moment");
 var ent = require('ent');
 
 exports.init = function(client, from, to, message) {
-	console.log(message);
-	message = message.toString('utf8');
-	console.log(message);
+	message = new Buffer(message).toString('utf8');
     db.logs.save({
         'channel': to,
         'log': {
