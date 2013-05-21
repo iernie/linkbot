@@ -8,7 +8,7 @@ exports.init = function(client, from, to, message) {
         'log': {
         	'date': moment().format("YYYY/MM/DD HH:mm:ss"),
             'nick': from,
-            'message': ent.encode(message)
+            'message': ent.encode(message.toString("utf8"))
         }
     });
 };
