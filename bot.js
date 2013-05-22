@@ -11,6 +11,7 @@ exports.init = function(config) {
     });
 
     client.addListener('message', function(from, to, message){
+        message = new Buffer(message).toString('utf8');
         if (to.match(/^[#&]/)) {
             var plugins = config.plugins;
             for (var i = plugins.length - 1; i >= 0; i--) {
