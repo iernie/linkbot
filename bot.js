@@ -1,5 +1,4 @@
 var Irc = require('irc');
-var Plugins = require('./plugins.js');
 
 exports.init = function(config) {
     var client = new Irc.Client(config.irc.server, config.bot.nick, {
@@ -11,11 +10,11 @@ exports.init = function(config) {
     });
 
     client.addListener('message', function(from, to, message){
-        message = new Buffer(message).toString('utf8');
         if (to.match(/^[#&]/)) {
             var plugins = config.plugins;
             for (var i = plugins.length - 1; i >= 0; i--) {
-                Plugins.init(plugins[i], client, from, to, message);
+                var plugin = require('./plugins/plugin.' + plugins[i] + ".js");
+                plugin.init(client, from, to, message);
             }
         }
     });

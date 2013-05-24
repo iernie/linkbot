@@ -6,7 +6,7 @@
     "irc": "*",
     "request": "*",
     "ent": "*",
-    "start-stop-daemon": "*",
+    "forever": "*",
     "moment": "*",
     "mongojs": "*"
   },
