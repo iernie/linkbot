@@ -8,7 +8,9 @@ var quakenet = {
 		nick: 'b0t',
 		name: 'b0tname'
 	},
-	plugins: ["title"]
+	plugins: {
+		"title": {}
+	}
 };
 
 var freenode = {
@@ -21,7 +23,10 @@ var freenode = {
 		nick: 'b0t',
 		name: 'b0tname'
 	},
-	plugins: ["title"]
+	plugins: {
+		"title": {},
+		"logging": {dbName: "dbname", collections: ["col"]}
+	}
 };
 
 exports.servers = [quakenet, freenode];

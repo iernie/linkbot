@@ -12,9 +12,9 @@ exports.init = function(config) {
     client.addListener('message', function(from, to, message){
         if (to.match(/^[#&]/)) {
             var plugins = config.plugins;
-            for (var i = plugins.length - 1; i >= 0; i--) {
-                var plugin = require('./plugins/plugin.' + plugins[i] + ".js");
-                plugin.init(client, from, to, message);
+            for (plugin in plugins) {
+                var p = require('./plugins/plugin.' + plugin + ".js");
+                p.init(client, from, to, message, plugins[plugin]);
             }
         }
     });
