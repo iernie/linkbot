@@ -1,6 +1,6 @@
 exports.servers = {
 
-	'quakenet' = {
+	'quakenet': {
 		irc: {
 			server: 'irc.quakenet.org',
 			port: 6667,
@@ -14,8 +14,8 @@ exports.servers = {
 			"title": {}
 		}
 	},
-	
-	'freenode' = {
+
+	'freenode': {
 		irc: {
 			server: 'irc.freenode.net',
 			port: 6667,
