@@ -1,6 +1,15 @@
 var Bot = require('./bot.js');
 var Config = require('./config.js');
 
-for (var i = Config.servers.length - 1; i >= 0; i--) {
-	Bot.init(Config.servers[i]);
+if (undefined == process.argv[2]) {
+	console.log("Pleas specify a server!");
+	process.exit(1);
+} else {
+	for (server in Config.servers) {
+		if (server == process.argv[2]) {
+			console.log("this is it!");
+			Bot.init(Config.servers[server]);
+		}	
+	}
 }
+
