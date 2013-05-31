@@ -1,11 +1,8 @@
-var mongojs = require('mongojs');
 var moment = require("moment");
 var ent = require('ent');
 
-exports.init = function(client, from, to, message, config) {
-	var db = mongojs(config.dbName, config.collections);
-
-    db[config.collections[0]].save({
+exports.init = function(client, from, to, message, db, kwargs) {
+	db.collection(kwargs.collection).save({
         'channel': to,
     	'date': moment().format("YYYY/MM/DD HH:mm:ss"),
         'nick': from,

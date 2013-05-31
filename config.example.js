@@ -10,6 +10,7 @@ exports.servers = {
 			nick: 'b0t',
 			name: 'b0tname'
 		},
+		database: 'databasename',
 		plugins: {
 			"title": {}
 		}
@@ -25,9 +26,10 @@ exports.servers = {
 			nick: 'b0t',
 			name: 'b0tname'
 		},
+		database: 'databasename',
 		plugins: {
 			"title": {},
-			"logging": {dbName: "dbname", collections: ["col"]}
+			"logging": {collection: "col"}
 		}
 	}
 };

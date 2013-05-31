@@ -7,7 +7,6 @@ if (undefined == process.argv[2]) {
 } else {
 	for (server in Config.servers) {
 		if (server == process.argv[2]) {
-			console.log("this is it!");
 			Bot.init(Config.servers[server]);
 		}	
 	}
