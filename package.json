@@ -14,6 +14,7 @@
   "main": "start.js",
   "devDependencies": {},
   "scripts": {
+    "start": "node app.js quakenet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
