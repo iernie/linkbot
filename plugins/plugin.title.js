@@ -29,13 +29,15 @@ function getTitle(str) {
 exports.init = function(client, from, to, message) {
     var split_message = message.split(" ");
     var parseBody = function(error, response, body) {
-        if(!error && response.statusCode == 200 && response.headers['content-type'].split(";")[0] == "text/html") {
-            var matches = getTitle(body);
-            if (matches !== null) {
-                var title = matches[1];
-                client.say(to, ">> " + ent.decode(title));
+        if(!error && response.statusCode === 200) {
+            var contentType = response.headers['content-type'];
+            if(contentType === undefined || contentType.split(";")[0] === "text/html") {
+                var matches = getTitle(body);
+                if (matches !== null) {
+                    var title = matches[1];
+                    client.say(to, ">> " + ent.decode(title));
+                }
             }
-            
         }
     };
     

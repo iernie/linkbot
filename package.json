@@ -3,19 +3,15 @@
   "version": "0.0.1",
   "author": "ernie",
   "dependencies": {
-    "irc": "*",
-    "request": "*",
-    "ent": "*",
-    "forever": "*",
-    "moment": "*",
-    "mongojs": "*"
+    "ent": "^2.2.0",
+    "irc": "^0.3.9",
+    "request": "^2.51.0"
   },
   "description": "A simple IRC bot written in node",
   "main": "start.js",
   "devDependencies": {},
   "scripts": {
-    "start": "node app.js quakenet",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "forever start -o out.log -e err.log app.js quakenet"
   },
   "repository": {
     "type": "git",
