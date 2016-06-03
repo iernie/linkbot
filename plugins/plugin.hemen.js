@@ -15,7 +15,7 @@ exports.init = function(client, from, to, message) {
         if(matches !== null) {
             var query = matches.splice(1);
             if(query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '') {
-                request("http://hemmis.444.no/hemensier/search?q="+query[1].trim().split(" ")[0], parseBody);
+                request("http://hemmis.444.no/hemensier/search?q="+query[1].trim(), parseBody);
             } else {
                 request("http://hemmis.444.no/hemensier/", parseBody);
             }
