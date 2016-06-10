@@ -1,31 +1,35 @@
 {
-  "name": "node-bot",
-  "version": "0.0.1",
-  "author": "ernie",
+  "name": "linkbot",
+  "version": "1.0.0",
+  "description": "A simble IRC bot written in node",
+  "main": "start.js",
   "dependencies": {
     "ent": "^2.2.0",
-    "irc": "^0.3.9",
-    "request": "^2.51.0"
+    "forever": "^0.15.2",
+    "irc": "^0.5.0",
+    "node-geocoder": "^3.11.0",
+    "request": "^2.72.0",
+    "yr.no-forecast": "0.0.7"
   },
-  "description": "A simple IRC bot written in node",
-  "main": "start.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.12.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "eslint-plugin-jsx-a11y": "^1.4.1",
+    "eslint-plugin-react": "^5.1.1"
+  },
   "scripts": {
-    "start": "forever start -o out.log -e err.log app.js quakenet"
+    "start": "forever start -o out.log -e err.log start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/iernie/node-bot.git"
+    "url": "git+https://github.com/iernie/linkbot.git"
   },
+  "author": "iernie",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "257d0636fd2bfa75b3d67afc9defc2e0cdf669b1",
-  "keywords": [
-    "irc",
-    "bot"
-  ],
-  "subdomain": "linkbot",
-  "engines": {
-    "node": "0.10.x"
-  }
+  "bugs": {
+    "url": "https://github.com/iernie/linkbot/issues"
+  },
+  "homepage": "https://github.com/iernie/linkbot#readme"
 }

@@ -1,20 +1,22 @@
 function filterAndCleanInput(str) {
-    var matches = str.match(/^(\S+)\s(.*)/);
-    if (matches !== null) {
-        var q = matches.splice(1);
-        if(q !== null && q.length > 0 && q[1] !== null && q[1].trim() !== '') {
-            return q[1].split(":").filter(function(val) { return val !== ''; });
-        }
+  const matches = str.match(/^(\S+)\s(.*)/);
+  if (matches !== null) {
+    const q = matches.splice(1);
+    if (q !== null && q.length > 0 && q[1] !== null && q[1].trim() !== '') {
+      return q[1].split(':').filter((val) => val !== '');
     }
-    return null;
+  }
+  return null;
 }
 
-exports.init = function(client, from, to, message) {
+module.exports = (client) => {
+  client.addListener('message', (from, to, message) => {
     if (message.match(/^!8ball/)) {
-        var matches = filterAndCleanInput(message);
-        if (matches !== null && matches.length > 1) {
-            var random = Math.floor(Math.random() * matches.length);
-            client.say(to, from + ", svaret på spørsmålet ditt er: " + matches[random]);
-        }
+      const matches = filterAndCleanInput(message);
+      if (matches !== null && matches.length > 1) {
+        const random = Math.floor(Math.random() * matches.length);
+        client.say(to, `${from}, svaret på spørsmålet ditt er: ${matches[random]}`);
+      }
     }
+  });
 };

@@ -1,35 +1,14 @@
-exports.servers = {
-
-	'quakenet': {
-		irc: {
-			server: 'irc.quakenet.org',
-			port: 6667,
-			channels: ['#channel']
-		},
-		bot: {
-			nick: 'b0t',
-			name: 'b0tname'
-		},
-		database: 'databasename',
-		plugins: {
-			"title": {}
-		}
-	},
-
-	'freenode': {
-		irc: {
-			server: 'irc.freenode.net',
-			port: 6667,
-			channels: ['#channel']
-		},
-		bot: {
-			nick: 'b0t',
-			name: 'b0tname'
-		},
-		database: 'databasename',
-		plugins: {
-			"title": {},
-			"logging": {collection: "col"}
-		}
-	}
+module.exports = {
+  server: 'irc.quakenet.org',
+  nick: 'b0t',
+  options: {
+    autoConnect: true,
+    autoRejoin: true,
+    secure: false,
+    port: 6667,
+    channels: ['#channel']
+  },
+  plugins: [
+    { name: 'pluginName', options: { } }
+  ]
 };
