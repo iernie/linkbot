@@ -20,7 +20,8 @@
     "eslint-plugin-react": "^5.1.1"
   },
   "scripts": {
-    "start": "forever start -o out.log -e err.log start.js"
+    "start": "forever start -o out.log -e err.log start.js",
+    "stop": "forever stop 0"
   },
   "repository": {
     "type": "git",
