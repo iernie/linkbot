@@ -12,6 +12,7 @@ module.exports = (client) => {
             to: query[1].trim(),
             message: query[2].trim()
           });
+          client.say(to, `${from}, notert!`);
         }
       }
     }
@@ -19,7 +20,7 @@ module.exports = (client) => {
 
   client.addListener('join', (from, to) => {
     reminders.forEach((reminder, index, array) => {
-      if (reminder.to === to) {
+      if (reminder.to.toLowerCase() === to.toLowerCase()) {
         client.say(from, `${reminder.from}: ${reminder.message}`);
         array.splice(index, 1);
       }
