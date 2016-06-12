@@ -21,7 +21,7 @@ module.exports = (client) => {
   client.addListener('join', (from, to) => {
     reminders.forEach((reminder, index, array) => {
       if (reminder.to.toLowerCase() === to.toLowerCase()) {
-        client.say(from, `${reminder.from}: ${reminder.message}`);
+        client.say(from, `${reminder.to}: ${reminder.message} (${reminder.from})`);
         array.splice(index, 1);
       }
     });
