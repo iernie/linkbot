@@ -1,5 +1,13 @@
+const jsonfile = require('jsonfile');
+const file = './reminders.json';
+
 module.exports = (client) => {
-  const reminders = [];
+  let reminders = [];
+  jsonfile.readFile(file, (err, obj) => {
+    if (!err) {
+      reminders = obj;
+    }
+  });
 
   client.addListener('message', (from, to, message) => {
     if (message.match(/^!tell/)) {
@@ -9,9 +17,11 @@ module.exports = (client) => {
         if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '' && query[2] !== null && query[2].trim() !== '') {
           reminders.push({
             from,
+            channel: to,
             to: query[1].trim(),
             message: query[2].trim()
           });
+          jsonfile.writeFileSync(file, reminders);
           client.say(to, `${from}, notert!`);
         }
       }
@@ -19,11 +29,13 @@ module.exports = (client) => {
   });
 
   client.addListener('join', (from, to) => {
-    reminders.forEach((reminder, index, array) => {
-      if (reminder.to.toLowerCase() === to.toLowerCase()) {
+    reminders = reminders.filter((reminder) => {
+      if (reminder.to.toLowerCase() === to.toLowerCase() && reminder.channel === from) {
         client.say(from, `${reminder.to}: ${reminder.message} (${reminder.from})`);
-        array.splice(index, 1);
+        return false;
       }
+      return true;
     });
+    jsonfile.writeFileSync(file, reminders);
   });
 };
