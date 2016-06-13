@@ -16,7 +16,7 @@ function parseBody(client, to) {
 
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!giphy/)) {
+    if (message.match(/^!giphy /)) {
       const matches = message.match(/^(\S+)\s(.*)/);
       if (matches !== null) {
         const query = matches.splice(1);

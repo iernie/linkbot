@@ -33,7 +33,7 @@ module.exports = (client, plugin) => {
   const geocoder = nodeGeocoder(plugin.options);
 
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!temp/)) {
+    if (message.match(/^!temp /)) {
       const matches = message.match(/^(\S+)\s(.*)/);
       if (matches !== null) {
         const query = matches.splice(1);

@@ -10,7 +10,7 @@ module.exports = (client) => {
   });
 
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!tell/)) {
+    if (message.match(/^!tell /)) {
       const matches = message.match(/^(\S+)\s(\S+)\s(.*)/);
       if (matches !== null) {
         const query = matches.splice(1);

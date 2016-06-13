@@ -11,7 +11,7 @@ function filterAndCleanInput(str) {
 
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!8ball/)) {
+    if (message.match(/^!8ball /)) {
       const matches = filterAndCleanInput(message);
       if (matches !== null && matches.length > 1) {
         const random = Math.floor(Math.random() * matches.length);
