@@ -1,7 +1,8 @@
+const _ = require('lodash');
 const jsonfile = require('jsonfile');
 const file = './reminders.json';
 
-module.exports = (client, plugin, config) => {
+module.exports = (client) => {
   let reminders = [];
   jsonfile.readFile(file, (err, obj) => {
     if (!err) {
@@ -15,8 +16,14 @@ module.exports = (client, plugin, config) => {
       if (matches !== null) {
         const query = matches.splice(1);
         if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '' && query[2] !== null && query[2].trim() !== '') {
-          if (query[1].trim().toLowerCase() === config.nick.toLowerCase()) {
-            client.say(to, 'Tulling, jeg er jo her!');
+          const user = query[1].trim().toLowerCase();
+          const users = _.map(_.keys(client.chans[to].users), (u) => { return u.toLowerCase(); });
+          if (_.find(users, user)) {
+            if (user === client.nick.toLowerCase()) {
+              client.say(to, 'Tulling, jeg er jo her!');
+            } else {
+              client.say(to, `Tulling, ${query[1].trim()} er jo her!`);
+            }
             return;
           }
 
