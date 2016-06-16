@@ -17,8 +17,8 @@ module.exports = (client) => {
         const query = matches.splice(1);
         if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '' && query[2] !== null && query[2].trim() !== '') {
           const user = query[1].trim().toLowerCase();
-          const users = _.map(_.keys(client.chans[to].users), (u) => { return u.toLowerCase(); });
-          if (_.find(users, user)) {
+          const users = _.map(_.keys(client.chans[to].users), u => u.toLowerCase());
+          if (!_.isEmpty(_.filter(users, u => u === user))) {
             if (user === client.nick.toLowerCase()) {
               client.say(to, 'Tulling, jeg er jo her!');
             } else {
