@@ -4,7 +4,7 @@ const config = require('./config');
 const client = new irc.Client(config.server, config.nick, config.options);
 
 config.plugins.forEach((plugin) => {
-  require(`./plugins/plugin.${plugin.name}`)(client, plugin);
+  require(`./plugins/plugin.${plugin.name}`)(client, plugin, config);
 });
 
 client.addListener('error', (message) => {
