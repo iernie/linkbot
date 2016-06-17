@@ -1,6 +1,6 @@
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^(natta|god natt|godnatt|god natta)(!|linkbot|,| |alle|sammen)*$/i)) {
+    if (message.match(new RegExp(`^(natta|god|natt|,| )+(!|${client.nick}|alle|sammen|,| )*`, 'ig'))) {
       client.say(to, `natta ${from}!`);
     }
   });
