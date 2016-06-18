@@ -43,7 +43,7 @@ module.exports = (client) => {
   client.addListener('join', (from, to) => {
     reminders = reminders.filter((reminder) => {
       if (to.match(new RegExp(`${reminder.to}`, 'ig')) && reminder.channel === from) {
-        client.say(from, `${to}: ${reminder.message} (${reminder.from})`);
+        client.say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
         return false;
       }
       return true;
