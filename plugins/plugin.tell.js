@@ -2,7 +2,6 @@ const jsonfile = require('jsonfile');
 const file = './reminders.json';
 
 module.exports = (client) => {
-  let shouldSave = false;
   let reminders = [];
   jsonfile.readFile(file, (err, obj) => {
     if (!err) {
@@ -11,6 +10,7 @@ module.exports = (client) => {
   });
 
   function checkMessages(channel, to) {
+    let shouldSave = false;
     reminders = reminders.filter((reminder) => {
       if (to.match(new RegExp(`${reminder.to}`, 'ig')) && reminder.channel === channel) {
         client.say(channel, `${to}: ${reminder.message} (mvh ${reminder.from})`);
@@ -20,7 +20,6 @@ module.exports = (client) => {
       return true;
     });
     if (shouldSave) {
-      shouldSave = false;
       jsonfile.writeFileSync(file, reminders);
     }
   }

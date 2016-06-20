@@ -16,14 +16,9 @@ function parseBody(client, to) {
 
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!giphy /)) {
-      const matches = message.match(/^(\S+)\s(.*)/);
-      if (matches !== null) {
-        const query = matches.splice(1);
-        if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '') {
-          request(`http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=${query[1].trim().replace(/ /g, '+')}`, parseBody(client, to));
-        }
-      }
+    const matches = message.match(/^!giphy (\S.*)/i);
+    if (matches !== null) {
+      request(`http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=${matches[1].trim().replace(/ /g, '+')}`, parseBody(client, to));
     }
   });
 };

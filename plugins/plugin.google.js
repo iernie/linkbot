@@ -16,14 +16,9 @@ function parseBodyFunction(client, to) {
 
 module.exports = (client, plugin) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!g /)) {
-      const matches = message.match(/^(\S+)\s(.*)/);
-      if (matches !== null) {
-        const query = matches.splice(1);
-        if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '') {
-          request(`https://www.googleapis.com/customsearch/v1?key=${plugin.options.key}&cx=${plugin.options.cx}&q=${query[1].trim()}`, parseBodyFunction(client, to));
-        }
-      }
+    const matches = message.match(/^!g (\S.*)/);
+    if (matches !== null) {
+      request(`https://www.googleapis.com/customsearch/v1?key=${plugin.options.key}&cx=${plugin.options.cx}&q=${matches[1].trim()}`, parseBodyFunction(client, to));
     }
   });
 };
