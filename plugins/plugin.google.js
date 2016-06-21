@@ -16,7 +16,7 @@ function parseBodyFunction(client, to) {
 
 module.exports = (client, plugin) => {
   client.addListener('message', (from, to, message) => {
-    const matches = message.match(/^!g (\S.*)/);
+    const matches = message.match(/^!g (\S.*)/i);
     if (matches !== null) {
       request(`https://www.googleapis.com/customsearch/v1?key=${plugin.options.key}&cx=${plugin.options.cx}&q=${matches[1].trim()}`, parseBodyFunction(client, to));
     }

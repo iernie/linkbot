@@ -14,14 +14,11 @@ function parseBodyFunction(client, to) {
 
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
-    if (message.match(/^!hemen/)) {
-      let queryParam = '';
-      const matches = message.match(/^(\S+)\s(.*)/);
-      if (matches !== null) {
-        const query = matches.splice(1);
-        if (query !== null && query.length > 0 && query[1] !== null && query[1].trim() !== '') {
-          queryParam = `search?q=${query[1].trim()}`;
-        }
+    let queryParam = '';
+    const matches = message.match(/^(!hemen)( \S.*)?/i);
+    if (matches !== null) {
+      if (matches[2] !== undefined) {
+        queryParam = `search?q=${matches[2].trim()}`;
       }
       request(`http://hemmis.444.no/hemensier/${queryParam}`, parseBodyFunction(client, to));
     }
