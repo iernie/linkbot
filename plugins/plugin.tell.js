@@ -60,6 +60,7 @@ module.exports = (client) => {
   });
 
   client.addListener('join', (from, to) => {
+    usertimes.set(to.toLowerCase(), moment());
     checkMessages(from, to);
   });
 };
