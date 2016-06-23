@@ -6,7 +6,10 @@ function parseBodyFunction(client, to) {
     if (!error && response.statusCode === 200) {
       const contentType = response.headers['content-type'];
       if (contentType.split(';')[0] === 'application/json') {
-        client.say(to, ent.decode(body).replace(/  /g, ' '));
+        const json = JSON.parse(body);
+        if (json.type === "success") {
+          client.say(to, ent.decode(json.value.joke).replace(/  /g, ' '));
+        }
       }
     }
   };
