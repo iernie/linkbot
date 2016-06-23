@@ -2,6 +2,7 @@ const irc = require('irc');
 const config = require('./config');
 
 const client = new irc.Client(config.server, config.nick, config.options);
+client.setMaxListeners(config.plugins.length);
 
 config.plugins.forEach((plugin) => {
   require(`./plugins/plugin.${plugin.name}`)(client, plugin);

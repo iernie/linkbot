@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(/^!channel (\S.*)/i);
