@@ -1,25 +1,12 @@
+const _ = require('lodash');
 const request = require('request');
 const ent = require('ent');
 
-function isURL(str) {
-  const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-  '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-  return pattern.test(str);
-}
-
-function appendProtocolIfMissing(str) {
-  if (!str.match(/^[a-zA-Z]+:\/\//)) {
-    return `http://${str}`;
+function appendProtocolIfMissing(url) {
+  if (!url.match(/^[a-zA-Z]+:\/\//)) {
+    return `http://${url}`;
   }
-  return str;
-}
-
-function getTitle(str) {
-  return str.match(/<title>\s*(.*?)\s*<\/title>/im);
+  return url;
 }
 
 function parseBody(client, to) {
@@ -27,10 +14,9 @@ function parseBody(client, to) {
     if (!error && response.statusCode === 200) {
       const contentType = response.headers['content-type'];
       if (contentType !== undefined && contentType.split(';')[0] === 'text/html') {
-        const matches = getTitle(body);
+        const matches = body.match(/<title>\s*(.*?)\s*<\/title>/im)
         if (matches !== null) {
-          const title = matches[1];
-          client.say(to, `>> ${ent.decode(title)}`);
+          client.say(to, `>> ${ent.decode(matches[1])}`);
         }
       }
     }
@@ -38,13 +24,20 @@ function parseBody(client, to) {
 }
 
 module.exports = (client) => {
+  const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?', 'ig'); // fragment locator
+
   client.addListener('message', (from, to, message) => {
-    const splitMessages = message.split(' ');
-    splitMessages.forEach(splitMessage => {
-      if (isURL(splitMessage)) {
-        const url = appendProtocolIfMissing(splitMessage);
+    const matches = message.match(pattern);
+    if (matches !== null) {
+      _.map(matches, url => appendProtocolIfMissing(url)).forEach(url => {
+        console.log(url);
         request(url, parseBody(client, to));
-      }
-    });
+      });
+    }
   });
 };
