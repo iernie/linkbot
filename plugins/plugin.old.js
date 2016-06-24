@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const moment = require('moment');
 const jsonfile = require('jsonfile');
 const file = './urls.json';
