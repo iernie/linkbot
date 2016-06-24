@@ -21,7 +21,7 @@ module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
     if (matches !== null) {
-      _.map(matches, url => url.trim().replace(/^https?:\/\//ig, '').toLowerCase()).forEach(url => {
+      _.map(matches, url => url.trim().replace(/^https?:\/\/(www\.)?/ig, '').toLowerCase()).forEach(url => {
         const savedUrl = urls.get(url);
         if (savedUrl !== undefined && savedUrl.channel === to) {
           client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${moment().diff(savedUrl.date, 'days')} dager siden.`);

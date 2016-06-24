@@ -35,7 +35,6 @@ module.exports = (client) => {
     const matches = message.match(pattern);
     if (matches !== null) {
       _.map(matches, url => appendProtocolIfMissing(url)).forEach(url => {
-        console.log(url);
         request(url, parseBody(client, to));
       });
     }
