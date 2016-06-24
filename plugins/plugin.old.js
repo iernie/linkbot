@@ -24,7 +24,9 @@ module.exports = (client) => {
       _.map(matches, url => url.trim().replace(/^https?:\/\/(www\.)?/ig, '').toLowerCase()).forEach(url => {
         const savedUrl = urls.get(url);
         if (savedUrl !== undefined && savedUrl.channel === to) {
-          client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${moment().diff(savedUrl.date, 'days')} dager siden.`);
+          const days = moment().diff(savedUrl.date, 'days');
+          const daysString = days === 1 ? 'dag' : 'dager';
+          client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
         } else {
           urls.set(url, { user: from, date: moment(), channel: to });
           jsonfile.writeFileSync(file, JSON.stringify([...urls]));
