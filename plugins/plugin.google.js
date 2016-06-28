@@ -7,7 +7,7 @@ function parseBodyFunction(client, to) {
       if (contentType.split(';')[0] === 'application/json') {
         const json = JSON.parse(body);
         if (json.items !== null && json.items.length > 0) {
-          client.say(to, `>> ${json.items[0].title} ${json.items[0].link}`);
+          client.say(to, `>> ${json.items[0].title} - ${json.items[0].link}`);
         }
       }
     }

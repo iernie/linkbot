@@ -1,10 +1,8 @@
 const _ = require('lodash');
-const moment = require('moment');
 const jsonfile = require('jsonfile');
 const file = './reminders.json';
 
 module.exports = (client) => {
-  const usertimes = new Map();
   let reminders = [];
   jsonfile.readFile(file, (err, obj) => {
     if (!err) {
@@ -28,8 +26,6 @@ module.exports = (client) => {
   }
 
   client.addListener('message', (from, to, message) => {
-    usertimes.set(from.toLowerCase(), moment());
-
     const matches = message.match(/^!tell ([a-z0-9æøå_]+)\s(.+)/i);
     if (matches !== null) {
       const user = matches[1].trim().toLowerCase();
@@ -39,11 +35,8 @@ module.exports = (client) => {
           client.say(to, 'Tulling, jeg er jo her!');
           return;
         }
-        const time = usertimes.get(user);
-        if (time !== undefined && moment().diff(time, 'hours') < 2) {
-          client.say(to, `Tulling, ${matches[1].trim()} er jo her!`);
-          return;
-        }
+        client.say(to, `Tulling, ${matches[1].trim()} er jo her!`);
+        return;
       }
 
       reminders.push({
@@ -60,7 +53,6 @@ module.exports = (client) => {
   });
 
   client.addListener('join', (from, to) => {
-    usertimes.set(to.toLowerCase(), moment());
     checkMessages(from, to);
   });
 };

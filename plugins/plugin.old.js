@@ -1,7 +1,15 @@
 const _ = require('lodash');
+const urlParser = require('url');
 const moment = require('moment');
 const jsonfile = require('jsonfile');
 const file = './urls.json';
+
+function appendProtocolIfMissing(url) {
+  if (!url.match(/^https?:\/\//)) {
+    return `http://${url}`;
+  }
+  return url;
+}
 
 module.exports = (client) => {
   const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
@@ -21,15 +29,17 @@ module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
     if (matches !== null) {
-      _.map(matches, url => url.trim().replace(/^https?:\/\/(www\.)?/ig, '').toLowerCase()).forEach(url => {
-        const savedUrl = urls.get(url);
-        if (savedUrl !== undefined && savedUrl.channel === to) {
-          const days = moment().diff(savedUrl.date, 'days');
-          const daysString = days === 1 ? 'dag' : 'dager';
-          client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
-        } else {
-          urls.set(url, { user: from, date: moment(), channel: to });
-          jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
+        if (url.path !== '/') {
+          const savedUrl = urls.get(url.path.toLowerCase());
+          if (savedUrl !== undefined && savedUrl.channel === to) {
+            const days = moment().diff(savedUrl.date, 'days');
+            const daysString = days === 1 ? 'dag' : 'dager';
+            client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
+          } else {
+            urls.set(url.path.toLowerCase(), { user: from, date: moment(), channel: to });
+            jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+          }
         }
       });
     }

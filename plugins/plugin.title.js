@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const request = require('request');
 const ent = require('ent');
+const urlParser = require('url');
 
 function appendProtocolIfMissing(url) {
   if (!url.match(/^[a-zA-Z]+:\/\//)) {
@@ -14,7 +15,7 @@ function parseBody(client, to) {
     if (!error && response.statusCode === 200) {
       const contentType = response.headers['content-type'];
       if (contentType !== undefined && contentType.split(';')[0] === 'text/html') {
-        const matches = body.match(/<title>\s*(.*?)\s*<\/title>/im)
+        const matches = body.match(/<title>\s*(.*?)\s*<\/title>/im);
         if (matches !== null) {
           client.say(to, `>> ${ent.decode(matches[1])}`);
         }
@@ -34,8 +35,10 @@ module.exports = (client) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
     if (matches !== null) {
-      _.map(matches, url => appendProtocolIfMissing(url)).forEach(url => {
-        request(url, parseBody(client, to));
+      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
+        if (url.href !== '') {
+          request(url.href, parseBody(client, to));
+        }
       });
     }
   });
