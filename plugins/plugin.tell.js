@@ -10,21 +10,6 @@ module.exports = (client) => {
     }
   });
 
-  function checkMessages(channel, to) {
-    let shouldSave = false;
-    reminders = _.filter(reminders, reminder => {
-      if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === channel) {
-        client.say(channel, `${to}: ${reminder.message} (mvh ${reminder.from})`);
-        shouldSave = true;
-        return false;
-      }
-      return true;
-    });
-    if (shouldSave) {
-      jsonfile.writeFileSync(file, reminders);
-    }
-  }
-
   client.addListener('message', (from, to, message) => {
     const matches = message.match(/^!tell ([a-z0-9æøå_]+)\s(.+)/i);
     if (matches !== null) {
@@ -47,12 +32,17 @@ module.exports = (client) => {
       });
       jsonfile.writeFileSync(file, reminders);
       client.say(to, `${from}, notert!`);
-    } else {
-      checkMessages(to, from);
     }
   });
 
   client.addListener('join', (from, to) => {
-    checkMessages(from, to);
+    reminders = _.filter(reminders, reminder => {
+      if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === from) {
+        client.say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
+        return false;
+      }
+      return true;
+    });
+    jsonfile.writeFileSync(file, reminders);
   });
 };
