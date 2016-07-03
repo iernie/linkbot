@@ -30,18 +30,16 @@ module.exports = (client) => {
     const matches = message.match(pattern);
     if (matches !== null) {
       _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
-        if (url.path !== '/') {
-          const savedUrl = urls.get(url.href.toLowerCase());
-          if (savedUrl !== undefined && savedUrl.channel === to) {
-            if (savedUrl.user.toLowerCase() !== from.toLowerCase()) {
-              const days = moment().diff(savedUrl.date, 'days');
-              const daysString = days === 1 ? 'dag' : 'dager';
-              client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
-            }
-          } else {
-            urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
-            jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+        const savedUrl = urls.get(url.href.toLowerCase());
+        if (savedUrl !== undefined && savedUrl.channel === to) {
+          if (savedUrl.user.toLowerCase() !== from.toLowerCase()) {
+            const days = moment().diff(savedUrl.date, 'days');
+            const daysString = days === 1 ? 'dag' : 'dager';
+            client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
           }
+        } else {
+          urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
+          jsonfile.writeFileSync(file, JSON.stringify([...urls]));
         }
       });
     }
