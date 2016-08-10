@@ -8,19 +8,19 @@
     "forever": "^0.15.2",
     "irc": "^0.5.0",
     "jsonfile": "^2.3.1",
-    "lodash": "^4.13.1",
-    "moment": "^2.13.0",
-    "node-geocoder": "^3.11.0",
-    "request": "^2.72.0",
+    "lodash": "^4.14.2",
+    "moment": "^2.14.1",
+    "node-geocoder": "^3.13.1",
+    "request": "^2.74.0",
     "yr.no-forecast": "0.0.7"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
-    "eslint": "^2.12.0",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-plugin-import": "^1.8.1",
-    "eslint-plugin-jsx-a11y": "^1.4.1",
-    "eslint-plugin-react": "^5.1.1"
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0"
   },
   "scripts": {
     "start": "forever start -o out.log -e err.log start.js",
