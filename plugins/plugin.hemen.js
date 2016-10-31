@@ -1,5 +1,7 @@
 const request = require('request');
 const ent = require('ent');
+const jsonfile = require('jsonfile');
+const mute = './mute.json';
 
 function parseBodyFunction(client, to) {
   return (error, response, body) => {
@@ -14,9 +16,10 @@ function parseBodyFunction(client, to) {
 
 module.exports = (client) => {
   client.addListener('pm', (from, message) => {
+    let isMuted = jsonfile.readFileSync(mute);
     let queryParam = '';
     const matches = message.match(/^(!hemen)( \S.*)?/i);
-    if (matches !== null) {
+    if (!isMuted && matches !== null) {
       if (matches[2] !== undefined) {
         queryParam = `search?q=${matches[2].trim()}`;
       }
