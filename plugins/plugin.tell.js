@@ -1,9 +1,8 @@
 const _ = require('lodash');
 const jsonfile = require('jsonfile');
 const file = './reminders.json';
-const mute = './mute.json';
 
-module.exports = (client) => {
+module.exports = (client, say) => {
   let reminders = [];
   jsonfile.readFile(file, (err, obj) => {
     if (!err) {
@@ -18,10 +17,10 @@ module.exports = (client) => {
       const users = _.map(_.keys(client.chans[to].users), u => u.toLowerCase());
       if (!_.isEmpty(_.filter(users, u => u === user))) {
         if (user === client.nick.toLowerCase()) {
-          client.say(to, 'Tulling, jeg er jo her!');
+          say(to, 'Tulling, jeg er jo her!');
           return;
         }
-        client.say(to, `Tulling, ${matches[1].trim()} er jo her!`);
+        say(to, `Tulling, ${matches[1].trim()} er jo her!`);
         return;
       }
 
@@ -32,21 +31,18 @@ module.exports = (client) => {
         message: matches[2].trim()
       });
       jsonfile.writeFileSync(file, reminders);
-      client.say(to, `${from}, notert!`);
+      say(to, `${from}, notert!`);
     }
   });
 
   client.addListener('join', (from, to) => {
-    let isMuted = jsonfile.readFileSync(mute);
-    if(!isMuted) {
-      reminders = _.filter(reminders, reminder => {
-        if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === from) {
-          client.say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
-          return false;
-        }
-        return true;
-      });
-      jsonfile.writeFileSync(file, reminders);
-    }
+    reminders = _.filter(reminders, reminder => {
+      if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === from) {
+        say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
+        return false;
+      }
+      return true;
+    });
+    jsonfile.writeFileSync(file, reminders);
   });
 };

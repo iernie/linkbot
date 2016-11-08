@@ -3,7 +3,6 @@ const urlParser = require('url');
 const moment = require('moment');
 const jsonfile = require('jsonfile');
 const file = './urls.json';
-const mute = './mute.json';
 
 function appendProtocolIfMissing(url) {
   if (!url.match(/^https?:\/\//)) {
@@ -12,7 +11,7 @@ function appendProtocolIfMissing(url) {
   return url;
 }
 
-module.exports = (client) => {
+module.exports = (client, say) => {
   const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
@@ -28,20 +27,21 @@ module.exports = (client) => {
   });
 
   client.addListener('message', (from, to, message) => {
-    let isMuted = jsonfile.readFileSync(mute);
     const matches = message.match(pattern);
-    if (!isMuted && matches !== null) {
+    if (matches !== null) {
       _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
         const savedUrl = urls.get(url.href.toLowerCase());
         if (savedUrl !== undefined && savedUrl.channel === to) {
           if (savedUrl.user.toLowerCase() !== from.toLowerCase()) {
             const days = moment().diff(savedUrl.date, 'days');
             const daysString = days === 1 ? 'dag' : 'dager';
-            client.say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
+            say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
           }
         } else {
-          urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
-          jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+          if (url.path !== undefined && url.path !== '' && url.path !== '/') {
+            urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
+            jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+          }
         }
       });
     }
