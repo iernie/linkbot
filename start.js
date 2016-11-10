@@ -11,6 +11,7 @@ const say = function(target, text) {
   if (!isMuted) {
     client.say(target, text);
   }
+  return !isMuted;
 };
 
 config.plugins.forEach((plugin) => {

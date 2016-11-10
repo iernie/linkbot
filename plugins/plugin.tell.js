@@ -38,8 +38,7 @@ module.exports = (client, say) => {
   client.addListener('join', (from, to) => {
     reminders = _.filter(reminders, reminder => {
       if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === from) {
-        say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
-        return false;
+        return say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
       }
       return true;
     });
