@@ -2,6 +2,7 @@ const _ = require('lodash');
 const urlParser = require('url');
 const moment = require('moment');
 const jsonfile = require('jsonfile');
+
 const file = './urls.json';
 
 function appendProtocolIfMissing(url) {
@@ -29,7 +30,7 @@ module.exports = (client, say) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
     if (matches !== null) {
-      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
+      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach((url) => {
         const savedUrl = urls.get(url.href.toLowerCase());
         if (savedUrl !== undefined && savedUrl.channel === to) {
           if (savedUrl.user.toLowerCase() !== from.toLowerCase()) {
@@ -37,11 +38,9 @@ module.exports = (client, say) => {
             const daysString = days === 1 ? 'dag' : 'dager';
             say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
           }
-        } else {
-          if (url.path !== undefined && url.path !== '' && url.path !== '/') {
-            urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
-            jsonfile.writeFileSync(file, JSON.stringify([...urls]));
-          }
+        } else if (url.path !== undefined && url.path !== '' && url.path !== '/') {
+          urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
+          jsonfile.writeFileSync(file, JSON.stringify([...urls]));
         }
       });
     }

@@ -1,4 +1,5 @@
 const jsonfile = require('jsonfile');
+
 const file = './mute.json';
 
 module.exports = (client) => {

@@ -8,6 +8,7 @@
     "max-len": 0,
     "import/no-unresolved": 0,
     "global-require": 0,
+    "linebreak-style": 0,
     "no-console": 0
   }
 }

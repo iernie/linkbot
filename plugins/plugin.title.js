@@ -35,7 +35,7 @@ module.exports = (client, say) => {
   client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
     if (matches !== null) {
-      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach(url => {
+      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach((url) => {
         if (url.href !== '') {
           request(url.href, parseBody(client, to, say));
         }
