@@ -1,11 +1,18 @@
 const nodeGeocoder = require('node-geocoder');
 const yrno = require('yr.no-forecast');
+const c = require('irc-colors');
 
 function currentSummary(client, to, res, matches, say) {
   return (error, summary) => {
     if (!error) {
       const city = res[0].city !== undefined ? res[0].city : matches[1].trim();
-      say(to, `${city}: ${summary.temperature.replace(' celsius', '°C')}`);
+      const temperature = parseInt(summary.temperature, 10);
+      let text = summary.temperature.replace(' celsius', '°C');
+      if (temperature > 20) text = c.red(text);
+      if (temperature > 0) text = c.green(text);
+      if (temperature <= 0) text = c.cyan(text);
+      if (temperature <= -10) text = c.blue(text);
+      say(to, `${city}: ${text}`);
     }
   };
 }
