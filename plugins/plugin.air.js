@@ -1,38 +1,35 @@
-const luftkvalitet = require('luftkvalitet');
+const nodeGeocoder = require('node-geocoder');
+const request = require('request');
 const c = require('irc-colors');
 
-module.exports = (client, say) => {
+function geoCodeResult(client, to, matches, say, token) {
+  return (error, res) => {
+    if (!error && res !== undefined && res.length > 0) {
+      request(`https://api.waqi.info/feed/geo:${res[0].latitude};${res[0].longitude}/?token=${token}`, (e, response, body) => {
+        if (!e && response.statusCode === 200) {
+          const json = JSON.parse(body);
+          if (json.status === 'ok') {
+            const aqi = json.data.aqi;
+            const city = res[0].city !== undefined ? res[0].city : matches[1].trim();
+            if (aqi <= 50) say(to, `${city}: ${c.green('Lite helserisiko')}`);
+            else if (aqi <= 150) say(to, `${city}: ${c.brown('Moderat helserisiko')}`);
+            else if (aqi <= 200) say(to, `${city}: ${c.red('høy helserisiko')}`);
+            else if (aqi <= 300) say(to, `${city}: ${c.purple('Svært høy helserisiko')}`);
+            else say(to, `${city}: ${c.rainbow('Eksterm helserisiko')}`);
+          }
+        }
+      });
+    }
+  };
+}
+
+module.exports = (client, say, plugin) => {
+  const geocoder = nodeGeocoder(plugin.options);
+
   client.addListener('message', (from, to, message) => {
     const matches = message.match(/^!air (\S.*)/i);
     if (matches !== null) {
-      const location = matches[1].trim();
-      luftkvalitet({ type: 'Country' }, (error, array) => {
-        if (!error) {
-          array
-            .filter(x => x.Name.toLowerCase() === location.toLowerCase())
-            .forEach((data) => {
-              let text;
-              switch (data.Text) {
-                case 'Lite':
-                  text = c.green(data.ShortDescription);
-                  break;
-                case 'Moderat':
-                  text = c.brown(data.ShortDescription);
-                  break;
-                case 'Høy':
-                  text = c.red(data.ShortDescription);
-                  break;
-                case 'Svært høy':
-                  text = c.purple(data.ShortDescription);
-                  break;
-                default:
-                  text = data.ShortDescription;
-                  break;
-              }
-              say(to, `${data.Name}: ${text}`);
-            });
-        }
-      });
+      geocoder.geocode(matches[1].trim(), geoCodeResult(client, to, matches, say, plugin.token));
     }
   });
 };
