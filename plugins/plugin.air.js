@@ -12,10 +12,11 @@ function geoCodeResult(client, to, matches, say, token) {
             const aqi = json.data.aqi;
             const city = res[0].city !== undefined ? res[0].city : matches[1].trim();
             if (aqi <= 50) say(to, `${city}: ${c.green('Lite helserisiko')}`);
-            else if (aqi <= 150) say(to, `${city}: ${c.brown('Moderat helserisiko')}`);
-            else if (aqi <= 200) say(to, `${city}: ${c.red('høy helserisiko')}`);
+            else if (aqi <= 100) say(to, `${city}: ${c.yellow('Moderat helserisiko')}`);
+            else if (aqi <= 150) say(to, `${city}: ${c.brown('Middels Helserisiko')}`);
+            else if (aqi <= 200) say(to, `${city}: ${c.red('Høy helserisiko')}`);
             else if (aqi <= 300) say(to, `${city}: ${c.purple('Svært høy helserisiko')}`);
-            else say(to, `${city}: ${c.rainbow('Eksterm helserisiko')}`);
+            else say(to, `${city}: ${c.rainbow('Ekstrem helserisiko')}`);
           }
         }
       });
