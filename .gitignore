@@ -37,7 +37,5 @@ jspm_packages
 .node_repl_history
 
 config.js
-mute.sjon
-auth.json
-urls.json
-reminders.json
+*.json
+!*.example.json

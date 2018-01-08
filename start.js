@@ -7,7 +7,7 @@ const mute = './mute.json';
 const client = new irc.Client(config.server, config.nick, config.options);
 client.setMaxListeners(config.plugins.length * 2);
 
-const say = function (target, text) {
+const say = function say(target, text) {
   const isMuted = jsonfile.readFileSync(mute);
   if (!isMuted) {
     client.say(target, text);
