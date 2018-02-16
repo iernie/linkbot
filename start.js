@@ -1,18 +1,11 @@
 const irc = require('irc');
-const jsonfile = require('jsonfile');
 const config = require('./config');
-
-const mute = './mute.json';
 
 const client = new irc.Client(config.server, config.nick, config.options);
 client.setMaxListeners(config.plugins.length * 2);
 
 const say = function say(target, text) {
-  const isMuted = jsonfile.readFileSync(mute);
-  if (!isMuted) {
-    client.say(target, text);
-  }
-  return isMuted;
+  client.say(target, text);
 };
 
 config.plugins.forEach((plugin) => {

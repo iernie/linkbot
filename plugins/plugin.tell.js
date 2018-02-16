@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const jsonfile = require('jsonfile');
+
 const file = './reminders.json';
 
 module.exports = (client, say) => {
@@ -38,7 +39,8 @@ module.exports = (client, say) => {
   client.addListener('join', (from, to) => {
     reminders = _.filter(reminders, (reminder) => {
       if (to.match(new RegExp(`${reminder.to}`, 'i')) && reminder.channel === from) {
-        return say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
+        say(from, `${to}: ${reminder.message} (mvh ${reminder.from})`);
+        return false;
       }
       return true;
     });
