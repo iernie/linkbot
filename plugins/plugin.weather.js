@@ -1,6 +1,6 @@
 const nodeGeocoder = require('node-geocoder');
 const yrno = require('yr.no-forecast');
-const c = require('irc-colors');
+const c = require('chalk');
 
 function currentSummary(client, to, res, matches, say) {
   return (error, summary) => {

@@ -1,3 +1,3 @@
 linkbot
 ========
-A simple IRC bot written in node
+A simple Discord bot written in node

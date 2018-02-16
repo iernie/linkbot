@@ -1,17 +1,21 @@
-const irc = require('irc');
-const config = require('./config');
+const Discord = require('discord.io');
+const logger = require('winston');
 
-const client = new irc.Client(config.server, config.nick, config.options);
-client.setMaxListeners(config.plugins.length * 2);
+logger.remove(logger.transports.Console);
+logger.add(logger.transports.Console, {
+  colorize: true
+});
+logger.level = 'debug';
 
-const say = function say(target, text) {
-  client.say(target, text);
-};
-
-config.plugins.forEach((plugin) => {
-  require(`./plugins/plugin.${plugin.name}`)(client, say, plugin); // eslint-disable-line
+const bot = new Discord.Client({
+  token: process.env['container:token'],
+  autorun: true
 });
 
-client.addListener('error', (message) => {
-  console.error('ERROR: %s: %s', message.command, message.args.join(' '));
+bot.on('ready', () => {
+  logger.info('Connected');
+  logger.info('Logged in as: ');
+  logger.info(`${bot.username} - (${bot.id})`);
 });
+
+// require(`./plugins/plugin.discord.title`)(bot); // eslint-disable-line
