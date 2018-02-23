@@ -1,21 +1,8 @@
-const Discord = require('discord.io');
-const logger = require('winston');
+const Discord = require('discord.js');
 
-logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {
-  colorize: true
-});
-logger.level = 'debug';
+const client = new Discord.Client();
 
-const bot = new Discord.Client({
-  token: process.env['container:token'],
-  autorun: true
-});
 
-bot.on('ready', () => {
-  logger.info('Connected');
-  logger.info('Logged in as: ');
-  logger.info(`${bot.username} - (${bot.id})`);
-});
+client.login(process.env.token);
 
 // require(`./plugins/plugin.discord.title`)(bot); // eslint-disable-line
