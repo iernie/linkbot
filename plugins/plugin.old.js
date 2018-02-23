@@ -1,4 +1,5 @@
 const urlParser = require('url');
+const differenceInDays = require('date-fns/difference_in_days');
 
 const URL = Parse.Object.extend('URL');
 
@@ -32,7 +33,8 @@ module.exports = (client) => {
           if (result && result.length > 0) {
             result.forEach((res) => {
               // if (res.get('user') === message.author.id) {
-              message.reply(`<@${message.author.id}>, old! Denne lenken ble postet av <@${res.get('user')}> for X siden.`);
+              const days = differenceInDays(res.get('createdAt'), new Date());
+              message.reply(`old! Denne lenken ble postet av <@${res.get('user')}> for ${days} ${days === 1 ? 'dag' : 'dager'} siden.`);
               // }
             });
           } else {
