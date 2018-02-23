@@ -2,21 +2,23 @@ const nodeGeocoder = require('node-geocoder');
 const request = require('request');
 const c = require('chalk');
 
-function geoCodeResult(client, to, matches, say, token) {
+const geocoder = nodeGeocoder({ provider: 'google', apiKey: process.env.google_api_key });
+
+function geoCodeResult(message, matches) {
   return (error, res) => {
     if (!error && res !== undefined && res.length > 0) {
-      request(`https://api.waqi.info/feed/geo:${res[0].latitude};${res[0].longitude}/?token=${token}`, (e, response, body) => {
+      request(`https://api.waqi.info/feed/geo:${res[0].latitude};${res[0].longitude}/?token=${process.env.waqi_token}`, (e, response, body) => {
         if (!e && response.statusCode === 200) {
           const json = JSON.parse(body);
           if (json.status === 'ok') {
             const aqi = json.data.aqi;
             const city = res[0].city !== undefined ? res[0].city : matches[1].trim();
-            if (aqi <= 50) say(to, `${city}: ${c.green('Lite helserisiko')}`);
-            else if (aqi <= 100) say(to, `${city}: ${c.yellow('Moderat helserisiko')}`);
-            else if (aqi <= 150) say(to, `${city}: ${c.bgYellow('Middels Helserisiko')}`);
-            else if (aqi <= 200) say(to, `${city}: ${c.red('Høy helserisiko')}`);
-            else if (aqi <= 300) say(to, `${city}: ${c.bgRed('Svært høy helserisiko')}`);
-            else say(to, `${city}: ${c.bgMagenta('Ekstrem helserisiko')}`);
+            if (aqi <= 50) message.channel.send(`${city}: ${c.green('Lite helserisiko')}`);
+            else if (aqi <= 100) message.channel.send(`${city}: ${c.yellow('Moderat helserisiko')}`);
+            else if (aqi <= 150) message.channel.send(`${city}: ${c.bgYellow('Middels Helserisiko')}`);
+            else if (aqi <= 200) message.channel.send(`${city}: ${c.red('Høy helserisiko')}`);
+            else if (aqi <= 300) message.channel.send(`${city}: ${c.bgRed('Svært høy helserisiko')}`);
+            else message.channel.send(`${city}: ${c.bgMagenta('Ekstrem helserisiko')}`);
           }
         }
       });
@@ -24,13 +26,13 @@ function geoCodeResult(client, to, matches, say, token) {
   };
 }
 
-module.exports = (client, say, plugin) => {
-  const geocoder = nodeGeocoder(plugin.options);
+module.exports = (client) => {
+  client.on('message', (message) => {
+    if (message.author.bot) return;
 
-  client.addListener('message', (from, to, message) => {
-    const matches = message.match(/^!air (\S.*)/i);
-    if (matches !== null) {
-      geocoder.geocode(matches[1].trim(), geoCodeResult(client, to, matches, say, plugin.token));
+    const matches = message.content.match(/^!air (\S.*)/i);
+    if (matches) {
+      geocoder.geocode(matches[1].trim(), geoCodeResult(message, matches));
     }
   });
 };

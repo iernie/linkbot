@@ -3,7 +3,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     if (message.content.match(new RegExp(`^(hei|hallo|(god ?)?morgen|halla) (<@)?${client.user.username}(>)?`, 'i'))) {
-      client.sendMessage(message.channel, 'Eeeh, du vet at jeg er en bot ikke sant?');
+      message.channel.send('Eeeh, du vet at jeg er en bot ikke sant?');
     }
   });
 };
