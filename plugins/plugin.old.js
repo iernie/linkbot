@@ -31,10 +31,9 @@ module.exports = (client) => {
         query.find().then((result) => {
           if (result && result.length > 0) {
             result.forEach((res) => {
-              const user = client.users.get(res.get('user'));
-              if (user.id === message.author.id) {
-                message.reply(`${message.author.mention()}, old! Denne lenken ble postet av ${client.users.get(res.get('user')).mention()} for ${0} ${0} siden.`);
-              }
+              // if (res.get('user') === message.author.id) {
+              message.reply(`<@${message.author.id}>, old! Denne lenken ble postet av <@${res.get('user')}> for X siden.`);
+              // }
             });
           } else {
             const urlObject = new URL();
