@@ -1,6 +1,5 @@
 const nodeGeocoder = require('node-geocoder');
 const yrno = require('yr.no-forecast');
-const c = require('chalk');
 
 const geocoder = nodeGeocoder({ provider: 'google', apiKey: process.env.google_api_key });
 
@@ -8,12 +7,7 @@ function currentSummary(message, res, matches) {
   return (error, summary) => {
     if (!error) {
       const city = res[0].city !== undefined ? res[0].city : matches[1].trim();
-      const temperature = parseFloat(summary.temperature);
-      let text = summary.temperature.replace(' celsius', '°C');
-      if (temperature >= 20) text = c.red(text);
-      if (temperature > 0) text = c.green(text);
-      if (temperature <= 0) text = c.cyan(text);
-      if (temperature <= -10) text = c.blue(text);
+      const text = summary.temperature.replace(' celsius', '°C');
       message.channel.send(`${city}: ${text}`);
     }
   };
@@ -43,7 +37,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     const matches = message.content.match(/^!temp (\S.*)/i);
-    if (matches !== null) {
+    if (matches) {
       geocoder.geocode(matches[1].trim(), geoCodeResult(message, matches));
     }
   });
