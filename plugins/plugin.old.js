@@ -1,5 +1,6 @@
 const urlParser = require('url');
-const differenceInDays = require('date-fns/difference_in_days');
+const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+const nb = require('date-fns/locale/nb');
 
 const URL = Parse.Object.extend('URL');
 
@@ -32,8 +33,8 @@ module.exports = (client) => {
         query.first().then((result) => {
           if (result) {
             if (result.get('user') !== message.author.id) {
-              const days = differenceInDays(result.get('createdAt'), new Date());
-              message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} ${days === 1 ? 'dag' : 'dager'} siden.`);
+              const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
+              message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} siden.`);
             }
           } else {
             const urlObject = new URL();
