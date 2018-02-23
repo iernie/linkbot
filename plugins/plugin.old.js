@@ -1,5 +1,4 @@
 const urlParser = require('url');
-const Parse = require('parse/node');
 
 const URL = Parse.Object.extend('URL');
 

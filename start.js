@@ -1,5 +1,5 @@
+global.Parse = require('parse/node');
 const Discord = require('discord.js');
-const Parse = require('parse/node');
 
 const client = new Discord.Client();
 Parse.initialize(process.env.parse_app_id);
