@@ -20,7 +20,7 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
-    const matches = message.match(pattern);
+    const matches = message.content.match(pattern);
     if (matches) {
       matches
       .map(url => urlParser.parse(appendProtocolIfMissing(url)))
