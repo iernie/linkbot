@@ -1,10 +1,12 @@
-module.exports = (client, say) => {
-  client.addListener('message', (from, to, message) => {
+module.exports = (client) => {
+  client.on('message', (message) => {
+    if (message.author.bot) return;
+
     const matches = message.match(/^!8ball (\S.*:.+)/i);
-    if (matches !== null) {
+    if (matches) {
       const queries = matches[1].split(':').filter(val => val !== '');
       const random = Math.floor(Math.random() * queries.length);
-      say(to, `${from}, svaret på spørsmålet ditt er: ${queries[random]}`);
+      message.reply.send(`svaret på spørsmålet ditt er: ${queries[random]}`);
     }
   });
 };
