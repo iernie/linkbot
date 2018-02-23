@@ -1,9 +1,7 @@
-const _ = require('lodash');
 const urlParser = require('url');
-const moment = require('moment');
-const jsonfile = require('jsonfile');
+const Parse = require('parse/node');
 
-const file = './urls.json';
+const URL = Parse.Object.extend('URL');
 
 function appendProtocolIfMissing(url) {
   if (!url.match(/^https?:\/\//)) {
@@ -12,35 +10,37 @@ function appendProtocolIfMissing(url) {
   return url;
 }
 
-module.exports = (client, say) => {
-  const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-    '(\\#[-a-z\\d_]*)?', 'ig'); // fragment locator
+const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+  '(\\#[-a-z\\d_]*)?', 'ig'); // fragment locator
 
-  let urls = new Map();
-  jsonfile.readFile(file, (err, obj) => {
-    if (!err) {
-      urls = new Map(JSON.parse(obj));
-    }
-  });
+module.exports = (client) => {
+  client.on('message', (message) => {
+    if (message.author.bot) return;
 
-  client.addListener('message', (from, to, message) => {
     const matches = message.match(pattern);
-    if (matches !== null) {
-      _.map(matches, url => urlParser.parse(appendProtocolIfMissing(url))).forEach((url) => {
-        const savedUrl = urls.get(url.href.toLowerCase());
-        if (savedUrl !== undefined && savedUrl.channel === to) {
-          if (savedUrl.user.toLowerCase() !== from.toLowerCase()) {
-            const days = moment().diff(savedUrl.date, 'days');
-            const daysString = days === 1 ? 'dag' : 'dager';
-            say(to, `${from}, old! Denne lenken ble postet av ${savedUrl.user} for ${days} ${daysString} siden.`);
-          }
-        } else if (url.path !== undefined && url.path !== '' && url.path !== '/') {
-          urls.set(url.href.toLowerCase(), { user: from, date: moment(), channel: to });
-          jsonfile.writeFileSync(file, JSON.stringify([...urls]));
+    if (matches) {
+      matches
+      .map(url => urlParser.parse(appendProtocolIfMissing(url)))
+      .forEach(async (url) => {
+        const query = new Parse.Query(URL);
+        query.equalTo('url', url.href.toLowerCase());
+        query.equalTo('channel', message.channel.id);
+        query.notEqualTo('user', message.author.id);
+        const result = await query.find();
+        if (result && result.length > 0) {
+          result.forEach((res) => {
+            message.reply(`@${message.author.id}, old! Denne lenken ble postet av ${client.users.get(res.user).username} for ${0} ${0} siden.`);
+          });
+        } else {
+          const urlObject = new URL();
+          urlObject.set('url', url.href.toLowerCase());
+          urlObject.set('user', message.author.id);
+          urlObject.set('channel', message.channel.id);
+          urlObject.save();
         }
       });
     }
