@@ -7,7 +7,6 @@
     "chalk": "^2.3.1",
     "date-fns": "^1.29.0",
     "discord.js": "^11.3.0",
-    "ent": "^2.2.0",
     "node-geocoder": "^3.15.2",
     "parse": "^1.11.0",
     "request": "^2.79.0",
