@@ -29,14 +29,12 @@ module.exports = (client) => {
         const query = new Parse.Query(URL);
         query.equalTo('url', url.href.toLowerCase());
         query.equalTo('channel', message.channel.id);
-        query.find().then((result) => {
-          if (result && result.length > 0) {
-            result.forEach((res) => {
-              // if (res.get('user') === message.author.id) {
-              const days = differenceInDays(res.get('createdAt'), new Date());
-              message.reply(`old! Denne lenken ble postet av <@${res.get('user')}> for ${days} ${days === 1 ? 'dag' : 'dager'} siden.`);
-              // }
-            });
+        query.first().then((result) => {
+          if (result) {
+            if (result.get('user') !== message.author.id) {
+              const days = differenceInDays(result.get('createdAt'), new Date());
+              message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} ${days === 1 ? 'dag' : 'dager'} siden.`);
+            }
           } else {
             const urlObject = new URL();
             urlObject.set('url', url.href.toLowerCase());
