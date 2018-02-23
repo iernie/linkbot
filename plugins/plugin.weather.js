@@ -42,7 +42,7 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
-    const matches = message.match(/^!temp (\S.*)/i);
+    const matches = message.content.match(/^!temp (\S.*)/i);
     if (matches !== null) {
       geocoder.geocode(matches[1].trim(), geoCodeResult(message, matches));
     }
