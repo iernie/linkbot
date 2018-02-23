@@ -3,7 +3,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     if (message.content.match(new RegExp(`^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${client.user.username}(>)?|alle|sammen|,| )*$`, 'i'))) {
-      message.channel.send(`natta <@${message.author.username}>!`);
+      message.channel.send(`natta <@${message.author.id}>!`);
     }
   });
 };
