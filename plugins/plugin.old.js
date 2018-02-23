@@ -30,6 +30,7 @@ module.exports = (client) => {
         query.equalTo('channel', message.channel.id);
         query.notEqualTo('user', message.author.id);
         const result = await query.find();
+        console.log(result);
         if (result && result.length > 0) {
           result.forEach((res) => {
             message.reply(`@${message.author.id}, old! Denne lenken ble postet av ${client.users.get(res.user).username} for ${0} ${0} siden.`);
