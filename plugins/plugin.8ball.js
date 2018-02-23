@@ -6,7 +6,7 @@ module.exports = (client) => {
     if (matches) {
       const queries = matches[1].split(':').filter(val => val !== '');
       const random = Math.floor(Math.random() * queries.length);
-      message.reply.send(`svaret på spørsmålet ditt er: ${queries[random]}`);
+      message.reply(`svaret på spørsmålet ditt er: ${queries[random]}`);
     }
   });
 };
