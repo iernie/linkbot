@@ -24,23 +24,26 @@ module.exports = (client) => {
     if (matches) {
       matches
       .map(url => urlParser.parse(appendProtocolIfMissing(url)))
-      .forEach(async (url) => {
+      .forEach((url) => {
         const query = new Parse.Query(URL);
         query.equalTo('url', url.href.toLowerCase());
         query.equalTo('channel', message.channel.id);
-        // query.notEqualTo('user', message.author.id);
-        const result = await query.find();
-        if (result && result.length > 0) {
-          result.forEach((res) => {
-            message.reply(`${message.author.mention()}, old! Denne lenken ble postet av ${client.users.get(res.user).mention()} for ${0} ${0} siden.`);
-          });
-        } else {
-          const urlObject = new URL();
-          urlObject.set('url', url.href.toLowerCase());
-          urlObject.set('user', message.author.id);
-          urlObject.set('channel', message.channel.id);
-          urlObject.save();
-        }
+        query.find().then((result) => {
+          if (result && result.length > 0) {
+            result.forEach((res) => {
+              const user = client.users.get(res.get('user'));
+              if (user.id === message.author.id) {
+                message.reply(`${message.author.mention()}, old! Denne lenken ble postet av ${client.users.get(res.get('user')).mention()} for ${0} ${0} siden.`);
+              }
+            });
+          } else {
+            const urlObject = new URL();
+            urlObject.set('url', url.href.toLowerCase());
+            urlObject.set('user', message.author.id);
+            urlObject.set('channel', message.channel.id);
+            urlObject.save();
+          }
+        }).catch(() => {});
       });
     }
   });
