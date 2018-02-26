@@ -1,0 +1,22 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.10.2
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:hoek:20180212':
+    - yr.no-forecast > yr.no-interface > request > hawk > hoek:
+        reason: None given
+        expires: '2018-03-28T08:53:05.756Z'
+    - yr.no-forecast > yr.no-interface > request > hawk > boom > hoek:
+        reason: None given
+        expires: '2018-03-28T08:53:05.756Z'
+    - yr.no-forecast > yr.no-interface > request > hawk > cryptiles > boom > hoek:
+        reason: None given
+        expires: '2018-03-28T08:53:05.756Z'
+    - yr.no-forecast > yr.no-interface > request > hawk > sntp > hoek:
+        reason: None given
+        expires: '2018-03-28T08:53:05.756Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:moment:20170905':
+    - yr.no-forecast > moment:
+        patched: '2018-02-26T08:53:05.757Z'
