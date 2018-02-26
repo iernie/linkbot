@@ -21,7 +21,7 @@ module.exports = (client) => {
             lat: location[0].latitude,
             lon: location[0].longitude
           });
-          const summary = await weather.getCurrentSummary();
+          const summary = await weather.getForecastForTime(new Date());
           const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
           const text = summary.temperature.replace(' celsius', '°C');
           message.channel.send(`${city}: ${text}`);
