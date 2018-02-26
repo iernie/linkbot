@@ -1,5 +1,10 @@
 const nodeGeocoder = require('node-geocoder');
-const yrno = require('yr.no-forecast');
+const yrno = require('yr.no-forecast')({
+  version: '1.9',
+  request: {
+    timeout: 15000
+  }
+});
 
 const geocoder = nodeGeocoder({ provider: 'google', apiKey: process.env.google_api_key });
 
