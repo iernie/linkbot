@@ -29,7 +29,7 @@ module.exports = (client) => {
       try {
         const location = await geocoder.geocode(matches[1].trim());
         if (location && location.length > 0) {
-          request(`https://api.openaq.org/v1/measurements?radius=15000&coordinates=${location[0].latitude},${location[0].longitude}`, (e, response, body) => {
+          request(`https://api.openaq.org/v1/measurements?radius=10000&coordinates=${location[0].latitude},${location[0].longitude}`, (e, response, body) => {
             if (!e && response.statusCode === 200) {
               const json = JSON.parse(body);
               let level = Level.UNKNOWN;
