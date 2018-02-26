@@ -10,6 +10,7 @@ require(`./plugins/plugin.air`)(client); // eslint-disable-line
 require(`./plugins/plugin.hei`)(client); // eslint-disable-line
 require(`./plugins/plugin.natta`)(client); // eslint-disable-line
 require(`./plugins/plugin.old`)(client); // eslint-disable-line
+require(`./plugins/plugin.say`)(client); // eslint-disable-line
 require(`./plugins/plugin.weather`)(client); // eslint-disable-line
 
 client.login(process.env.token);
