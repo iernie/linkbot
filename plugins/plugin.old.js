@@ -4,12 +4,12 @@ const nb = require('date-fns/locale/nb');
 
 const URL = Parse.Object.extend('URL');
 
-function appendProtocolIfMissing(url) {
+const appendProtocolIfMissing = (url) => {
   if (!url.match(/^https?:\/\//)) {
     return `http://${url}`;
   }
   return url;
-}
+};
 
 const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -25,12 +25,12 @@ module.exports = (client) => {
     const matches = message.content.match(pattern);
     if (matches) {
       matches
-      .map(url => urlParser.parse(appendProtocolIfMissing(url)))
-      .forEach((url) => {
-        const query = new Parse.Query(URL);
-        query.equalTo('url', url.href.toLowerCase());
-        query.equalTo('channel', message.channel.id);
-        query.first().then((result) => {
+        .map(url => urlParser.parse(appendProtocolIfMissing(url)))
+        .forEach(async (url) => {
+          const query = new Parse.Query(URL);
+          query.equalTo('url', url.href.toLowerCase());
+          query.equalTo('channel', message.channel.id);
+          const result = await query.first();
           if (result) {
             if (result.get('user') !== message.author.id) {
               const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
@@ -43,8 +43,7 @@ module.exports = (client) => {
             urlObject.set('channel', message.channel.id);
             urlObject.save();
           }
-        }).catch(() => {});
-      });
+        });
     }
   });
 };
