@@ -22,6 +22,7 @@ module.exports = (client) => {
             lon: location[0].longitude
           });
           const summary = await weather.getForecastForTime(new Date());
+          console.log(summary);
           if (summary && summary.temperature) {
             const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
             message.channel.send(`${city}: ${summary.temperature.value}°C`);
