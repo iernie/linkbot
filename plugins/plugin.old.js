@@ -24,11 +24,12 @@ module.exports = (client) => {
         if (results && results.length) {
           results.forEach((result) => {
             const url = urlParser.parse(normalizeUrl(result.get('url'), { normalizeHttps: true, removeDirectoryIndex: true }));
+            console.log(result, url);
             if (url.path && url.path !== '/') {
               result.set('url', url.href);
               result.save();
             } else {
-              result.destory();
+              result.destory().then(() => {}).catch(() => {});
             }
           });
           console.log('done');
