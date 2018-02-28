@@ -16,29 +16,6 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
-    if (message.content === 'test') {
-      console.log('starting');
-      const queryTemp = new Parse.Query(URL);
-      queryTemp.limit(200);
-      queryTemp.find().then((results) => {
-        console.log('got results', results.length);
-        if (results && results.length) {
-          results.forEach((result) => {
-            const url = urlParser.parse(normalizeUrl(result.get('url'), { normalizeHttps: true, removeDirectoryIndex: true }));
-            if (url.path && url.path !== '/') {
-              result.set('url', url.href);
-              result.save();
-            } else {
-              console.log(url.href);
-            }
-          });
-          console.log('done');
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
-    }
-
     const matches = message.content.match(pattern);
     if (matches) {
       matches
