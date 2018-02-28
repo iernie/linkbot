@@ -36,7 +36,7 @@ module.exports = (client) => {
               const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
               message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} siden.`);
             }
-          } else {
+          } else if (url.path && url.path !== '/') {
             const urlObject = new URL();
             urlObject.set('url', url.href.toLowerCase());
             urlObject.set('user', message.author.id);
