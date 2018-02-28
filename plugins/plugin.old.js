@@ -1,15 +1,9 @@
 const urlParser = require('url');
 const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
 
 const URL = Parse.Object.extend('URL');
-
-const appendProtocolIfMissing = (url) => {
-  if (!url.match(/^https?:\/\//)) {
-    return `http://${url}`;
-  }
-  return url;
-};
 
 const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -22,13 +16,29 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
+    const queryTemp = new Parse.Query(URL);
+    queryTemp.limit(1000);
+    queryTemp.find().then((results) => {
+      if (results && results.length) {
+        results.forEach((result) => {
+          const url = urlParser.parse(normalizeUrl(result.get('url'), { normalizeHttps: true, removeDirectoryIndex: true }));
+          if (url.path && url.path !== '/') {
+            result.set('url', url.href);
+            result.save();
+          } else {
+            result.destory();
+          }
+        });
+      }
+    });
+
     const matches = message.content.match(pattern);
     if (matches) {
       matches
-        .map(url => urlParser.parse(appendProtocolIfMissing(url)))
+        .map(url => urlParser.parse(normalizeUrl(url, { normalizeHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
           const query = new Parse.Query(URL);
-          query.equalTo('url', url.href.toLowerCase());
+          query.equalTo('url', url.href);
           query.equalTo('channel', message.channel.id);
           const result = await query.first();
           if (result) {
@@ -38,7 +48,7 @@ module.exports = (client) => {
             }
           } else if (url.path && url.path !== '/') {
             const urlObject = new URL();
-            urlObject.set('url', url.href.toLowerCase());
+            urlObject.set('url', url.href);
             urlObject.set('user', message.author.id);
             urlObject.set('channel', message.channel.id);
             urlObject.save();
