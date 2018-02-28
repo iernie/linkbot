@@ -19,9 +19,8 @@ module.exports = (client) => {
     if (message.content === 'test') {
       console.log('starting');
       const queryTemp = new Parse.Query(URL);
-      queryTemp.limit(1000);
       queryTemp.find().then((results) => {
-        console.log('got results');
+        console.log('got results', results.length);
         if (results && results.length) {
           results.forEach((result) => {
             const url = urlParser.parse(normalizeUrl(result.get('url'), { normalizeHttps: true, removeDirectoryIndex: true }));
@@ -34,6 +33,8 @@ module.exports = (client) => {
           });
           console.log('done');
         }
+      }).catch((error) => {
+        console.log(error);
       });
     }
 
