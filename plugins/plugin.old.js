@@ -16,22 +16,6 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
-    const queryTemp = new Parse.Query(URL);
-    queryTemp.limit(1000);
-    queryTemp.find().then((results) => {
-      if (results && results.length) {
-        results.forEach((result) => {
-          const url = urlParser.parse(normalizeUrl(result.get('url'), { normalizeHttps: true, removeDirectoryIndex: true }));
-          if (url.path && url.path !== '/') {
-            result.set('url', url.href);
-            result.save();
-          } else {
-            result.destory();
-          }
-        });
-      }
-    });
-
     const matches = message.content.match(pattern);
     if (matches) {
       matches
