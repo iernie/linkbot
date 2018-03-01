@@ -30,7 +30,7 @@ module.exports = (client) => {
       }
     }
 
-    if (user.match(/redmist/i)) {
+    if (user.match(/redmist|kriss/i)) {
       const emoji = client.emojis.find('name', 'redmist');
       if (emoji) {
         message.react(emoji.id);
