@@ -50,5 +50,12 @@ module.exports = (client) => {
         message.react(emoji.id);
       }
     }
+
+    if (user.match(/tobias(vl)?|spug/i)) {
+      const emoji = client.emojis.find('name', 'tobias');
+      if (emoji) {
+        message.react(emoji.id);
+      }
+    }
   });
 };
