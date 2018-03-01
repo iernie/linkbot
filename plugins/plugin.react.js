@@ -3,7 +3,8 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     if (message.content.match(/test/i)) {
-      message.react(':large_blue_circle:');
+      const emoji = client.emojis.find('name', 'large_blue_circle');
+      message.react(emoji.id);
     }
   });
 };
