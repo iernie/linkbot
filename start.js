@@ -1,6 +1,8 @@
 global.Parse = require('parse/node');
 const Discord = require('discord.js');
 
+const plugins = require('./plugins');
+
 const client = new Discord.Client();
 Parse.initialize(process.env.parse_app_id);
 Parse.serverURL = process.env.parse_server_url;
@@ -9,12 +11,6 @@ client.on('ready', () => {
   console.log('Bip bop, I am ready!');
 });
 
-require(`./plugins/plugin.8ball`)(client); // eslint-disable-line
-require(`./plugins/plugin.air`)(client); // eslint-disable-line
-require(`./plugins/plugin.hei`)(client); // eslint-disable-line
-require(`./plugins/plugin.natta`)(client); // eslint-disable-line
-require(`./plugins/plugin.old`)(client); // eslint-disable-line
-require(`./plugins/plugin.say`)(client); // eslint-disable-line
-require(`./plugins/plugin.weather`)(client); // eslint-disable-line
+plugins.forEach(plugin => plugin(client));
 
 client.login(process.env.token);
