@@ -5,7 +5,6 @@ module.exports = [
   require('./plugin.hei'),
   require('./plugin.natta'),
   require('./plugin.old'),
-  require('./plugin.react'),
   require('./plugin.say'),
   require('./plugin.vote'),
   require('./plugin.weather')
