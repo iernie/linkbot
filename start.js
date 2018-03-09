@@ -8,12 +8,6 @@ Parse.initialize(process.env.parse_app_id);
 Parse.serverURL = process.env.parse_server_url;
 
 client.on('ready', () => {
-  client.user.setPresence({
-    game: {
-      name: 'Livets harde skole',
-      type: 0
-    }
-  });
   console.log('Bip bop, I am ready!');
 });
 

@@ -4,6 +4,7 @@ module.exports = [
   require('./plugin.air'),
   require('./plugin.hei'),
   require('./plugin.natta'),
+  require('./plugin.presence'),
   require('./plugin.old'),
   require('./plugin.say'),
   require('./plugin.vote'),
