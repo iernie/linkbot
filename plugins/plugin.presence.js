@@ -23,11 +23,11 @@ const Presences = [
     type: Types.PLAYING
   },
   {
-    name: 'to your conversations',
+    name: 'your conversations',
     type: Types.LISTENING
   },
   {
-    name: 'to smooth jazz',
+    name: 'smooth jazz',
     type: Types.LISTENING
   },
   {
