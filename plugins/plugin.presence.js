@@ -48,11 +48,16 @@ const Presences = [
   }
 ];
 
+const setPresence = (client) => {
+  const presence = Presences[Math.floor(Math.random() * Presences.length)];
+  client.user.setPresence({
+    game: presence
+  });
+};
+
 module.exports = (client) => {
   client.on('ready', () => {
-    const presence = Presences[Math.floor(Math.random() * Presences.length)];
-    client.user.setPresence({
-      game: presence
-    });
+    setPresence(client);
+    setInterval(() => { setPresence(client); }, 43200000);
   });
 };
