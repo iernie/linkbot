@@ -1,10 +1,5 @@
 const nodeGeocoder = require('node-geocoder');
-const yrno = require('yr.no-forecast')({
-  version: '1.9',
-  request: {
-    timeout: 15000
-  }
-});
+const yrno = require('yr.no-forecast')();
 
 const geocoder = nodeGeocoder({ provider: 'google', apiKey: process.env.google_api_key });
 
@@ -25,6 +20,8 @@ module.exports = (client) => {
           if (summary && summary.temperature) {
             const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
             message.channel.send(`${city}: ${summary.temperature.value}°C`);
+          } else {
+            message.channel.send('Fant ingen temperatur');
           }
         }
       } catch (err) {
