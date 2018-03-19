@@ -18,7 +18,7 @@ module.exports = (client) => {
           meanObject.set('reason', matchesNew[2].trim());
         }
         meanObject.save();
-        message.reply('done!');
+        message.channel.send('done!');
       } catch (err) {
         console.log(err);
       }
@@ -29,6 +29,7 @@ module.exports = (client) => {
       try {
         const query = new Parse.Query(Mean);
         query.equalTo('user', matchesLast[1].trim());
+        query.equalTo('channel', message.channel.id);
         query.descending('createdAt');
         const result = await query.first();
         if (result) {
@@ -37,9 +38,9 @@ module.exports = (client) => {
           if (result.get('reason')) {
             reason = `Grunn: ${result.get('reason')}. `;
           }
-          message.channel.send(`<@${result.get('user')}> var sist slem for ${days} siden. ${reason}Lagt til av <@${result.get('author')}>.`);
+          message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. ${reason}Lagt til av ${client.users.get(result.get('author')).username}.`);
         } else {
-          message.channel.send(`<@${matchesLast[1].trim()}> har vært snill :)`);
+          message.channel.send(`${client.users.get(result.get('user')).username} har vært snill :)`);
         }
       } catch (err) {
         console.log(err);
