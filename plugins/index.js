@@ -3,6 +3,7 @@ module.exports = [
   require('./plugin.8ball'),
   require('./plugin.air'),
   require('./plugin.hei'),
+  require('./plugin.mean'),
   require('./plugin.natta'),
   require('./plugin.presence'),
   require('./plugin.old'),
