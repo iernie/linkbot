@@ -33,7 +33,7 @@ module.exports = (client) => {
         const result = await query.first();
         if (result) {
           const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          let reason;
+          let reason = '';
           if (result.get('reason')) {
             reason = `Grunn: ${result.get('reason')}. `;
           }
