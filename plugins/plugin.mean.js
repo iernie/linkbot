@@ -7,7 +7,7 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    const matches = message.content.match(/^!mean <@(.+)> ?(\S.*)?/i);
+    const matches = message.content.match(/^!mean <@!?(.+)> ?(\S.*)?/i);
     if (matches) {
       if (matches[2]) {
         try {
