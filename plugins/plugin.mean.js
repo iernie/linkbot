@@ -8,6 +8,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     const matchesNew = message.content.match(/^!mean add <@(.+)> ?(\S.*)?/i);
+    console.log(message.content);
     if (matchesNew) {
       try {
         const meanObject = new Mean();
@@ -28,7 +29,7 @@ module.exports = (client) => {
     if (matchesLast) {
       try {
         const query = new Parse.Query(Mean);
-        query.equalTo('user', matchesNew[1].trim());
+        query.equalTo('user', matchesLast[1].trim());
         query.descending('createdAt');
         const result = await query.first();
         if (result) {
@@ -39,7 +40,7 @@ module.exports = (client) => {
           }
           message.channel.send(`<@${result.get('user')}> var sist slem for ${days} siden. ${reason}Lagt til av <@${result.get('author')}>.`);
         } else {
-          message.channel.send(`<@${matchesNew[1].trim()}> har vært snill :)`);
+          message.channel.send(`<@${matchesLast[1].trim()}> har vært snill :)`);
         }
       } catch (err) {
         console.log(err);
