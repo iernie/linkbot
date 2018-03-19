@@ -40,7 +40,7 @@ module.exports = (client) => {
           }
           message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. ${reason}Lagt til av ${client.users.get(result.get('author')).username}.`);
         } else {
-          message.channel.send(`${client.users.get(result.get('user')).username} har vært snill :)`);
+          message.channel.send(`${client.users.get(matchesLast[1].trim()).username} har vært snill :)`);
         }
       } catch (err) {
         console.log(err);
