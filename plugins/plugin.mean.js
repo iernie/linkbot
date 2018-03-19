@@ -7,44 +7,41 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    const matchesNew = message.content.match(/^!mean add <@(.+)> ?(\S.*)?/i);
-    if (matchesNew) {
-      try {
-        const meanObject = new Mean();
-        meanObject.set('user', matchesNew[1].trim());
-        meanObject.set('author', message.author.id);
-        meanObject.set('channel', message.channel.id);
-        if (matchesNew[2]) {
-          meanObject.set('reason', matchesNew[2].trim());
+    const matches = message.content.match(/^!mean <@(.+)> ?(\S.*)?/i);
+    if (matches) {
+      if (matches[2]) {
+        try {
+          const meanObject = new Mean();
+          meanObject.set('user', matches[1].trim());
+          meanObject.set('author', message.author.id);
+          meanObject.set('channel', message.channel.id);
+          meanObject.set('reason', matches[2].trim());
+          meanObject.save();
+          message.react('👌');
+        } catch (err) {
+          console.log(err);
         }
-        meanObject.save();
-        message.channel.send('done!');
-      } catch (err) {
-        console.log(err);
+      } else {
+        try {
+          const query = new Parse.Query(Mean);
+          query.equalTo('user', matches[1].trim());
+          query.equalTo('channel', message.channel.id);
+          query.descending('createdAt');
+          const result = await query.first();
+          if (result) {
+            const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
+            message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
+          } else {
+            message.channel.send(`${client.users.get(matches[1].trim()).username} har vært snill :)`);
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
 
-    const matchesLast = message.content.match(/^!mean <@(.+)>/i);
-    if (matchesLast) {
-      try {
-        const query = new Parse.Query(Mean);
-        query.equalTo('user', matchesLast[1].trim());
-        query.equalTo('channel', message.channel.id);
-        query.descending('createdAt');
-        const result = await query.first();
-        if (result) {
-          const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          let reason = '';
-          if (result.get('reason')) {
-            reason = `Grunn: ${result.get('reason')}. `;
-          }
-          message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. ${reason}Lagt til av ${client.users.get(result.get('author')).username}.`);
-        } else {
-          message.channel.send(`${client.users.get(matchesLast[1].trim()).username} har vært snill :)`);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+    if (message.content.match(/^!help/i)) {
+      message.channel.send('!mean @user [?reason=add]');
     }
   });
 };

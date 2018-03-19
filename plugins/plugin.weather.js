@@ -28,5 +28,9 @@ module.exports = (client) => {
         console.log(err);
       }
     }
+
+    if (message.content.match(/^!help/i)) {
+      message.channel.send('!temp [location]');
+    }
   });
 };

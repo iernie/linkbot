@@ -6,5 +6,9 @@ module.exports = (client) => {
       message.react('👍');
       message.react('👎');
     }
+
+    if (message.content.match(/^!help/i)) {
+      message.channel.send('!vote [question]');
+    }
   });
 };

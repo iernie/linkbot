@@ -8,5 +8,9 @@ module.exports = (client) => {
       const random = Math.floor(Math.random() * queries.length);
       message.reply(`svaret på spørsmålet ditt er: ${queries[random]}`);
     }
+
+    if (message.content.match(/^!help/i)) {
+      message.channel.send('!8ball [Q1] (eller, or, |) [Q2] [...Qx]');
+    }
   });
 };
