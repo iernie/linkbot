@@ -8,14 +8,13 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     const matchesNew = message.content.match(/^!mean add <@(.+)> ?(\S.*)?/i);
-    console.log(message.content);
     if (matchesNew) {
       try {
         const meanObject = new Mean();
         meanObject.set('user', matchesNew[1].trim());
         meanObject.set('author', message.author.id);
         meanObject.set('channel', message.channel.id);
-        if (matchesNew[2].trim()) {
+        if (matchesNew[2]) {
           meanObject.set('reason', matchesNew[2].trim());
         }
         meanObject.save();
