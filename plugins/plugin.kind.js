@@ -1,38 +1,38 @@
 const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
 const nb = require('date-fns/locale/nb');
 
-const Mean = Parse.Object.extend('Mean');
+const Kind = Parse.Object.extend('Kind');
 
 module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    const matches = message.content.match(/^!slem <@!?(.+)> ?(\S.*)?/i);
+    const matches = message.content.match(/^!snill <@!?(.+)> ?(\S.*)?/i);
     if (matches) {
       if (matches[2]) {
         try {
-          const meanObject = new Mean();
-          meanObject.set('user', matches[1].trim());
-          meanObject.set('author', message.author.id);
-          meanObject.set('channel', message.channel.id);
-          meanObject.set('reason', matches[2].trim());
-          meanObject.save();
-          message.react('😈');
+          const kindObject = new Kind();
+          kindObject.set('user', matches[1].trim());
+          kindObject.set('author', message.author.id);
+          kindObject.set('channel', message.channel.id);
+          kindObject.set('reason', matches[2].trim());
+          kindObject.save();
+          message.react('👼');
         } catch (err) {
           console.log(err);
         }
       } else {
         try {
-          const query = new Parse.Query(Mean);
+          const query = new Parse.Query(Kind);
           query.equalTo('user', matches[1].trim());
           query.equalTo('channel', message.channel.id);
           query.descending('createdAt');
           const result = await query.first();
           if (result) {
             const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-            message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
+            message.channel.send(`${client.users.get(result.get('user')).username} var sist snill for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
           } else {
-            message.channel.send(`${client.users.get(matches[1].trim()).username} har vært snill :)`);
+            message.channel.send(`${client.users.get(matches[1].trim()).username} har ikke vært snill :(`);
           }
         } catch (err) {
           console.log(err);
@@ -41,7 +41,7 @@ module.exports = (client) => {
     }
 
     if (message.content.match(/^!help/i)) {
-      message.channel.send('!slem @user [?reason=add]');
+      message.channel.send('!snill @user [?reason=add]');
     }
   });
 };
