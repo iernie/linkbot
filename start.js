@@ -11,6 +11,14 @@ client.on('ready', () => {
   console.log('Bip bop, I am ready!');
 });
 
+client.on('error', (error) => {
+  console.log(error);
+});
+
+client.on('debug', (info) => {
+  console.log(info);
+});
+
 plugins.forEach(plugin => plugin(client));
 
 client.login(process.env.token);
