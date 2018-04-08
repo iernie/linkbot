@@ -9,7 +9,25 @@ module.exports = (client) => {
 
     const matches = message.content.match(/^!(kind|snill) <@!?(.+)> ?(\S.*)?/i);
     if (matches) {
-      if (matches[3]) {
+      const hasNew = matches[3];
+
+      try {
+        const query = new Parse.Query(Kind);
+        query.equalTo('user', matches[2].trim());
+        query.equalTo('channel', message.channel.id);
+        query.descending('createdAt');
+        const result = await query.first();
+        if (result) {
+          const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
+          message.channel.send(`${client.users.get(result.get('user')).username} var sist snill for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
+        } else if (!hasNew) {
+          message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      if (hasNew) {
         try {
           const kindObject = new Kind();
           kindObject.set('user', matches[2].trim());
@@ -18,22 +36,6 @@ module.exports = (client) => {
           kindObject.set('reason', matches[3].trim());
           kindObject.save();
           message.react('👼');
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        try {
-          const query = new Parse.Query(Kind);
-          query.equalTo('user', matches[2].trim());
-          query.equalTo('channel', message.channel.id);
-          query.descending('createdAt');
-          const result = await query.first();
-          if (result) {
-            const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-            message.channel.send(`${client.users.get(result.get('user')).username} var sist snill for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
-          } else {
-            message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
-          }
         } catch (err) {
           console.log(err);
         }
