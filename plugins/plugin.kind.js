@@ -9,7 +9,7 @@ module.exports = (client) => {
 
     const matches = message.content.match(/^!(kind|snill) <@!?(.+)> ?(\S.*)?/i);
     if (matches) {
-      const hasNew = matches[3];
+      const hasNew = !!matches[3];
 
       try {
         const query = new Parse.Query(Kind);
