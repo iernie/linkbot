@@ -11,14 +11,13 @@ module.exports = (client) => {
     const matches = message.content.match(/^!(mean|slem) <@!?(.+)> ?(\S.*)?/i);
     if (matches) {
       const hasNew = matches[3];
-      let result;
 
       try {
         const query = new Parse.Query(Mean);
         query.equalTo('user', matches[2].trim());
         query.equalTo('channel', message.channel.id);
         query.descending('createdAt');
-        result = await query.first();
+        const result = await query.first();
         if (result) {
           const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
           message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
@@ -30,6 +29,11 @@ module.exports = (client) => {
       }
 
       if (hasNew) {
+        const query = new Parse.Query(Mean);
+        query.equalTo('author', message.author.id);
+        query.equalTo('channel', message.channel.id);
+        query.descending('createdAt');
+        const result = await query.first();
         if (result && differenceInDays(new Date(), result.get('createdAt')) < 1) {
           message.channel.send('Du har brukt opp dagskvoten din med !slem');
         } else {
