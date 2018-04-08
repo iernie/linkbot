@@ -8,7 +8,7 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    const matches = message.content.match(/^!(mean|slem) <@!?(.+)> ?(\S.*)?/i);
+    const matches = message.content.match(/^!(mean|slem) <@!?(\d+)> ?(\S.*)?/i);
     if (matches) {
       const hasNew = !!matches[3];
 
@@ -22,7 +22,6 @@ module.exports = (client) => {
           const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
           message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
         } else if (!hasNew) {
-          console.log(hasNew, matches[2]);
           message.channel.send(`${client.users.get(matches[2].trim()).username} har vært snill :)`);
         }
       } catch (err) {
