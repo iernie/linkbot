@@ -59,8 +59,11 @@ module.exports = (client) => {
               }
               return acc;
             }, {});
-          const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => a.count - b.count);
-          console.log(results, toplist, sorted);
+          const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
+          message.channel.send('!snill toppliste!');
+          for (let i = 0; i < Math.max(sorted.length, 5); i += 1) {
+            message.channel.send(`${i + 1}: ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
+          }
         }
       } catch (err) {
         console.log(err);
