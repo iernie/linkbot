@@ -43,9 +43,15 @@ module.exports = (client) => {
     } else if (matches) {
       try {
         const query = new Parse.Query(Kind);
-        const result = await query.aggregate([{ group: { objectId: '$user' } }]);
-        if (result) {
-          console.log(result);
+        query.equalTo('channel', message.channel.id);
+        query.limit(1000);
+        const results = await query.find();
+        if (results) {
+          const toplist = results
+            .map(result => result.get('user'))
+            .reduce((val, curr) => ({ [curr]: val[curr] ? val[curr] + 1 : 0, ...val }), {});
+          const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => a.count - b.count);
+          console.log(sorted);
         }
       } catch (err) {
         console.log(err);
