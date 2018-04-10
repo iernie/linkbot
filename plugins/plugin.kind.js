@@ -8,7 +8,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     const matches = message.content.match(/^!(kind|snill) <@!?(\d+)> ?(\S.*)?/i);
-    if (matches) {
+    if (matches && matches[2]) {
       const hasNew = !!matches[3];
 
       try {
@@ -39,6 +39,16 @@ module.exports = (client) => {
         } catch (err) {
           console.log(err);
         }
+      }
+    } else if (matches) {
+      try {
+        const query = new Parse.Query(Kind);
+        const result = await query.aggregate({ group: { objectId: '$user' } });
+        if (result) {
+          console.log(result);
+        }
+      } catch (err) {
+        console.log(err);
       }
     }
 
