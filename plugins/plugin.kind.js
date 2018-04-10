@@ -8,7 +8,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     const matches = message.content.match(/^!(kind|snill) <@!?(\d+)> ?(\S.*)?/i);
-    if (matches && matches[2]) {
+    if (matches) {
       const hasNew = !!matches[3];
 
       try {
@@ -40,7 +40,9 @@ module.exports = (client) => {
           console.log(err);
         }
       }
-    } else if (matches) {
+    }
+
+    if (message.content.match(/^!(kind|snill)/i)) {
       try {
         const query = new Parse.Query(Kind);
         query.equalTo('channel', message.channel.id);
