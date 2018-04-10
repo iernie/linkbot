@@ -39,10 +39,18 @@ module.exports = (client) => {
             });
         }
 
-        const sorted = Object.keys(scores).map(key => ({ user: key, count: scores[key] })).sort((a, b) => a.count - b.count);
+        const mapped = Object.keys(scores).map(key => ({ user: key, count: scores[key] }));
+
+        const top = mapped.sort((a, b) => b.count - a.count);
         message.channel.send('Karma toppliste!');
-        for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-          message.channel.send(`${i + 1}. ${client.users.get(sorted[i].user).username} har ${sorted[i].count} i karma.`);
+        for (let i = 0; i < Math.min(top.length, 3); i += 1) {
+          message.channel.send(`+${i + 1}. ${client.users.get(top[i].user).username} har ${top[i].count} i karma.`);
+        }
+
+        const bottom = mapped.sort((a, b) => a.count - b.count);
+        message.channel.send('Karma bunnliste!');
+        for (let i = Math.min(bottom.length, 3); i >= 0; i -= 1) {
+          message.channel.send(`-${i + 1}. ${client.users.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
         }
       } catch (err) {
         console.log(err);
