@@ -71,7 +71,7 @@ module.exports = (client) => {
             }, {});
           const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           message.channel.send('Slem toppliste!');
-          for (let i = 0; i < Math.max(sorted.length, 5); i += 1) {
+          for (let i = 0; i < Math.max(sorted.length - 1, 5); i += 1) {
             message.channel.send(`${i + 1}: ${client.users.get(sorted[i].user).username} har vært slem ${sorted[i].count} ganger.`);
           }
         }
