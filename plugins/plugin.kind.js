@@ -43,7 +43,7 @@ module.exports = (client) => {
     } else if (matches) {
       try {
         const query = new Parse.Query(Kind);
-        const result = await query.aggregate({ group: { objectId: '$user' } });
+        const result = await query.aggregate([{ group: { objectId: '$user' } }]);
         if (result) {
           console.log(result);
         }

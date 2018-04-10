@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const plugins = require('./plugins');
 
 const client = new Discord.Client();
-Parse.initialize(process.env.parse_app_id);
+Parse.initialize(process.env.parse_app_id, null, process.env.parse_master_key);
 Parse.serverURL = process.env.parse_server_url;
 
 client.on('ready', () => {
