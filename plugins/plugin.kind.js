@@ -51,9 +51,9 @@ module.exports = (client) => {
         if (results) {
           const toplist = results
             .map(result => result.get('user'))
-            .reduce((val, curr) => ({ ...val, [curr]: val[curr] ? val[curr] + 1 : 0 }), {});
+            .reduce((val, curr) => ({ ...val, [curr]: (val[curr] ? val[curr] + 1 : 0) }), {});
           const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => a.count - b.count);
-          console.log(toplist, sorted);
+          console.log(results, sorted);
         }
       } catch (err) {
         console.log(err);
