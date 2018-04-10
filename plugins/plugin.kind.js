@@ -46,7 +46,6 @@ module.exports = (client) => {
       try {
         const query = new Parse.Query(Kind);
         query.equalTo('channel', message.channel.id);
-        query.limit(1000);
         const results = await query.find();
         if (results) {
           const toplist = results
@@ -62,7 +61,7 @@ module.exports = (client) => {
           const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           message.channel.send('Snill toppliste!');
           for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            message.channel.send(`${i + 1}: ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
+            message.channel.send(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }
         }
       } catch (err) {
