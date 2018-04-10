@@ -42,7 +42,7 @@ module.exports = (client) => {
       }
     }
 
-    if (message.content.match(/^!(kind|snill)/i)) {
+    if (message.content.match(/^!(kind|snill)$/i)) {
       try {
         const query = new Parse.Query(Kind);
         query.equalTo('channel', message.channel.id);
@@ -60,7 +60,7 @@ module.exports = (client) => {
               return acc;
             }, {});
           const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
-          message.channel.send('!snill toppliste!');
+          message.channel.send('Snill toppliste!');
           for (let i = 0; i < Math.max(sorted.length, 5); i += 1) {
             message.channel.send(`${i + 1}: ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }

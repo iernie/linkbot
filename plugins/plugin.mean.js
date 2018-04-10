@@ -52,6 +52,34 @@ module.exports = (client) => {
       }
     }
 
+    if (message.content.match(/^!(mean|slem)$/i)) {
+      try {
+        const query = new Parse.Query(Mean);
+        query.equalTo('channel', message.channel.id);
+        query.limit(1000);
+        const results = await query.find();
+        if (results) {
+          const toplist = results
+            .map(result => result.get('user'))
+            .reduce((acc, curr) => {
+              if (typeof acc[curr] === 'undefined') {
+                acc[curr] = 1;
+              } else {
+                acc[curr] += 1;
+              }
+              return acc;
+            }, {});
+          const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
+          message.channel.send('Slem toppliste!');
+          for (let i = 0; i < Math.max(sorted.length, 5); i += 1) {
+            message.channel.send(`${i + 1}: ${client.users.get(sorted[i].user).username} har vært slem ${sorted[i].count} ganger.`);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     if (message.content.match(/^!help/i)) {
       message.channel.send('!mean @user [?reason=add]');
     }
