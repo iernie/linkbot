@@ -1,5 +1,5 @@
 const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
-const differenceInDays = require('date-fns/difference_in_days');
+const differenceInCalendarDays = require('date-fns/difference_in_calendar_days');
 const nb = require('date-fns/locale/nb');
 
 const Mean = Parse.Object.extend('Mean');
@@ -20,7 +20,7 @@ module.exports = (client) => {
         const result = await query.first();
         if (result) {
           const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden. Grunn: ${result.get('reason')}. Lagt til av ${client.users.get(result.get('author')).username}.`);
+          message.channel.send(`${client.users.get(result.get('user')).username} var sist slem for ${days} siden; "${result.get('reason')}" –${client.users.get(result.get('author')).username}.`);
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har vært snill :)`);
         }
@@ -34,7 +34,7 @@ module.exports = (client) => {
         query.equalTo('channel', message.channel.id);
         query.descending('createdAt');
         const result = await query.first();
-        if (result && differenceInDays(new Date(), result.get('createdAt')) < 1) {
+        if (result && differenceInCalendarDays(new Date(), result.get('createdAt')) < 1) {
           message.channel.send('Du har brukt opp dagskvoten din med !slem');
         } else {
           try {
