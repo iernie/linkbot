@@ -10,6 +10,7 @@ module.exports = (client) => {
 
     const matches = message.content.match(/^!(mean|slem) <@!?(\d+)> ?(\S.*)?/i);
     if (matches) {
+      message.channel.startTyping();
       const hasNew = !!matches[3];
 
       try {
@@ -50,9 +51,11 @@ module.exports = (client) => {
           }
         }
       }
+      message.channel.stopTyping();
     }
 
     if (message.content.match(/^!(mean|slem)$/i)) {
+      message.channel.startTyping();
       try {
         const query = new Parse.Query(Mean);
         query.equalTo('channel', message.channel.id);
@@ -77,6 +80,7 @@ module.exports = (client) => {
       } catch (err) {
         console.log(err);
       }
+      message.channel.stopTyping();
     }
 
     if (message.content.match(/^!help/i)) {

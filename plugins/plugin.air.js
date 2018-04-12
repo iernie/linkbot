@@ -60,6 +60,7 @@ module.exports = (client) => {
 
     const matches = message.content.match(/^!air (\S.*)/i);
     if (matches) {
+      message.channel.startTyping();
       try {
         const location = await geocoder.geocode(matches[1].trim());
         if (location && location.length > 0) {
@@ -83,6 +84,7 @@ module.exports = (client) => {
       } catch (err) {
         console.log(err);
       }
+      message.channel.stopTyping();
     }
 
     if (message.content.match(/^!help/i)) {

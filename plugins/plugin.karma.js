@@ -6,6 +6,7 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     if (message.content.match(/^!(karma|score)$/i)) {
+      message.channel.startTyping();
       try {
         const scores = {};
 
@@ -55,6 +56,7 @@ module.exports = (client) => {
       } catch (err) {
         console.log(err);
       }
+      message.channel.stopTyping();
     }
 
     if (message.content.match(/^!help/i)) {
