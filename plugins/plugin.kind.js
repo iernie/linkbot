@@ -7,10 +7,10 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    const matches = message.content.match(/^!(kind|snill) <@!?(\d+)> ?(\S.*)?/i);
+    const matches = message.content.match(/^!(kind|snill) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
-      const hasNew = !!matches[3];
+      const hasNew = !!matches[3].trim();
 
       try {
         const query = new Parse.Query(Kind);
