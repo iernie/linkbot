@@ -18,7 +18,6 @@ module.exports = (client) => {
 
     const matches = message.content.match(pattern);
     if (matches) {
-      message.channel.startTyping();
       matches
         .map(url => urlParser.parse(normalizeUrl(url, { normalizeHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
@@ -43,7 +42,6 @@ module.exports = (client) => {
             console.log(err);
           }
         });
-      message.channel.stopTyping();
     }
   });
 };
