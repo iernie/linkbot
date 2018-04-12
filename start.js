@@ -15,6 +15,8 @@ client.on('error', (error) => {
   console.log(error);
 });
 
+client.setMaxListeners(0);
+
 plugins.forEach(plugin => plugin(client));
 
 client.login(process.env.token);
