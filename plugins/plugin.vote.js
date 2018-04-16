@@ -3,8 +3,12 @@ module.exports = (client) => {
     if (message.author.bot) return;
 
     if (message.content.match(/^!vote .+/i)) {
-      message.react('👍');
-      message.react('👎');
+      try {
+        message.react('👍');
+        message.react('👎');
+      } catch (err) {
+        console.error('vote', err);
+      }
     }
 
     if (message.content.match(/^!help/i)) {

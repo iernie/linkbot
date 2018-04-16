@@ -54,7 +54,7 @@ module.exports = (client) => {
           message.channel.send(`${i + 1}. ${client.users.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
         }
       } catch (err) {
-        console.log(err);
+        console.log('karma', err);
       }
       message.channel.stopTyping();
     }

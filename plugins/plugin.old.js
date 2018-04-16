@@ -39,7 +39,7 @@ module.exports = (client) => {
               urlObject.save();
             }
           } catch (err) {
-            console.log(err);
+            console.log('old', err);
           }
         });
     }

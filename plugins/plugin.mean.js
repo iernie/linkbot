@@ -26,7 +26,7 @@ module.exports = (client) => {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har vært snill :)`);
         }
       } catch (err) {
-        console.log(err);
+        console.log('mean', err);
       }
 
       if (hasNew) {
@@ -47,7 +47,7 @@ module.exports = (client) => {
             meanObject.save();
             message.react('😈');
           } catch (err) {
-            console.log(err);
+            console.log('mean', err);
           }
         }
       }
@@ -77,7 +77,7 @@ module.exports = (client) => {
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log('mean', err);
       }
       message.channel.stopTyping();
     }

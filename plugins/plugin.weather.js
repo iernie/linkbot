@@ -26,7 +26,7 @@ module.exports = (client) => {
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log('weather', err);
       }
       message.channel.stopTyping();
     }

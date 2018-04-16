@@ -1,22 +1,13 @@
-global.Parse = require('parse/node');
-const Discord = require('discord.js');
+const forever = require('forever-monitor');
 
-const plugins = require('./plugins');
-
-const client = new Discord.Client();
-Parse.initialize(process.env.parse_app_id);
-Parse.serverURL = process.env.parse_server_url;
-
-client.on('ready', () => {
-  console.log('Bip bop, I am ready!');
+const child = new (forever.Monitor)('bot.js', {
+  max: 3,
+  silent: true,
+  args: []
 });
 
-client.on('error', (error) => {
-  console.log(error);
+child.on('exit', () => {
+  console.log('bot.js has exited after 3 restarts');
 });
 
-client.setMaxListeners(0);
-
-plugins.forEach(plugin => plugin(client));
-
-client.login(process.env.token);
+child.start();

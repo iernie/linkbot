@@ -82,7 +82,7 @@ module.exports = (client) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.log('air', err);
       }
       message.channel.stopTyping();
     }

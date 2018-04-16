@@ -4,11 +4,9 @@ module.exports = (client) => {
 
     const matches = message.content.match(/^!8ball (\S.*(\|| or | eller ).+)/i);
     if (matches) {
-      message.channel.startTyping();
       const queries = matches[1].split(/\|| or | eller /i).map(val => val.replace(/\?$/, '').trim());
       const random = Math.floor(Math.random() * queries.length);
       message.channel.send(queries[random]);
-      message.channel.stopTyping();
     }
 
     if (message.content.match(/^!help/i)) {

@@ -25,7 +25,7 @@ module.exports = (client) => {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
         }
       } catch (err) {
-        console.log(err);
+        console.log('kind', err);
       }
 
       if (hasNew) {
@@ -38,7 +38,7 @@ module.exports = (client) => {
           kindObject.save();
           message.react('👼');
         } catch (err) {
-          console.log(err);
+          console.log('kind', err);
         }
       }
       message.channel.stopTyping();
@@ -67,7 +67,7 @@ module.exports = (client) => {
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log('kind', err);
       }
       message.channel.stopTyping();
     }
