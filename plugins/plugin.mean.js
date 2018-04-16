@@ -25,20 +25,18 @@ module.exports = (client) => {
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har vært snill :)`);
         }
-      } catch (err) {
-        console.log('mean', err);
-      }
 
-      if (hasNew) {
-        const query = new Parse.Query(Mean);
-        query.equalTo('author', message.author.id);
-        query.equalTo('channel', message.channel.id);
-        query.descending('createdAt');
-        const result = await query.first();
-        if (result && differenceInCalendarDays(new Date(), result.get('createdAt')) < 1) {
-          message.channel.send('Du har brukt opp dagskvoten din med !slem');
-        } else {
-          try {
+        if (hasNew) {
+          const newQuery = new Parse.Query(Mean);
+          newQuery.equalTo('author', message.author.id);
+          newQuery.equalTo('channel', message.channel.id);
+          newQuery.descending('createdAt');
+          const newResult = await newQuery.first();
+          if (newResult && differenceInCalendarDays(new Date(), newResult.get('createdAt')) < 1) {
+            message.channel.send('Du har brukt opp dagskvoten din med !slem');
+          } else if (matches[2].trim() === message.author.id) {
+            message.channel.send('Tsk, tsk! Du kan ikke slemme deg selv. 😈');
+          } else {
             const meanObject = new Mean();
             meanObject.set('user', matches[2].trim());
             meanObject.set('author', message.author.id);
@@ -46,10 +44,10 @@ module.exports = (client) => {
             meanObject.set('reason', matches[3].trim());
             meanObject.save();
             message.react('😈');
-          } catch (err) {
-            console.log('mean', err);
           }
         }
+      } catch (err) {
+        console.log('mean', err);
       }
       message.channel.stopTyping();
     }

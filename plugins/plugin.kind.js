@@ -24,22 +24,22 @@ module.exports = (client) => {
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
         }
+
+        if (hasNew) {
+          if (matches[2].trim() === message.author.id) {
+            message.channel.send('Tsk, tsk! Du kan ikke snille deg selv. 👼');
+          } else {
+            const kindObject = new Kind();
+            kindObject.set('user', matches[2].trim());
+            kindObject.set('author', message.author.id);
+            kindObject.set('channel', message.channel.id);
+            kindObject.set('reason', matches[3].trim());
+            kindObject.save();
+            message.react('👼');
+          }
+        }
       } catch (err) {
         console.log('kind', err);
-      }
-
-      if (hasNew) {
-        try {
-          const kindObject = new Kind();
-          kindObject.set('user', matches[2].trim());
-          kindObject.set('author', message.author.id);
-          kindObject.set('channel', message.channel.id);
-          kindObject.set('reason', matches[3].trim());
-          kindObject.save();
-          message.react('👼');
-        } catch (err) {
-          console.log('kind', err);
-        }
       }
       message.channel.stopTyping();
     }
