@@ -76,7 +76,7 @@ module.exports = (client) => {
                 else if (level === Level.MODERATE) message.channel.send(`${city}: Moderat helserisiko`);
                 else if (level === Level.HIGH) message.channel.send(`${city}: Betydelig helserisiko`);
                 else if (level === Level.EXTREME) message.channel.send(`${city}: Alvorlig helserisiko`);
-                else message.channel.send(`${city}: Ukjent helserisiko`);
+                else message.channel.send('jeg nekter, jeg er linkbot');
               }
             }
           });

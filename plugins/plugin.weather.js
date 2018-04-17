@@ -22,7 +22,7 @@ module.exports = (client) => {
             const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
             message.channel.send(`${city}: ${summary.temperature.value}°C`);
           } else {
-            message.channel.send('Fant ingen temperatur');
+            message.channel.send('jeg nekter, jeg er linkbot');
           }
         }
       } catch (err) {
