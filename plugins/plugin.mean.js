@@ -13,7 +13,7 @@ module.exports = (client) => {
       message.channel.startTyping();
       const hasNew = !!matches[3].trim();
 
-      try {
+      const getLatest = async () => {
         const query = new Parse.Query(Mean);
         query.equalTo('user', matches[2].trim());
         query.equalTo('channel', message.channel.id);
@@ -25,7 +25,9 @@ module.exports = (client) => {
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har vært snill :)`);
         }
+      };
 
+      try {
         if (hasNew) {
           const newQuery = new Parse.Query(Mean);
           newQuery.equalTo('author', message.author.id);
@@ -34,17 +36,20 @@ module.exports = (client) => {
           const newResult = await newQuery.first();
           if (newResult && differenceInCalendarDays(new Date(), newResult.get('createdAt')) < 1) {
             message.channel.send('Du har brukt opp dagskvoten din med !slem');
-          } else if (matches[2].trim() === message.author.id) {
-            message.channel.send('Tsk, tsk! Du kan ikke slemme deg selv. 😈');
           } else {
             const meanObject = new Mean();
             meanObject.set('user', matches[2].trim());
             meanObject.set('author', message.author.id);
             meanObject.set('channel', message.channel.id);
             meanObject.set('reason', matches[3].trim());
+
+            await getLatest();
+
             meanObject.save();
             message.react('😈');
           }
+        } else {
+          await getLatest();
         }
       } catch (err) {
         console.log('mean', err);

@@ -12,7 +12,7 @@ module.exports = (client) => {
       message.channel.startTyping();
       const hasNew = !!matches[3].trim();
 
-      try {
+      const getLatest = async () => {
         const query = new Parse.Query(Kind);
         query.equalTo('user', matches[2].trim());
         query.equalTo('channel', message.channel.id);
@@ -24,7 +24,9 @@ module.exports = (client) => {
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
         }
+      };
 
+      try {
         if (hasNew) {
           if (matches[2].trim() === message.author.id) {
             message.channel.send('Tsk, tsk! Du kan ikke snille deg selv. 👼');
@@ -34,9 +36,14 @@ module.exports = (client) => {
             kindObject.set('author', message.author.id);
             kindObject.set('channel', message.channel.id);
             kindObject.set('reason', matches[3].trim());
+
+            await getLatest();
+
             kindObject.save();
             message.react('👼');
           }
+        } else {
+          await getLatest();
         }
       } catch (err) {
         console.log('kind', err);
