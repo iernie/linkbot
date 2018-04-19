@@ -7,22 +7,6 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    if (message.content.match(/^!secret/i)) {
-      const query = new Parse.Query(Kind);
-      const result = await query.find();
-      result.forEach((res) => {
-        if (res.get('user') === res.get('author')) {
-          res.destroy({
-            success() {
-            },
-            error() {
-              console.log('something went wrong');
-            }
-          });
-        }
-      });
-    }
-
     const matches = message.content.match(/^!(kind|snill) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
