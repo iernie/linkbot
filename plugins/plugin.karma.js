@@ -39,20 +39,22 @@ module.exports = (client) => {
               }
             });
         }
-
+        const list = [];
         const mapped = Object.keys(scores).map(key => ({ user: key, count: scores[key] }));
 
         const top = mapped.sort((a, b) => b.count - a.count);
-        message.channel.send('Karma toppliste!');
+        list.push('Karma toppliste!');
         for (let i = 0; i < Math.min(top.length, 3); i += 1) {
-          message.channel.send(`${i + 1}. ${client.users.get(top[i].user).username} har ${top[i].count} i karma.`);
+          list.push(`${i + 1}. ${client.users.get(top[i].user).username} har ${top[i].count} i karma.`);
+        }
+        list.push('');
+        const bottom = mapped.sort((a, b) => a.count - b.count);
+        list.push('Karma bunnliste!');
+        for (let i = 0; i < Math.min(bottom.length, 3); i += 1) {
+          list.push(`${i + 1}. ${client.users.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
         }
 
-        const bottom = mapped.sort((a, b) => a.count - b.count);
-        message.channel.send('Karma bunnliste!');
-        for (let i = 0; i < Math.min(bottom.length, 3); i += 1) {
-          message.channel.send(`${i + 1}. ${client.users.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
-        }
+        message.channel.send(list.join('\n'));
       } catch (err) {
         console.log('karma', err);
       }

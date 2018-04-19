@@ -10,7 +10,7 @@ module.exports = (client) => {
     const matches = message.content.match(/^!(kind|snill) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
-      const hasNew = !!matches[3].trim();
+      const hasNew = !!(matches[3] && matches[3].trim());
 
       const getLatest = async () => {
         const query = new Parse.Query(Kind);
@@ -68,10 +68,12 @@ module.exports = (client) => {
               }
               return acc;
             }, {});
+          const list = [];
           const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            message.channel.send(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
+            list.push(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }
+          message.channel.send(list.join('\n'));
         }
       } catch (err) {
         console.log('kind', err);
