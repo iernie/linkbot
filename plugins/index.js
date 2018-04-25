@@ -7,7 +7,6 @@ module.exports = [
   require('./plugin.kind'),
   require('./plugin.mean'),
   require('./plugin.natta'),
-  require('./plugin.presence'),
   require('./plugin.old'),
   require('./plugin.say'),
   require('./plugin.vote'),

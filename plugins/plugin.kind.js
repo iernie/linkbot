@@ -1,12 +1,15 @@
-const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
-const nb = require('date-fns/locale/nb');
+// const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+// const nb = require('date-fns/locale/nb');
 
-const Kind = Parse.Object.extend('Kind');
+// const Kind = Parse.Object.extend('Kind');
 
 module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
-
+    if (message.content.match(/^!(kind|snill)/i)) {
+      message.react('🤷');
+    }
+    /*
     const matches = message.content.match(/^!(kind|snill) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
@@ -84,5 +87,6 @@ module.exports = (client) => {
     if (message.content.match(/^!help/i)) {
       message.channel.send('!kind @user [?reason=add]');
     }
+    */
   });
 };
