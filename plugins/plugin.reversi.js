@@ -11,9 +11,11 @@ module.exports = (client) => {
       if (matches[2] === 'new') {
         games[message.channel.id] = new Game();
         message.channel.send(games[message.channel.id].toText());
-      } else {
-        games[message.channel.id].proceed(matches[4], matches[5]);
-        message.channel.send(games[message.channel.id].toText());
+      } else if (matches[3]) {
+        const game = games[message.channel.id];
+        game.proceed(matches[4], matches[5]);
+        message.channel.send(game.toText());
+        games[message.channel.id] = game;
       }
     }
 
