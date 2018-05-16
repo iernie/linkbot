@@ -9,6 +9,7 @@ module.exports = [
   require('./plugin.mute'),
   require('./plugin.natta'),
   require('./plugin.old'),
+  require('./plugin.reversi'),
   require('./plugin.say'),
   require('./plugin.vote'),
   require('./plugin.weather')
