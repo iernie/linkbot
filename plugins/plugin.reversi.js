@@ -3,8 +3,10 @@ const { Game } = require('reversi');
 let games = [];
 
 const removeGame = (channelId) => {
-  const index = games.indexOf(g => g[0] === channelId);
-  games = games.splice(index, 1);
+  const index = games.findIndex(g => g[0] === channelId);
+  if (index !== -1) {
+    games = games.splice(index, 1);
+  }
 };
 
 const addGame = (channnelId) => {
@@ -24,7 +26,7 @@ module.exports = (client) => {
         const game = addGame(message.channel.id);
         message.channel.send(game.toText());
       } else if (matches[3]) {
-        const index = games.indexOf(g => g[0] === message.channel.id);
+        const index = games.findIndex(g => g[0] === message.channel.id);
         if (index !== -1) {
           const game = games[index][1];
           game.proceed(matches[4], matches[5]);
