@@ -5,7 +5,9 @@ module.exports = (client) => {
     const matches = message.content.match(/!say #?(\S+)\s(.+)/i);
     if (matches) {
       const channel = client.channels.find('name', matches[1]);
-      channel.send(matches[2]);
+      if (channel) {
+        channel.send(matches[2]);
+      }
     }
   });
 };

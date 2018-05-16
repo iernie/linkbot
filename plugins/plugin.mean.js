@@ -1,16 +1,14 @@
-// const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
-// const differenceInCalendarDays = require('date-fns/difference_in_calendar_days');
-// const nb = require('date-fns/locale/nb');
+const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+const differenceInCalendarDays = require('date-fns/difference_in_calendar_days');
+const nb = require('date-fns/locale/nb');
+const isMuted = require('../utils/muteUtils');
 
-// const Mean = Parse.Object.extend('Mean');
+const Mean = Parse.Object.extend('Mean');
 
 module.exports = (client) => {
   client.on('message', async (message) => {
-    if (message.author.bot) return;
-    if (message.content.match(/^!(mean|slem)/i)) {
-      message.react('🤷');
-    }
-    /*
+    if (message.author.bot || await isMuted(message.channel.id)) return;
+
     const matches = message.content.match(/^!(mean|slem) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
@@ -58,7 +56,6 @@ module.exports = (client) => {
         console.log('mean', err);
       }
       message.channel.stopTyping();
-
     }
 
     if (message.content.match(/^!(mean|slem)$/i)) {
@@ -94,6 +91,5 @@ module.exports = (client) => {
     if (message.content.match(/^!help/i)) {
       message.channel.send('!mean @user [?reason=add]');
     }
-    */
   });
 };

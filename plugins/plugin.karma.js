@@ -1,13 +1,11 @@
-// const Mean = Parse.Object.extend('Mean');
-// const Kind = Parse.Object.extend('Kind');
+const Mean = Parse.Object.extend('Mean');
+const Kind = Parse.Object.extend('Kind');
+const isMuted = require('../utils/muteUtils');
 
 module.exports = (client) => {
   client.on('message', async (message) => {
-    if (message.author.bot) return;
-    if (message.content.match(/^!(karma|score)/i)) {
-      message.react('🤷');
-    }
-    /*
+    if (message.author.bot || await isMuted(message.channel.id)) return;
+
     if (message.content.match(/^!(karma|score)$/i)) {
       message.channel.startTyping();
       try {
@@ -67,6 +65,5 @@ module.exports = (client) => {
     if (message.content.match(/^!help/i)) {
       message.channel.send('!karma');
     }
-    */
   });
 };
