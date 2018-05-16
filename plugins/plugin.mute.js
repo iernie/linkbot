@@ -14,10 +14,12 @@ module.exports = (client) => {
         const result = await query.first();
         if (result) {
           result.destroy();
+          message.react('🔊');
         } else {
           const muteObject = new Mute();
           muteObject.set('channel', channel.id);
           muteObject.save();
+          message.react('🔇');
         }
       }
     }
