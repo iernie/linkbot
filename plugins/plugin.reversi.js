@@ -1,6 +1,18 @@
 const { Game } = require('reversi');
 
-const games = {};
+let games = [];
+
+const removeGame = (channelId) => {
+  const index = games.indexOf(g => g[0] === channelId);
+  games = games.splice(index, 1);
+};
+
+const addGame = (channnelId) => {
+  removeGame(channnelId);
+  const game = new Game();
+  games.push([channnelId, game]);
+  return game;
+};
 
 module.exports = (client) => {
   client.on('message', (message) => {
@@ -9,13 +21,19 @@ module.exports = (client) => {
     const matches = message.content.match(/^!(othello|reversi) (((\d),(\d))|new)/i);
     if (matches) {
       if (matches[2] === 'new') {
-        games[message.channel.id] = new Game();
-        message.channel.send(games[message.channel.id].toText());
-      } else if (matches[3]) {
-        const game = games[message.channel.id];
-        game.proceed(matches[4], matches[5]);
+        const game = addGame(message.channel.id);
         message.channel.send(game.toText());
-        games[message.channel.id] = game;
+      } else if (matches[3]) {
+        const index = games.indexOf(g => g[0] === message.channel.id);
+        if (index !== -1) {
+          const game = games[index][1];
+          game.proceed(matches[4], matches[5]);
+          message.channel.send(game.toText());
+          if (game.isEnded) {
+            removeGame(message.channel.id);
+            message.channel.send('Game over!');
+          }
+        }
       }
     }
 
