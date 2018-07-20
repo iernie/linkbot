@@ -5,12 +5,12 @@ const nb = require('date-fns/locale/nb');
 
 const URL = Parse.Object.extend('URL');
 
-const pattern = new RegExp('(https?:\\/\\/)?' + // protocol
-  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-  '(\\#[-a-z\\d_]*)?', 'ig'); // fragment locator
+const pattern = new RegExp('(https?:\\/\\/)?' // protocol
+  + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
+  + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
+  + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
+  + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
+  + '(\\#[-a-z\\d_]*)?', 'ig'); // fragment locator
 
 module.exports = (client) => {
   client.on('message', (message) => {

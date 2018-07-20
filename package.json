@@ -6,11 +6,11 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "discord.js": "^11.3.2",
+    "fast-xml-parser": "^3.11.1",
+    "node-fetch": "^2.1.2",
     "node-geocoder": "^3.22.0",
     "normalize-url": "^3.2.0",
-    "parse": "^1.11.1",
-    "request": "^2.86.0",
-    "yr.no-forecast": "^2.1.0"
+    "parse": "^1.11.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
