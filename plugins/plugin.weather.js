@@ -1,7 +1,7 @@
 const nodeGeocoder = require('node-geocoder');
 const yrno = require('yr.no-forecast')();
 
-const geocoder = nodeGeocoder({ provider: 'OpenStreetMapGeocoder' });
+const geocoder = nodeGeocoder({ provider: 'openstreetmap' });
 
 module.exports = (client) => {
   client.on('message', async (message) => {
