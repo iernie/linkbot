@@ -3,7 +3,7 @@ const request = require('request');
 const format = require('date-fns/format');
 const nb = require('date-fns/locale/nb');
 
-const geocoder = nodeGeocoder({ provider: 'google', apiKey: process.env.google_api_key });
+const geocoder = nodeGeocoder({ provider: 'openstreetmap' });
 
 const Level = {
   UNKNOWN: 0,
