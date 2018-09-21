@@ -1,4 +1,4 @@
 linkbot
 ========
 
-A simple Discord bot written in node
+A simple Discord bot written in node.
