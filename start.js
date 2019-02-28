@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 global.Parse = require('parse/node');
 const Discord = require('discord.js');
 
