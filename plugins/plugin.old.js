@@ -19,7 +19,7 @@ module.exports = (client) => {
     const matches = message.content.match(pattern);
     if (matches) {
       matches
-        .map(url => urlParser.parse(normalizeUrl(url, { normalizeHttps: true, removeDirectoryIndex: true })))
+        .map(url => urlParser.parse(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
           try {
             const query = new Parse.Query(URL);
