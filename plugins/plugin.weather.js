@@ -14,7 +14,7 @@ module.exports = (client) => {
       try {
         const location = await geocoder.geocode(matches[1].trim());
         if (location && location.length > 0) {
-          const data = await fetch(`https://api.met.no/weatherapi/locationforecast/1.9/?lat=${location[0].latitude}&lon=${location[0].longitude}`).then(res => res.text());
+          const data = await fetch(`https://api.met.no/weatherapi/locationforecast/1.9/?lat=${location[0].latitude}&lon=${location[0].longitude}`).then((res) => res.text());
           if (data && parser.validate(data)) {
             const json = parser.parse(data, { parseAttributeValue: true, ignoreAttributes: false, attributeNamePrefix: '' });
             if (json && json.weatherdata && json.weatherdata.product && json.weatherdata.product.time && json.weatherdata.product.time.length > 0) {

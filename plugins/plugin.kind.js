@@ -1,4 +1,4 @@
-const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const nb = require('date-fns/locale/nb');
 const isMuted = require('../utils/muteUtils');
 
@@ -20,7 +20,7 @@ module.exports = (client) => {
         query.descending('createdAt');
         const result = await query.first();
         if (result) {
-          const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
+          const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
           message.channel.send(`${client.users.get(result.get('user')).username} var sist snill for ${days}; "${result.get('reason')}" –${client.users.get(result.get('author')).username}.`);
         } else if (!hasNew) {
           message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
@@ -60,7 +60,7 @@ module.exports = (client) => {
         const results = await query.find();
         if (results) {
           const toplist = results
-            .map(result => result.get('user'))
+            .map((result) => result.get('user'))
             .reduce((acc, curr) => {
               if (typeof acc[curr] === 'undefined') {
                 acc[curr] = 1;
@@ -70,7 +70,7 @@ module.exports = (client) => {
               return acc;
             }, {});
           const list = [];
-          const sorted = Object.keys(toplist).map(key => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
+          const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
             list.push(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }

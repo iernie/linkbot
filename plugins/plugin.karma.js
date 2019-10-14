@@ -16,7 +16,7 @@ module.exports = (client) => {
         const meanResult = await meanQuery.find();
         if (meanResult) {
           meanResult
-            .map(result => result.get('user'))
+            .map((result) => result.get('user'))
             .forEach((curr) => {
               if (typeof scores[curr] === 'undefined') {
                 scores[curr] = -1;
@@ -31,7 +31,7 @@ module.exports = (client) => {
         const kindResult = await kindQuery.find();
         if (kindResult) {
           kindResult
-            .map(result => result.get('user'))
+            .map((result) => result.get('user'))
             .forEach((curr) => {
               if (typeof scores[curr] === 'undefined') {
                 scores[curr] = 1;
@@ -41,7 +41,7 @@ module.exports = (client) => {
             });
         }
         const list = [];
-        const mapped = Object.keys(scores).map(key => ({ user: key, count: scores[key] }));
+        const mapped = Object.keys(scores).map((key) => ({ user: key, count: scores[key] }));
 
         const top = mapped.sort((a, b) => b.count - a.count);
         list.push('Karma toppliste!');

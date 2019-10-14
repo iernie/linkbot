@@ -40,3 +40,4 @@ jspm_packages
 config.js
 *.json
 !*.example.json
+!package-lock.json

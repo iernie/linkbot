@@ -1,5 +1,5 @@
 const urlParser = require('url');
-const distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
+const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
 
@@ -19,7 +19,7 @@ module.exports = (client) => {
     const matches = message.content.match(pattern);
     if (matches) {
       matches
-        .map(url => urlParser.parse(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
+        .map((url) => urlParser.parse(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
           try {
             const query = new Parse.Query(URL);
@@ -28,7 +28,7 @@ module.exports = (client) => {
             const result = await query.first();
             if (result) {
               if (result.get('user') !== message.author.id) {
-                const days = distanceInWordsToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
+                const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
                 message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} siden.`);
               }
             } else if (url.path && url.path !== '/') {
