@@ -11,6 +11,7 @@ Parse.serverURL = process.env.parse_server_url;
 
 client.on('ready', () => {
   console.log('Bip bop, I am ready!');
+  client.user.setUsername(process.env.username || "linkbot");
 });
 
 client.on('error', (error) => {
@@ -19,6 +20,6 @@ client.on('error', (error) => {
 
 client.setMaxListeners(0);
 
-plugins.forEach((plugin) => plugin(client));
+plugins.forEach(plugin => plugin(client));
 
 client.login(process.env.token);
