@@ -10,6 +10,7 @@ module.exports = [
   require('./plugin.natta'),
   require('./plugin.old'),
   require('./plugin.say'),
+  require('./plugin.username'),
   require('./plugin.vote'),
   require('./plugin.weather')
 ];
