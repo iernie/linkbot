@@ -21,9 +21,9 @@ module.exports = (client) => {
         const result = await query.first();
         if (result) {
           const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          message.channel.send(`${client.users.get(result.get('user')).username} var sist snill for ${days}; "${result.get('reason')}" –${client.users.get(result.get('author')).username}.`);
+          message.channel.send(`${client.users.cache.get(result.get('user')).username} var sist snill for ${days}; "${result.get('reason')}" –${client.users.cache.get(result.get('author')).username}.`);
         } else if (!hasNew) {
-          message.channel.send(`${client.users.get(matches[2].trim()).username} har ikke vært snill :(`);
+          message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har ikke vært snill :(`);
         }
       };
 
@@ -72,7 +72,7 @@ module.exports = (client) => {
           const list = [];
           const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            list.push(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
+            list.push(`${i + 1}. ${.cache.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }
           message.channel.send(list.join('\n'));
         }

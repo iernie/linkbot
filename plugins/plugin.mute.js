@@ -6,7 +6,7 @@ module.exports = (client) => {
 
     const matches = message.content.match(/!mute #?(\S+)/i);
     if (matches) {
-      const channel = client.channels.find('name', matches[1]);
+      const channel = client.channels.cache.find('name', matches[1]);
 
       if (channel) {
         const query = new Parse.Query(Mute);

@@ -46,13 +46,13 @@ module.exports = (client) => {
         const top = mapped.sort((a, b) => b.count - a.count);
         list.push('Karma toppliste!');
         for (let i = 0; i < Math.min(top.length, 3); i += 1) {
-          list.push(`${i + 1}. ${client.users.get(top[i].user).username} har ${top[i].count} i karma.`);
+          list.push(`${i + 1}. ${client.users.cache.get(top[i].user).username} har ${top[i].count} i karma.`);
         }
         list.push('');
         const bottom = mapped.sort((a, b) => a.count - b.count);
         list.push('Karma bunnliste!');
         for (let i = 0; i < Math.min(bottom.length, 3); i += 1) {
-          list.push(`${i + 1}. ${client.users.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
+          list.push(`${i + 1}. ${client.users.cache.get(bottom[i].user).username} har ${bottom[i].count} i karma.`);
         }
 
         message.channel.send(list.join('\n'));
