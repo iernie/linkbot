@@ -75,6 +75,7 @@ module.exports = (client) => {
             else if (level === Level.EXTREME) message.channel.send(`${city}: Alvorlig helserisiko`);
             else message.react('🤷');
           } else {
+            console.log('air', json);
             message.react('🤷');
           }
         }
