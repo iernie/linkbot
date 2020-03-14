@@ -72,7 +72,7 @@ module.exports = (client) => {
           const list = [];
           const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
           for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            list.push(`${i + 1}. ${.cache.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
+            list.push(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
           }
           message.channel.send(list.join('\n'));
         }
