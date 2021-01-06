@@ -8,6 +8,7 @@ module.exports = [
   require('./plugin.mean'),
   require('./plugin.mute'),
   require('./plugin.natta'),
+  require('./plugin.newyear'),
   require('./plugin.old'),
   require('./plugin.say'),
   require('./plugin.username'),

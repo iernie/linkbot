@@ -1,7 +1,8 @@
-const Mute = Parse.Object.extend('Mute');
+const firebase = require('firebase/app');
 
-module.exports = (channelId) => {
-  const mute = new Parse.Query(Mute);
-  mute.equalTo('channel', channelId);
-  return mute.first();
+const db = firebase.firestore();
+
+module.exports = async (channelId) => {
+  const doc = await db.collection('mute').doc(channelId).get();
+  return doc.exists;
 };

@@ -1,8 +1,9 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const nb = require('date-fns/locale/nb');
+const firebase = require('firebase/app');
 const isMuted = require('../utils/muteUtils');
 
-const Kind = Parse.Object.extend('Kind');
+const db = firebase.firestore();
 
 module.exports = (client) => {
   client.on('message', async (message) => {
@@ -14,17 +15,23 @@ module.exports = (client) => {
       const hasNew = !!(matches[3] && matches[3].trim());
 
       const getLatest = async () => {
-        const query = new Parse.Query(Kind);
-        query.equalTo('user', matches[2].trim());
-        query.equalTo('channel', message.channel.id);
-        query.descending('createdAt');
-        const result = await query.first();
-        if (result) {
-          const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          message.channel.send(`${client.users.cache.get(result.get('user')).username} var sist snill for ${days}; "${result.get('reason')}" –${client.users.cache.get(result.get('author')).username}.`);
-        } else if (!hasNew) {
-          message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har ikke vært snill :(`);
-        }
+        db.collection('kind')
+          .orderBy('createdAt', 'desc')
+          .where('user', '==', matches[2].trim())
+          .where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const result = querySnapshot.docs[0].data();
+              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
+              message.channel.send(`${client.users.cache.get(result.user).username} var sist snill for ${days}; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
+            } else {
+              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har ikke vært snill :(`);
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
       };
 
       try {
@@ -32,15 +39,20 @@ module.exports = (client) => {
           if (matches[2].trim() === message.author.id) {
             message.channel.send('Tsk, tsk! Du kan ikke snille deg selv. 👼');
           } else {
-            const kindObject = new Kind();
-            kindObject.set('user', matches[2].trim());
-            kindObject.set('author', message.author.id);
-            kindObject.set('channel', message.channel.id);
-            kindObject.set('reason', matches[3].trim());
+            db.collection('kind').doc(`${message.channel.id}-${matches[2].trim()}`).set({
+              user: matches[2].trim(),
+              author: message.author.id,
+              channel: message.channel.id,
+              reason: matches[3].trim(),
+              createdAt: new Date()
+            })
+              .then(() => {
+                console.log('Document successfully written!');
+              })
+              .catch((error) => {
+                console.error('Error writing document: ', error);
+              });
 
-            await getLatest();
-
-            kindObject.save();
             message.react('👼');
           }
         } else {
@@ -55,27 +67,31 @@ module.exports = (client) => {
     if (message.content.match(/^!(kind|snill)$/i)) {
       message.channel.startTyping();
       try {
-        const query = new Parse.Query(Kind);
-        query.equalTo('channel', message.channel.id);
-        const results = await query.find();
-        if (results) {
-          const toplist = results
-            .map((result) => result.get('user'))
-            .reduce((acc, curr) => {
-              if (typeof acc[curr] === 'undefined') {
-                acc[curr] = 1;
-              } else {
-                acc[curr] += 1;
+        db.collection('kind')
+          .where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const toplist = querySnapshot.docs.map((doc) => doc.data().user)
+                .reduce((acc, curr) => {
+                  if (typeof acc[curr] === 'undefined') {
+                    acc[curr] = 1;
+                  } else {
+                    acc[curr] += 1;
+                  }
+                  return acc;
+                }, {});
+              const list = [];
+              const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
+              for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
+                list.push(`${i + 1}. ${client.users.cache.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
               }
-              return acc;
-            }, {});
-          const list = [];
-          const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
-          for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            list.push(`${i + 1}. ${client.users.get(sorted[i].user).username} har vært snill ${sorted[i].count} ganger.`);
-          }
-          message.channel.send(list.join('\n'));
-        }
+              message.channel.send(list.join('\n'));
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
       } catch (err) {
         console.log('kind', err);
       }

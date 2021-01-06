@@ -1,9 +1,10 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
 const nb = require('date-fns/locale/nb');
+const firebase = require('firebase/app');
 const isMuted = require('../utils/muteUtils');
 
-const Mean = Parse.Object.extend('Mean');
+const db = firebase.firestore();
 
 module.exports = (client) => {
   client.on('message', async (message) => {
@@ -15,38 +16,49 @@ module.exports = (client) => {
       const hasNew = !!(matches[3] && matches[3].trim());
 
       const getLatest = async () => {
-        const query = new Parse.Query(Mean);
-        query.equalTo('user', matches[2].trim());
-        query.equalTo('channel', message.channel.id);
-        query.descending('createdAt');
-        const result = await query.first();
-        if (result) {
-          const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-          message.channel.send(`${client.users.cache.get(result.get('user')).username} var sist slem for ${days} siden; "${result.get('reason')}" –${client.users.cache.get(result.get('author')).username}.`);
-        } else if (!hasNew) {
-          message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har vært snill :)`);
-        }
+        db.collection('mean')
+          .orderBy('createdAt', 'desc')
+          .where('user', '==', matches[2].trim())
+          .where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const result = querySnapshot.docs[0].data();
+              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
+              message.channel.send(`${client.users.cache.get(result.user).username} var sist slem for ${days} siden; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
+            } else {
+              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har vært snill :)`);
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
       };
 
       try {
         if (hasNew) {
-          const newQuery = new Parse.Query(Mean);
-          newQuery.equalTo('author', message.author.id);
-          newQuery.equalTo('channel', message.channel.id);
-          newQuery.descending('createdAt');
-          const newResult = await newQuery.first();
-          if (newResult && differenceInCalendarDays(new Date(), newResult.get('createdAt')) < 1) {
+          const newResult = await db.collection('mean')
+            .orderBy('createdAt', 'desc')
+            .where('author', '==', message.author.id)
+            .where('channel', '==', message.channel.id)
+            .get();
+
+          if (newResult.size > 0 && differenceInCalendarDays(new Date(), newResult[0].data().createdAt.toDate()) < 1) {
             message.channel.send('Du har brukt opp dagskvoten din med !slem');
           } else {
-            const meanObject = new Mean();
-            meanObject.set('user', matches[2].trim());
-            meanObject.set('author', message.author.id);
-            meanObject.set('channel', message.channel.id);
-            meanObject.set('reason', matches[3].trim());
-
-            await getLatest();
-
-            meanObject.save();
+            db.collection('mean').doc(`${message.channel.id}-${matches[2].trim()}`).set({
+              user: matches[2].trim(),
+              author: message.author.id,
+              channel: message.channel.id,
+              reason: matches[3].trim(),
+              createdAt: new Date()
+            })
+              .then(() => {
+                console.log('Document successfully written!');
+              })
+              .catch((error) => {
+                console.error('Error writing document: ', error);
+              });
             message.react('😈');
           }
         } else {
@@ -61,27 +73,31 @@ module.exports = (client) => {
     if (message.content.match(/^!(mean|slem)$/i)) {
       message.channel.startTyping();
       try {
-        const query = new Parse.Query(Mean);
-        query.equalTo('channel', message.channel.id);
-        const results = await query.find();
-        if (results) {
-          const toplist = results
-            .map((result) => result.get('user'))
-            .reduce((acc, curr) => {
-              if (typeof acc[curr] === 'undefined') {
-                acc[curr] = 1;
-              } else {
-                acc[curr] += 1;
+        db.collection('mean')
+          .where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const toplist = querySnapshot.docs.map((doc) => doc.data().user)
+                .reduce((acc, curr) => {
+                  if (typeof acc[curr] === 'undefined') {
+                    acc[curr] = 1;
+                  } else {
+                    acc[curr] += 1;
+                  }
+                  return acc;
+                }, {});
+              const list = [];
+              const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
+              for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
+                list.push(`${i + 1}. ${client.users.cache.get(sorted[i].user).username} har vært slem ${sorted[i].count} ganger.`);
               }
-              return acc;
-            }, {});
-          const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
-          const list = [];
-          for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-            list.push(`${i + 1}. ${client.users.cache.get(sorted[i].user).username} har vært slem ${sorted[i].count} ganger.`);
-          }
-          message.channel.send(list.join('\n'));
-        }
+              message.channel.send(list.join('\n'));
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
       } catch (err) {
         console.log('mean', err);
       }

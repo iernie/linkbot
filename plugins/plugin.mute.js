@@ -1,4 +1,6 @@
-const Mute = Parse.Object.extend('Mute');
+const firebase = require('firebase/app');
+
+const db = firebase.firestore();
 
 module.exports = (client) => {
   client.on('message', async (message) => {
@@ -9,18 +11,35 @@ module.exports = (client) => {
       const channel = client.channels.cache.find('name', matches[1]);
 
       if (channel) {
-        const query = new Parse.Query(Mute);
-        query.equalTo('channel', channel.id);
-        const result = await query.first();
-        if (result) {
-          result.destroy();
-          message.react('🔊');
-        } else {
-          const muteObject = new Mute();
-          muteObject.set('channel', channel.id);
-          muteObject.save();
-          message.react('🔇');
-        }
+        db.collection('mute')
+          .doc(channel.id)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection('mute').doc(channel.id).delete().then(() => {
+                console.log('Document successfully deleted!');
+              })
+                .catch((error) => {
+                  console.error('Error removing document: ', error);
+                });
+              message.react('🔊');
+            } else {
+              db.collection('mute').doc(channel.id).set({
+                channel: channel.id,
+                createdAt: new Date()
+              })
+                .then(() => {
+                  console.log('Document successfully written!');
+                })
+                .catch((error) => {
+                  console.error('Error writing document: ', error);
+                });
+              message.react('🔇');
+            }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
       }
     }
   });

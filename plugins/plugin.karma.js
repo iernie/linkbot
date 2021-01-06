@@ -1,5 +1,6 @@
-const Mean = Parse.Object.extend('Mean');
-const Kind = Parse.Object.extend('Kind');
+const firebase = require('firebase/app');
+
+const db = firebase.firestore();
 const isMuted = require('../utils/muteUtils');
 
 module.exports = (client) => {
@@ -11,35 +12,38 @@ module.exports = (client) => {
       try {
         const scores = {};
 
-        const meanQuery = new Parse.Query(Mean);
-        meanQuery.equalTo('channel', message.channel.id);
-        const meanResult = await meanQuery.find();
-        if (meanResult) {
-          meanResult
-            .map((result) => result.get('user'))
-            .forEach((curr) => {
-              if (typeof scores[curr] === 'undefined') {
-                scores[curr] = -1;
+        db.collection('mean').where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const { user } = doc.data();
+              if (typeof scores[user] === 'undefined') {
+                scores[user] = -1;
               } else {
-                scores[curr] -= 1;
+                scores[user] -= 1;
               }
             });
-        }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
 
-        const kindQuery = new Parse.Query(Kind);
-        kindQuery.equalTo('channel', message.channel.id);
-        const kindResult = await kindQuery.find();
-        if (kindResult) {
-          kindResult
-            .map((result) => result.get('user'))
-            .forEach((curr) => {
-              if (typeof scores[curr] === 'undefined') {
-                scores[curr] = 1;
+        db.collection('kind').where('channel', '==', message.channel.id)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const { user } = doc.data();
+              if (typeof scores[user] === 'undefined') {
+                scores[user] = 1;
               } else {
-                scores[curr] += 1;
+                scores[user] += 1;
               }
             });
-        }
+          })
+          .catch((error) => {
+            console.log('Error getting documents: ', error);
+          });
+
         const list = [];
         const mapped = Object.keys(scores).map((key) => ({ user: key, count: scores[key] }));
 

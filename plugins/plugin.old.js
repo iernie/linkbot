@@ -2,8 +2,9 @@ const urlParser = require('url');
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
+const firebase = require('firebase/app');
 
-const URL = Parse.Object.extend('URL');
+const db = firebase.firestore();
 
 const pattern = new RegExp('(https?:\\/\\/)?' // protocol
   + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
@@ -22,22 +23,35 @@ module.exports = (client) => {
         .map((url) => urlParser.parse(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
           try {
-            const query = new Parse.Query(URL);
-            query.equalTo('url', url.href);
-            query.equalTo('channel', message.channel.id);
-            const result = await query.first();
-            if (result) {
-              if (result.get('user') !== message.author.id) {
-                const days = formatDistanceToNow(result.get('createdAt'), { includeSeconds: true, locale: nb });
-                message.reply(`old! Denne lenken ble postet av <@${result.get('user')}> for ${days} siden.`);
-              }
-            } else if (url.path && url.path !== '/') {
-              const urlObject = new URL();
-              urlObject.set('url', url.href);
-              urlObject.set('user', message.author.id);
-              urlObject.set('channel', message.channel.id);
-              urlObject.save();
-            }
+            db.collection('url')
+              .where('url', '==', url.href)
+              .where('channel', '==', message.channel.id)
+              .get()
+              .then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                  const result = querySnapshot.docs[0].data();
+                  if (result.user !== message.author.id) {
+                    const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
+                    message.reply(`old! Denne lenken ble postet av <@${result.user}> for ${days} siden.`);
+                  }
+                } else if (url.path && url.path !== '/') {
+                  db.collection('url').doc(`${message.channel.id}-${url.href.replace(/\//ig, '')}`).set({
+                    url: url.href,
+                    user: message.author.id,
+                    channel: message.channel.id,
+                    createdAt: new Date()
+                  })
+                    .then(() => {
+                      console.log('Document successfully written!');
+                    })
+                    .catch((error) => {
+                      console.error('Error writing document: ', error);
+                    });
+                }
+              })
+              .catch((error) => {
+                console.log('Error getting documents: ', error);
+              });
           } catch (err) {
             console.log('old', err);
           }
