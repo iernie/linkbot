@@ -5,7 +5,7 @@ module.exports = (client) => {
   client.on('message', (message) => {
     if (message.author.bot) return;
 
-    const match = message.content.match(new RegExp('^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(!+)?$', 'i'));
+    const match = message.content.match(new RegExp('^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$', 'i'));
     if (match && match[0] !== '') {
       if (new Date().getMonth() === 0) {
         message.channel.send(`Godt nytt år <@${message.author.id}>!`);
