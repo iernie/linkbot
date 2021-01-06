@@ -9,6 +9,8 @@ module.exports = (client) => {
     if (match && match[0] !== '') {
       if (new Date().getMonth() === 0) {
         message.channel.send(`Godt nytt år <@${message.author.id}>!`);
+      } else if (new Date().getMonth() === 11 && new Date().getDate() === 31) {
+        message.channel.send(`Godt nytt år <@${message.author.id}>! Det er ${formatDistanceToNow(new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0, 0), { includeSeconds: true, locale: nb })} igjen til midnatt!`);
       } else {
         message.channel.send(`Du er for tidlig! Det er ${formatDistanceToNow(new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0, 0), { includeSeconds: true, locale: nb })} igjen.`);
       }
