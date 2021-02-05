@@ -2,9 +2,9 @@ const urlParser = require('url');
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
-const admin = require('firebase-admin');
+const firebase = require('firebase/app');
 
-const db = admin.database();
+const db = firebase.firestore();
 
 const pattern = new RegExp('(https?:\\/\\/)?' // protocol
   + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name

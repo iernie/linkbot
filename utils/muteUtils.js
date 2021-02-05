@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+const firebase = require('firebase/app');
 
-const db = admin.database();
+const db = firebase.firestore();
 
 module.exports = async (channelId) => {
   const doc = await db.collection('mute').doc(channelId).get();

@@ -1,9 +1,9 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const nb = require('date-fns/locale/nb');
-const admin = require('firebase-admin');
+const firebase = require('firebase/app');
 const isMuted = require('../utils/muteUtils');
 
-const db = admin.database();
+const db = firebase.firestore();
 
 module.exports = (client) => {
   client.on('message', async (message) => {
