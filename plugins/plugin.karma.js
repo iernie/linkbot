@@ -1,6 +1,6 @@
-const firebase = require('firebase/app');
+const admin = require('firebase-admin');
 
-const db = firebase.firestore();
+const db = admin.database();
 const isMuted = require('../utils/muteUtils');
 
 module.exports = (client) => {
