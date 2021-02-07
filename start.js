@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 
 const firebase = require('firebase/app');
 require('firebase/firestore');
+require('firebase/auth');
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -12,6 +13,14 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+firebase.auth().signInWithEmailAndPassword(process.env.email, process.env.password)
+  .then(() => {
+    console.log('Logged into firebase');
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 const plugins = require('./plugins');
 
