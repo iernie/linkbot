@@ -1,4 +1,3 @@
-const urlParser = require('url');
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
@@ -20,7 +19,7 @@ module.exports = (client) => {
     const matches = message.content.match(pattern);
     if (matches) {
       matches
-        .map((url) => urlParser.parse(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
+        .map((url) => new URL(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
           try {
             db.collection('url')
@@ -34,7 +33,7 @@ module.exports = (client) => {
                     const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
                     message.reply(`old! Denne lenken ble postet av <@${result.user}> for ${days} siden.`);
                   }
-                } else if (url.path && url.path !== '/') {
+                } else if (url.pathname && url.pathname !== '/') {
                   db.collection('url').doc(`${message.channel.id}-${url.href.replace(/\//ig, '')}`).set({
                     url: url.href,
                     user: message.author.id,

@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const nodeGeocoder = require('node-geocoder');
-const parser = require('fast-xml-parser');
 
 const geocoder = nodeGeocoder({ provider: 'openstreetmap' });
 
@@ -14,15 +13,10 @@ module.exports = (client) => {
       try {
         const location = await geocoder.geocode(matches[1].trim());
         if (location && location.length > 0) {
-          const data = await fetch(`https://api.met.no/weatherapi/locationforecast/1.9/?lat=${location[0].latitude}&lon=${location[0].longitude}`).then((res) => res.text());
-          if (data && parser.validate(data)) {
-            const json = parser.parse(data, { parseAttributeValue: true, ignoreAttributes: false, attributeNamePrefix: '' });
-            if (json && json.weatherdata && json.weatherdata.product && json.weatherdata.product.time && json.weatherdata.product.time.length > 0) {
-              const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
-              message.channel.send(`${city}: ${json.weatherdata.product.time[0].location.temperature.value}°C`);
-            } else {
-              message.react('🤷');
-            }
+          const data = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location[0].latitude}&lon=${location[0].longitude}`).then((res) => res.json());
+          if (data && data.properties && data.properties.timeseries && data.properties.timeseries.length > 0) {
+            const city = location[0].city !== undefined ? location[0].city : matches[1].trim();
+            message.channel.send(`${city}: ${data.properties.timeseries[0].data.instant.details.air_temperature}°C`);
           } else {
             message.react('🤷');
           }
