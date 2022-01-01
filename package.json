@@ -10,7 +10,7 @@
     "firebase": "^9.6.1",
     "node-fetch": "^2.6.6",
     "node-geocoder": "^3.28.0",
-    "normalize-url": "^7.0.2"
+    "normalize-url": "^6.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
