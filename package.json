@@ -5,7 +5,7 @@
   "main": "start.js",
   "dependencies": {
     "date-fns": "^2.28.0",
-    "discord.js": "^13.5.0",
+    "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "firebase": "^9.6.1",
     "node-fetch": "^2.6.6",
