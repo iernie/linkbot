@@ -1,7 +1,7 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
 const nb = require('date-fns/locale/nb');
-const firebase = require('firebase/app');
+const firebase = require('firebase/compat/app');
 const isMuted = require('../utils/muteUtils');
 
 const db = firebase.firestore();

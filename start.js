@@ -2,9 +2,9 @@ require('dotenv').config();
 
 const Discord = require('discord.js');
 
-const firebase = require('firebase/app');
-require('firebase/firestore');
-require('firebase/auth');
+const firebase = require('firebase/compat/app');
+require('firebase/compat/firestore');
+require('firebase/compat/auth');
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,

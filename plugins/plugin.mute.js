@@ -1,4 +1,4 @@
-const firebase = require('firebase/app');
+const firebase = require('firebase/compat/app');
 
 const db = firebase.firestore();
 

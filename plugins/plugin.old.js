@@ -1,7 +1,7 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
 const nb = require('date-fns/locale/nb');
-const firebase = require('firebase/app');
+const firebase = require('firebase/compat/app');
 
 const db = firebase.firestore();
 
