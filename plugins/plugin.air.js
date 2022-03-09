@@ -64,7 +64,7 @@ module.exports = (client) => {
       try {
         const location = await geocoder.geocode(matches[1].trim());
         if (location && location.length > 0) {
-          const json = await fetch(`https://api.openaq.org/v1/measurements?radius=10000&coordinates=${location[0].latitude},${location[0].longitude}&date_from=${format(new Date(), 'yyyy-LL-dd', { locale: nb })}`).then((res) => res.json());
+          const json = await fetch(`https://api.openaq.org/v1/measurements?radius=10000&coordinates=${location[0].latitude},${location[0].longitude}&date_from=${format(new Date(), 'yyyy-LL-dd', { locale: nb })}`, { headers: { 'User-Agent': 'linkbot' } }).then((res) => res.json());
           if (json && json.results && json.results.length > 0) {
             const level = Math.max(...json.results.map((result) => getLevel(result.parameter, result.value)));
 
