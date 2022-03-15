@@ -9,7 +9,7 @@ module.exports = (client) => {
   client.on('message', async (message) => {
     if (message.author.bot || await isMuted(message.channel.id)) return;
 
-    const matches = message.content.match(/^!(mean|slem) +<@!?(\d+)>( *\S.*)?/i);
+    const matches = message.content.match(/^!(mean|slem|bad) +<@!?(\d+)>( *\S.*)?/i);
     if (matches) {
       message.channel.startTyping();
       const hasNew = !!(matches[3] && matches[3].trim());
@@ -89,7 +89,7 @@ module.exports = (client) => {
               const list = [];
               const sorted = Object.keys(toplist).map((key) => ({ user: key, count: toplist[key] })).sort((a, b) => b.count - a.count);
               for (let i = 0; i < Math.min(sorted.length, 5); i += 1) {
-                list.push(`${i + 1}. ${client.users.cache.get(sorted[i].user).username} har vært slem ${sorted[i].count} ganger.`);
+                list.push(`${i + 1}. ${client.users.cache.get(sorted[i].user).username} has beed bad ${sorted[i].count} times.`);
               }
               message.channel.send(list.join('\n'));
             }
