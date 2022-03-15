@@ -1,6 +1,5 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const normalizeUrl = require('normalize-url');
-const nb = require('date-fns/locale/nb');
 const firebase = require('firebase/compat/app');
 
 const db = firebase.firestore();
@@ -30,8 +29,8 @@ module.exports = (client) => {
                 if (!querySnapshot.empty) {
                   const result = querySnapshot.docs[0].data();
                   if (result.user !== message.author.id) {
-                    const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
-                    message.reply(`old! Denne lenken ble postet av <@${result.user}> for ${days} siden.`);
+                    const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true });
+                    message.reply(`old! This was posted by <@${result.user}> for ${days} ago.`);
                   }
                 } else if (url.pathname && url.pathname !== '/') {
                   db.collection('url').doc(`${message.channel.id}-${url.href.replace(/\//ig, '')}`).set({

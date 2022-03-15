@@ -1,5 +1,4 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
-const nb = require('date-fns/locale/nb');
 const firebase = require('firebase/compat/app');
 const isMuted = require('../utils/muteUtils');
 
@@ -23,10 +22,10 @@ module.exports = (client) => {
           .then((querySnapshot) => {
             if (!querySnapshot.empty) {
               const result = querySnapshot.docs[0].data();
-              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
-              message.channel.send(`${client.users.cache.get(result.user).username} var sist snill for ${days}; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
+              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true });
+              message.channel.send(`${client.users.cache.get(result.user).username} was last kind for ${days} ago; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
             } else {
-              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har ikke vært snill :(`);
+              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} has not been good :(`);
             }
           })
           .catch((error) => {
@@ -37,7 +36,7 @@ module.exports = (client) => {
       try {
         if (hasNew) {
           if (matches[2].trim() === message.author.id) {
-            message.channel.send('Tsk, tsk! Du kan ikke snille deg selv. 👼');
+            message.channel.send('Tsk, tsk! You cannot kind yourself. 👼');
           } else {
             db.collection('kind').doc(`${message.channel.id}-${matches[2].trim()}`).set({
               user: matches[2].trim(),
@@ -64,7 +63,7 @@ module.exports = (client) => {
       message.channel.stopTyping();
     }
 
-    if (message.content.match(/^!(kind|snill)$/i)) {
+    if (message.content.match(/^!(kind|snill|good)$/i)) {
       message.channel.startTyping();
       try {
         db.collection('kind')

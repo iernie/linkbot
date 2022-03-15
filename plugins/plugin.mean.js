@@ -1,6 +1,5 @@
 const formatDistanceToNow = require('date-fns/formatDistanceToNow');
 const differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
-const nb = require('date-fns/locale/nb');
 const firebase = require('firebase/compat/app');
 const isMuted = require('../utils/muteUtils');
 
@@ -24,10 +23,10 @@ module.exports = (client) => {
           .then((querySnapshot) => {
             if (!querySnapshot.empty) {
               const result = querySnapshot.docs[0].data();
-              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true, locale: nb });
-              message.channel.send(`${client.users.cache.get(result.user).username} var sist slem for ${days} siden; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
+              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true });
+              message.channel.send(`${client.users.cache.get(result.user).username} was last bad for ${days} ago; "${result.reason}" –${client.users.cache.get(result.author).username}.`);
             } else {
-              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} har vært snill :)`);
+              message.channel.send(`${client.users.cache.get(matches[2].trim()).username} has been good :)`);
             }
           })
           .catch((error) => {
@@ -44,7 +43,7 @@ module.exports = (client) => {
             .get();
 
           if (newResult.size > 0 && differenceInCalendarDays(new Date(), newResult[0].data().createdAt.toDate()) < 1) {
-            message.channel.send('Du har brukt opp dagskvoten din med !slem');
+            message.channel.send('You cannot use this more today.');
           } else {
             db.collection('mean').doc(`${message.channel.id}-${matches[2].trim()}`).set({
               user: matches[2].trim(),
@@ -70,7 +69,7 @@ module.exports = (client) => {
       message.channel.stopTyping();
     }
 
-    if (message.content.match(/^!(mean|slem)$/i)) {
+    if (message.content.match(/^!(mean|slem|bad)$/i)) {
       message.channel.startTyping();
       try {
         db.collection('mean')
