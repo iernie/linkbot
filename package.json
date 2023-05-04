@@ -2,27 +2,21 @@
   "name": "linkbot",
   "version": "1.0.0",
   "description": "A simple Discord bot written in node",
-  "main": "start.js",
+  "exports": "./index.js",
+  "type": "module",
   "dependencies": {
-    "date-fns": "^2.29.3",
-    "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0",
-    "firebase": "^9.14.0",
-    "node-fetch": "^2.6.7",
-    "node-geocoder": "^3.29.0",
-    "normalize-url": "^6.1.0"
+    "date-fns": "^2.30.0",
+    "discord.js": "^14.10.2",
+    "dotenv": "^16.0.3",
+    "firebase": "^9.21.0",
+    "node-geocoder": "^4.2.0",
+    "normalize-url": "^8.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.29.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint": "^8.39.0"
   },
   "scripts": {
-    "start": "node start.js"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
@@ -35,6 +29,6 @@
   },
   "homepage": "https://github.com/iernie/linkbot#readme",
   "engines": {
-    "node": ">= 16.6.0"
+    "node": ">= 18.0.0"
   }
 }
