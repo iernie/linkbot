@@ -17,7 +17,6 @@ const pattern = new RegExp(
 
 export default {
   name: Events.MessageCreate,
-  once: false,
   execute(message) {
     const matches = message.content.match(pattern);
     if (matches) {

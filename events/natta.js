@@ -2,7 +2,6 @@ import { Events } from "discord.js";
 
 export default {
   name: Events.MessageCreate,
-  once: false,
   async execute(message) {
     if (
       message.content.match(

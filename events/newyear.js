@@ -4,7 +4,6 @@ import nb from "date-fns/locale/nb/index.js";
 
 export default {
   name: Events.MessageCreate,
-  once: false,
   async execute(message) {
     const time = new Date(message.createdTimestamp);
     const match = message.content.match(new RegExp("^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$", "i"));
