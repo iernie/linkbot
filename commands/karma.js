@@ -46,7 +46,7 @@ export default {
       });
 
       if (Object.keys(karma).length === 0) {
-        interaction.reply("No karma has been collected so far");
+        interaction.reply("No karma have been collected so far");
       } else {
         const list = Object.keys(karma).reduce(
           (acc, curr) => [...acc, { user: karma[curr].user, count: karma[curr].count }],

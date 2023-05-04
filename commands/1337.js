@@ -28,7 +28,7 @@ export default {
       });
 
       if (Object.keys(streaks).length === 0) {
-        interaction.reply("No 1337 streaks has been collected so far");
+        interaction.reply("No 1337 streaks have been collected so far");
       } else {
         const list = Object.keys(streaks).reduce(
           (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
