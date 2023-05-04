@@ -7,6 +7,9 @@ const db = getFirestore();
 export default {
   data: new SlashCommandBuilder()
     .setName("bad")
+    .setNameLocalizations({
+      no: "slem",
+    })
     .setDescription("Check or set someones negative karma")
     .addUserOption((option) => option.setName("user").setDescription("the bad user").setRequired(true))
     .addStringOption((option) => option.setName("reason").setDescription("set new reason")),
