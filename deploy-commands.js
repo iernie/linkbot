@@ -4,23 +4,13 @@ dotenv.config();
 import { readdirSync } from "node:fs";
 import { REST, Routes } from "discord.js";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 (async () => {
-  const app = initializeApp({
+  initializeApp({
     apiKey: process.env.apiKey,
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
   });
-
-  const auth = getAuth(app);
-  signInWithEmailAndPassword(auth, process.env.email, process.env.password)
-    .then(() => {
-      console.log("Logged into firebase");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
 
   const commands = [];
 

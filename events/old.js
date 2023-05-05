@@ -19,7 +19,7 @@ export default {
   name: Events.MessageCreate,
   execute(message) {
     const matches = message.content.match(pattern);
-    if (matches) {
+    if (matches && !message.author.bot) {
       matches
         .map((url) => new URL(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .forEach(async (url) => {
