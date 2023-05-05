@@ -23,12 +23,14 @@ export default {
           await updateDoc(docRef, {
             user: message.author.username,
             streak: result.streak ?? 0 + 1,
+            longest: Math.max(result.longest ?? 1, result.streak ?? 0 + 1),
             lastModified: new Date(),
           });
         } else {
           await updateDoc(docRef, {
             user: message.author.username,
             streak: 1,
+            longest: 1,
             lastModified: new Date(),
           });
         }
