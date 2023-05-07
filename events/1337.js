@@ -1,4 +1,4 @@
-import { differenceInDays, getHours, getMinutes } from "date-fns";
+import { getHours, getMinutes } from "date-fns";
 import { doc, updateDoc, getDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Events } from "discord.js";
 
@@ -20,21 +20,11 @@ export default {
       if (docSnap.exists()) {
         const result = docSnap.data();
 
-        if (differenceInDays(time, result.lastModified.toDate()) === 1) {
-          await updateDoc(docRef, {
-            user: message.author.username,
-            streak: result.streak ?? 0 + 1,
-            longest: Math.max(result.longest ?? 1, result.streak ?? 0 + 1),
-            lastModified: new Date(),
-          });
-        } else {
-          await updateDoc(docRef, {
-            user: message.author.username,
-            streak: 1,
-            longest: 1,
-            lastModified: new Date(),
-          });
-        }
+        await updateDoc(docRef, {
+          user: message.author.username,
+          streak: result.streak ?? 0 + 1,
+          lastModified: new Date(),
+        });
       } else {
         await setDoc(docRef, {
           user: message.author.username,
@@ -44,7 +34,5 @@ export default {
         });
       }
     }
-
-    console.log(differenceInDays(time, new Date()));
   },
 };

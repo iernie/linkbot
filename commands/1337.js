@@ -6,7 +6,7 @@ const db = getFirestore();
 export default {
   data: new SlashCommandBuilder()
     .setName("1337")
-    .setDescription("Check 1337 streaks")
+    .setDescription("Check 1337 status")
     .addUserOption((option) => option.setName("user").setDescription("the user")),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
@@ -16,7 +16,7 @@ export default {
       const docSnap = await getDoc(docRef);
       const streak = docSnap.exists() ? docSnap.data().streak : 0;
 
-      interaction.reply(`${user.username} has a streak of ${streak} days`);
+      interaction.reply(`${user.username} has participated ${streak} times`);
     } else {
       const streaks = {};
 
@@ -28,7 +28,7 @@ export default {
       });
 
       if (Object.keys(streaks).length === 0) {
-        interaction.reply("No 1337 streaks have been collected so far");
+        interaction.reply("No 1337 have been collected so far");
       } else {
         const list = Object.keys(streaks).reduce(
           (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
@@ -40,7 +40,7 @@ export default {
 
         output.push("Top " + Math.min(top.length, 5));
         top.forEach((u, i) => {
-          output.push(`${i + 1}. ${u.user} has a streak of ${u.streak} days`);
+          output.push(`${i + 1}. ${u.user} has participated ${u.streak} times`);
         });
 
         interaction.reply(output.join("\n"));
