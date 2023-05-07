@@ -34,13 +34,13 @@ export default {
           (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
           []
         );
-        const top = list.sort((a, b) => a.count - b.count).slice(0, 5);
+        const top = list.sort((a, b) => a.count - b.count).slice(0, 10);
 
         const output = [];
 
-        output.push("Top " + Math.min(top.length, 5));
-        top.forEach((u, i) => {
-          output.push(`${i + 1}. ${u.user} has participated ${u.streak} times`);
+        output.push("Top " + Math.min(top.length, 10));
+        top.forEach((u) => {
+          output.push(`${u.streak}\t${u.user}`);
         });
 
         interaction.reply(output.join("\n"));
