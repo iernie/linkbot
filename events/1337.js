@@ -19,7 +19,8 @@ export default {
 
       if (docSnap.exists()) {
         const result = docSnap.data();
-        if (differenceInDays(time, result.lastModified) <= 1) {
+
+        if (differenceInDays(time, result.lastModified.toDate()) === 1) {
           await updateDoc(docRef, {
             user: message.author.username,
             streak: result.streak ?? 0 + 1,
@@ -43,5 +44,7 @@ export default {
         });
       }
     }
+
+    console.log(differenceInDays(time, new Date()));
   },
 };
