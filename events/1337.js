@@ -1,4 +1,4 @@
-import { getHours, getMinutes } from "date-fns";
+import { getHours, getMinutes, isToday } from "date-fns";
 import { doc, updateDoc, getDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Events } from "discord.js";
 
@@ -20,11 +20,13 @@ export default {
       if (docSnap.exists()) {
         const result = docSnap.data();
 
-        await updateDoc(docRef, {
-          user: message.author.username,
-          streak: result.streak ?? 0 + 1,
-          lastModified: new Date(),
-        });
+        if (!isToday(result.lastModified.toDate())) {
+          await updateDoc(docRef, {
+            user: message.author.username,
+            streak: result.streak ?? 0 + 1,
+            lastModified: new Date(),
+          });
+        }
       } else {
         await setDoc(docRef, {
           user: message.author.username,
