@@ -59,23 +59,19 @@ export default {
         const bottom = list
           .filter((t) => t.count <= 0)
           .sort((a, b) => b.count - a.count)
-          .slice(0, 3);
+          .slice(0, 3)
+          .reverse();
 
         const output = [];
 
-        if (top.length > 0) {
-          output.push("Top " + Math.min(top.length, 3));
-          top.forEach((u, i) => {
-            output.push(`${i + 1}. ${u.user} has ${u.count} karma points`);
-          });
-        }
-        if (top.length > 0 && bottom.length > 0) output.push("");
-        if (bottom.length > 0) {
-          output.push("Bottom " + Math.min(bottom.length, 3));
-          bottom.forEach((u, i) => {
-            output.push(`${i + 1}. ${u.user} has ${u.count} karma points`);
-          });
-        }
+        output.push("Leaderboard");
+        top.forEach((u) => {
+          output.push(`${u.count}\t${u.user}`);
+        });
+        if (top.length > 0 && bottom.length > 0) output.push("...");
+        bottom.forEach((u) => {
+          output.push(`${u.count}\t${u.user}`);
+        });
 
         interaction.reply(output.join("\n"));
       }

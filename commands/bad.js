@@ -71,7 +71,7 @@ export default {
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
         interaction.reply(`${user.username} was last bad ${days} ago; "${result.reason}" –${result.author}.`);
       } else {
-        interaction.reply(`${user.username} has been good :)`);
+        interaction.reply(`${user.username} has been good so far :)`);
       }
     }
   },

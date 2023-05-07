@@ -38,7 +38,7 @@ export default {
 
         const output = [];
 
-        output.push("Top " + Math.min(top.length, 10));
+        output.push("Leaderboard");
         top.forEach((u) => {
           output.push(`${u.streak}\t${u.user}`);
         });
