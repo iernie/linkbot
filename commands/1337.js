@@ -40,7 +40,7 @@ export default {
 
         output.push("Leaderboard");
         top.forEach((u) => {
-          output.push(`${u.streak}\t${u.user}`);
+          output.push(`${u.streak}`.padEnd(5, " ") + `${u.user}`);
         });
 
         interaction.reply(output.join("\n"));

@@ -55,22 +55,22 @@ export default {
         const top = list
           .filter((t) => t.count > 0)
           .sort((a, b) => a.count - b.count)
-          .slice(0, 3);
+          .slice(0, 5);
         const bottom = list
           .filter((t) => t.count <= 0)
           .sort((a, b) => b.count - a.count)
-          .slice(0, 3)
+          .slice(0, 5)
           .reverse();
 
         const output = [];
 
-        output.push("Leaderboard");
+        output.push("Scoreboard");
         top.forEach((u) => {
-          output.push(`${u.count}\t${u.user}`);
+          output.push(`${u.count}`.padEnd(5, " ") + `${u.user}`);
         });
-        if (top.length > 0 && bottom.length > 0) output.push("...");
+        if (top.length > 0 && bottom.length > 0) output.push("⋮");
         bottom.forEach((u) => {
-          output.push(`${u.count}\t${u.user}`);
+          output.push(`${u.count}`.padEnd(5, " ") + `${u.user}`);
         });
 
         interaction.reply(output.join("\n"));
