@@ -35,12 +35,13 @@ export default {
           []
         );
         const top = list.sort((a, b) => a.count - b.count).slice(0, 10);
+        const padding = top.length > 0 ? `${top[0].streak}`.length + 4 : 5;
 
         const output = [];
 
         output.push("Leaderboard");
         top.forEach((u) => {
-          output.push(`${u.streak}`.padEnd(5, " ") + `${u.user}`);
+          output.push(`${u.streak}`.padEnd(padding, " ") + `${u.user}`);
         });
 
         interaction.reply(output.join("\n"));

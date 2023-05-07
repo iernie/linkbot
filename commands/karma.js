@@ -63,14 +63,17 @@ export default {
           .reverse();
 
         const output = [];
+        const paddingTop = top.length > 0 ? `${top[0].count}`.length + 4 : 5;
+        const paddingBottom = bottom.length > 0 ? `${bottom[0].count}`.length + 4 : 5;
+        const padding = Math.max(paddingTop, paddingBottom);
 
         output.push("Scoreboard");
         top.forEach((u) => {
-          output.push(`${u.count}`.padEnd(5, " ") + `${u.user}`);
+          output.push(`${u.count}`.padEnd(padding, " ") + `${u.user}`);
         });
         if (top.length > 0 && bottom.length > 0) output.push("⋮");
         bottom.forEach((u) => {
-          output.push(`${u.count}`.padEnd(5, " ") + `${u.user}`);
+          output.push(`${u.count}`.padEnd(padding, " ") + `${u.user}`);
         });
 
         interaction.reply(output.join("\n"));
