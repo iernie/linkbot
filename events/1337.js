@@ -1,5 +1,5 @@
 import { getHours, getMinutes, isToday } from "date-fns";
-import { doc, updateDoc, getDoc, setDoc, getFirestore } from "firebase/firestore";
+import { doc, updateDoc, getDoc, setDoc, getFirestore, increment } from "firebase/firestore";
 import { Events } from "discord.js";
 
 const db = getFirestore();
@@ -23,7 +23,7 @@ export default {
         if (!isToday(result.lastModified.toDate())) {
           await updateDoc(docRef, {
             user: message.author.username,
-            streak: result.streak ?? 0 + 1,
+            streak: increment(1),
             lastModified: new Date(),
           });
         }

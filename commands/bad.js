@@ -1,5 +1,5 @@
 import { differenceInCalendarDays, formatDistanceToNow } from "date-fns";
-import { doc, updateDoc, getDoc, setDoc, getFirestore } from "firebase/firestore";
+import { doc, updateDoc, getDoc, setDoc, getFirestore, increment } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 
 const db = getFirestore();
@@ -41,10 +41,9 @@ export default {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        const result = docSnap.data();
         await updateDoc(docRef, {
           user: user.username,
-          count: result.count ?? 0 + 1,
+          count: increment(1),
           author: interaction.user.username,
           authorId: interaction.user.id,
           reason: reason,
