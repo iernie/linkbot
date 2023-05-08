@@ -34,7 +34,7 @@ export default {
           (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
           []
         );
-        const top = list.sort((a, b) => a.count - b.count).slice(0, 10);
+        const top = list.sort((a, b) => a.streak - b.streak).slice(0, 10);
         const padding = top.length > 0 ? `${top[0].streak}`.length + 4 : 5;
 
         const output = [];
