@@ -54,11 +54,11 @@ export default {
         );
         const top = list
           .filter((t) => t.count > 0)
-          .sort((a, b) => a.count - b.count)
+          .sort((a, b) => b.count - a.count)
           .slice(0, 5);
         const bottom = list
           .filter((t) => t.count <= 0)
-          .sort((a, b) => b.count - a.count)
+          .sort((a, b) => a.count - b.count)
           .slice(0, 5)
           .reverse();
 
