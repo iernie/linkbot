@@ -22,6 +22,7 @@ export default {
     if (matches && !message.author.bot) {
       matches
         .map((url) => new URL(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
+        .filter((url) => url.pathname && url.pathname !== "/")
         .forEach(async (url) => {
           const docRef = doc(db, message.guildId, message.channelId, "url", url.href.replace(/\//gi, ""));
           const docSnap = await getDoc(docRef);
