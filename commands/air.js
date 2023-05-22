@@ -1,5 +1,5 @@
 import nodeGeocoder from "node-geocoder";
-import { isAfter } from "date-fns";
+import { isAfter, parseISO } from "date-fns";
 import { SlashCommandBuilder } from "discord.js";
 
 const geocoder = nodeGeocoder({ provider: "openstreetmap" });
@@ -26,11 +26,13 @@ export default {
           headers: { "User-Agent": "linkbot" },
         }).then((res) => res.json());
 
-        const level = data.data.time.find((d) => isAfter(new Date(), d.from)).variables.AQI.value;
+        const level = data.data.time.find((d) => isAfter(new Date(), parseISO(d.from))).variables.AQI.value;
         const city =
           location[0].city !== undefined ? location[0].city : interaction.options.getString("location").trim();
 
-        const desc = description.variables.AQI.aqis.find((d) => level >= (d.from ?? d.to) && level <= (d.to ?? d.from));
+        const desc = description.variables.AQI.aqis.find(
+          (d) => level >= (d.from ?? d.to - 1) && level <= (d.to ?? d.from - 1)
+        );
 
         interaction.reply(`${city}: ${desc.description_EN} (${desc.short_description_EN})`);
       } else {
