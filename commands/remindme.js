@@ -1,5 +1,5 @@
 import { differenceInMilliseconds } from "date-fns";
-import { addDoc, getFirestore, collection, deleteDoc } from "firebase/firestore";
+import { doc, addDoc, getFirestore, collection, deleteDoc } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import * as chrono from "chrono-node";
 
@@ -32,7 +32,7 @@ export default {
 
       setTimeout(async () => {
         interaction.channel.send(`<@${interaction.user.id}>: ${what}`);
-        await deleteDoc(docRef);
+        await deleteDoc(doc(db, "reminders", docRef.id));
       }, differenceInMilliseconds(when, interaction.createdTimestamp));
 
       interaction.reply("Got it!");
