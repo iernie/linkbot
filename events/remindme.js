@@ -12,7 +12,7 @@ export default {
     querySnapshot.forEach(async (document) => {
       const data = document.data();
 
-      if (!data.when || isAfter(data.when.toDate(), client.readyAt)) {
+      if (!data.when || isAfter(client.readyAt, data.when.toDate())) {
         await deleteDoc(doc(db, "reminders", document.id));
       } else {
         try {
