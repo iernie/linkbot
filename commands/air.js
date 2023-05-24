@@ -31,7 +31,7 @@ export default {
           location[0].city !== undefined ? location[0].city : interaction.options.getString("location").trim();
 
         const desc = description.variables.AQI.aqis.find(
-          (d) => level >= (d.from ?? d.to - 1) && level <= (d.to ?? d.from - 1)
+          (d) => level >= (d.from ?? d.to + 1) && level <= (d.to ?? d.from - 1)
         );
 
         interaction.reply(`${city}: ${desc.description_EN} (${desc.short_description_EN})`);
