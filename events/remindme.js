@@ -12,7 +12,7 @@ export default {
     querySnapshot.forEach(async (doc) => {
       const data = doc.data();
 
-      if (isAfter(data.when.toDate(), client.readyAt)) {
+      if (!data.when || isAfter(data.when.toDate(), client.readyAt)) {
         await deleteDoc(doc);
       } else {
         try {
