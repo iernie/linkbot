@@ -1,6 +1,7 @@
-import { isAfter, differenceInMilliseconds } from "date-fns";
-import { doc, getDocs, getFirestore, collection, deleteDoc } from "firebase/firestore";
+import { isAfter, isEqual } from "date-fns";
+import { doc, getFirestore, collection, deleteDoc, onSnapshot } from "firebase/firestore";
 import { Events } from "discord.js";
+import * as cron from "node-cron";
 
 const db = getFirestore();
 
@@ -8,24 +9,27 @@ export default {
   name: Events.ClientReady,
   once: true,
   async execute(client) {
-    const querySnapshot = await getDocs(collection(db, "reminders"));
-    querySnapshot.forEach(async (document) => {
-      const data = document.data();
+    let data = [];
 
-      if (!data.when || isAfter(client.readyAt, data.when.toDate())) {
-        await deleteDoc(doc(db, "reminders", document.id));
-      } else {
-        try {
-          const channel = await client.channels.fetch(data.channelId);
+    onSnapshot(collection(db, "reminders"), (querySnapshot) => {
+      data = querySnapshot.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+    });
 
-          setTimeout(async () => {
+    cron.schedule("* * * * *", () => {
+      data.forEach(async (data) => {
+        if (isEqual(data.when.toDate(), new Date()) || isAfter(data.when.toDate(), new Date())) {
+          try {
+            const channel = await client.channels.fetch(data.channelId);
             channel.send(`<@${data.user}>: ${data.what}`);
-            await deleteDoc(doc(db, "reminders", document.id));
-          }, differenceInMilliseconds(data.when.toDate(), client.readyAt));
-        } catch (e) {
-          console.error(`Something went wrong when creating reminders: ${e}`);
+            await deleteDoc(doc(db, "reminders", data.id));
+          } catch (e) {
+            console.error(`Something went wrong when sending reminder: ${e}`);
+          }
         }
-      }
+      });
     });
   },
 };

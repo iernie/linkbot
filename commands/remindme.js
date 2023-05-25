@@ -1,5 +1,4 @@
-import { differenceInMilliseconds } from "date-fns";
-import { doc, addDoc, getFirestore, collection, deleteDoc } from "firebase/firestore";
+import { addDoc, getFirestore, collection } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import * as chrono from "chrono-node";
 
@@ -22,18 +21,13 @@ export default {
     if (!when) {
       await interaction.reply({ content: "I did not understand when you wanted it", ephemeral: true });
     } else {
-      const docRef = await addDoc(collection(db, "reminders"), {
+      await addDoc(collection(db, "reminders"), {
         user: interaction.user.id,
         guildId: interaction.guildId,
         channelId: interaction.channelId,
         what: what,
         when: when,
       });
-
-      setTimeout(async () => {
-        interaction.channel.send(`<@${interaction.user.id}>: ${what}`);
-        await deleteDoc(doc(db, "reminders", docRef.id));
-      }, differenceInMilliseconds(when, interaction.createdTimestamp));
 
       interaction.reply("Got it!");
     }
