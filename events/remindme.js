@@ -13,7 +13,7 @@ export default {
 
     onSnapshot(collection(db, "reminders"), (querySnapshot) => {
       data = [];
-      querySnapshot.foreach((d) => {
+      querySnapshot.forEach((d) => {
         data.push({
           id: d.id,
           ...d.data(),
