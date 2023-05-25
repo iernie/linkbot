@@ -1,4 +1,4 @@
-import { isAfter, isEqual } from "date-fns";
+import { isAfter, isEqual, startOfMinute } from "date-fns";
 import { doc, getFirestore, collection, deleteDoc, onSnapshot } from "firebase/firestore";
 import { Events } from "discord.js";
 import * as cron from "node-cron";
@@ -25,9 +25,12 @@ export default {
       });
     });
 
-    cron.schedule("* * * * *", () => {
+    cron.schedule("0 * * * * *", () => {
       data.forEach(async (data) => {
-        if (isEqual(new Date(), data.when) || isAfter(new Date(), data.when)) {
+        if (
+          isEqual(startOfMinute(new Date()), startOfMinute(data.when)) ||
+          isAfter(startOfMinute(new Date()), startOfMinute(data.when))
+        ) {
           try {
             const channel = await client.channels.fetch(data.channelId);
             channel.send(`<@${data.user}>: ${data.what}`);

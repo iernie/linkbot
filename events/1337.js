@@ -35,6 +35,8 @@ export default {
           createdAt: new Date(),
         });
       }
+
+      message.react("💯");
     }
   },
 };
