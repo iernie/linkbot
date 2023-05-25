@@ -14,16 +14,20 @@ export default {
     onSnapshot(collection(db, "reminders"), (querySnapshot) => {
       data = [];
       querySnapshot.forEach((d) => {
+        const _data = d.data();
         data.push({
           id: d.id,
-          ...d.data(),
+          when: _data.when.toDate(),
+          channelId: _data.channelId,
+          user: _data.user,
+          what: _data.what,
         });
       });
     });
 
     cron.schedule("* * * * *", () => {
       data.forEach(async (data) => {
-        if (isEqual(data.when.toDate(), new Date()) || isAfter(data.when.toDate(), new Date())) {
+        if (isEqual(new Date(), data.when) || isAfter(new Date(), data.when)) {
           try {
             const channel = await client.channels.fetch(data.channelId);
             channel.send(`<@${data.user}>: ${data.what}`);
