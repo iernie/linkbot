@@ -12,10 +12,13 @@ export default {
     let data = [];
 
     onSnapshot(collection(db, "reminders"), (querySnapshot) => {
-      data = querySnapshot.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
+      data = [];
+      querySnapshot.foreach((d) => {
+        data.push({
+          id: d.id,
+          ...d.data(),
+        });
+      });
     });
 
     cron.schedule("* * * * *", () => {
