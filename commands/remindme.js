@@ -1,6 +1,7 @@
 import { addDoc, getFirestore, collection } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import * as chrono from "chrono-node";
+import { formatDistanceToNow } from "date-fns";
 
 const db = getFirestore();
 
@@ -29,7 +30,7 @@ export default {
         when: when,
       });
 
-      interaction.reply("Got it!");
+      interaction.reply(`Got it! I'll remind you "${what}" in ${formatDistanceToNow(when)}`);
     }
   },
 };
