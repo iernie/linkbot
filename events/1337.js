@@ -26,6 +26,7 @@ export default {
             streak: increment(1),
             lastModified: new Date(),
           });
+          message.react("💯");
         }
       } else {
         await setDoc(docRef, {
@@ -34,9 +35,8 @@ export default {
           lastModified: new Date(),
           createdAt: new Date(),
         });
+        message.react("💯");
       }
-
-      message.react("💯");
     }
   },
 };
