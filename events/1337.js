@@ -37,6 +37,8 @@ export default {
         });
         message.react("💯");
       }
+    } else {
+      message.react("402781659621228556");
     }
   },
 };
