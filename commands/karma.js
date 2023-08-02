@@ -23,7 +23,7 @@ export default {
         const badSnap = await getDoc(badRef);
         const bad = badSnap.exists() ? badSnap.data().count : 0;
 
-        interaction.reply(`${user.username} has ${good - bad} karma points`);
+        interaction.reply(`${user.displayName} has ${good - bad} karma points`);
       }
     } else {
       const karma = {};
@@ -50,7 +50,7 @@ export default {
       } else {
         const list = Object.keys(karma).reduce(
           (acc, curr) => [...acc, { user: karma[curr].user, count: karma[curr].count }],
-          []
+          [],
         );
         const top = list
           .filter((t) => t.count > 0)

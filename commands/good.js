@@ -26,18 +26,18 @@ export default {
 
         if (docSnap.exists()) {
           await updateDoc(docRef, {
-            user: user.username,
+            user: user.displayName,
             count: increment(1),
-            author: interaction.user.username,
+            author: interaction.user.displayName,
             authorId: interaction.user.id,
             reason: reason,
             lastModified: new Date(),
           });
         } else {
           await setDoc(docRef, {
-            user: user.username,
+            user: user.displayName,
             count: 1,
-            author: interaction.user.username,
+            author: interaction.user.displayName,
             authorId: interaction.user.id,
             reason: reason,
             lastModified: new Date(),
@@ -53,9 +53,9 @@ export default {
       if (docSnap.exists()) {
         const result = docSnap.data();
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
-        interaction.reply(`${user.username} was last good ${days} ago; "${result.reason}" –${result.author}.`);
+        interaction.reply(`${user.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`);
       } else {
-        interaction.reply(`${user.username} has no recorded good :/`);
+        interaction.reply(`${user.displayName} has no recorded good :/`);
       }
     }
   },

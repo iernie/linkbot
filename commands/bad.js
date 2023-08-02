@@ -42,18 +42,18 @@ export default {
 
       if (docSnap.exists()) {
         await updateDoc(docRef, {
-          user: user.username,
+          user: user.displayName,
           count: increment(1),
-          author: interaction.user.username,
+          author: interaction.user.displayName,
           authorId: interaction.user.id,
           reason: reason,
           lastModified: new Date(),
         });
       } else {
         await setDoc(docRef, {
-          user: user.username,
+          user: user.displayName,
           count: 1,
-          author: interaction.user.username,
+          author: interaction.user.displayName,
           authorId: interaction.user.id,
           reason: reason,
           lastModified: new Date(),
@@ -68,9 +68,9 @@ export default {
       if (docSnap.exists()) {
         const result = docSnap.data();
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
-        interaction.reply(`${user.username} was last bad ${days} ago; "${result.reason}" –${result.author}.`);
+        interaction.reply(`${user.displayName} was last bad ${days} ago; "${result.reason}" –${result.author}.`);
       } else {
-        interaction.reply(`${user.username} has been good so far :)`);
+        interaction.reply(`${user.displayName} has been good so far :)`);
       }
     }
   },

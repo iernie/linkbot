@@ -5,10 +5,10 @@ export default {
   async execute(message) {
     if (
       message.content.match(
-        new RegExp(`^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${message.client.user.username}(>)?|alle|sammen|,| )*$`, "i")
+        new RegExp(`^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${message.client.user.displayName}(>)?|alle|sammen|,| )*$`, "i"),
       )
     ) {
-      message.channel.send(`natta ${message.author.username}!`);
+      message.channel.send(`natta ${message.author.displayName}!`);
     }
   },
 };

@@ -18,7 +18,7 @@ export default {
 
           if (!isToday(result.lastModified.toDate())) {
             await updateDoc(docRef, {
-              user: message.author.username,
+              user: message.author.displayName,
               streak: increment(1),
               lastModified: new Date(),
             });
@@ -26,7 +26,7 @@ export default {
           }
         } else {
           await setDoc(docRef, {
-            user: message.author.username,
+            user: message.author.displayName,
             streak: 1,
             lastModified: new Date(),
             createdAt: new Date(),

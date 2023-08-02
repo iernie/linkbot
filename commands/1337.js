@@ -16,7 +16,7 @@ export default {
       const docSnap = await getDoc(docRef);
       const streak = docSnap.exists() ? docSnap.data().streak : 0;
 
-      interaction.reply(`${user.username} has participated ${streak} times`);
+      interaction.reply(`${user.displayName} has participated ${streak} times`);
     } else {
       const streaks = {};
 
@@ -32,7 +32,7 @@ export default {
       } else {
         const list = Object.keys(streaks).reduce(
           (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
-          []
+          [],
         );
         const top = list.sort((a, b) => b.streak - a.streak).slice(0, 10);
         const padding = top.length > 0 ? `${top[0].streak}`.length + 4 : 5;
