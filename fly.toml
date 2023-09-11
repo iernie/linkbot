@@ -23,9 +23,6 @@ services = []
 [env]
   NODE_ENV="production"
 
-[[services]]
-  http_checks = []
-
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
