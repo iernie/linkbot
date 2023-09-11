@@ -35,9 +35,5 @@
   "homepage": "https://github.com/iernie/linkbot#readme",
   "engines": {
     "node": ">= 18.0.0"
-  },
-  "dockerfile": {
-    "deferBuild": true,
-    "windows": true
   }
 }
