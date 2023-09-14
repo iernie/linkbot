@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-COPY /build ./
+COPY . .
 
 FROM base
 
