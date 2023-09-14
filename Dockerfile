@@ -14,8 +14,10 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+COPY /build ./
+
 FROM base
 
-COPY --from=build /app/build /app
+COPY --from=build /app /app
 
-CMD [ "node", "index.js" ]
+CMD [ "npm", "start" ]
