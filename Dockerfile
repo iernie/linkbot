@@ -13,9 +13,9 @@ RUN apt-get update -qq && \
 
 COPY tsconfig.json package-lock.json package.json ./
 RUN npm ci
-RUN npm run build
 
-COPY --link . .
+COPY . .
+RUN npm run build
 
 FROM base
 
