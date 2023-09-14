@@ -10,12 +10,12 @@ FROM base as build
 
 COPY tsconfig.json package-lock.json package.json ./
 RUN npm ci
-RUN npm run build
 
 COPY . .
+RUN npm run build
 
 FROM base
 
-COPY --from=build /app /app
+COPY --from=build /app/build /app
 
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "index.js" ]
