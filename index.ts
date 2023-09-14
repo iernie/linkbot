@@ -37,7 +37,7 @@ import type { BotEvent, SlashCommand } from "./types.d.ts";
   const commandFiles = readdirSync("./commands");
   for (const file of commandFiles) {
     const filePath = "./commands/" + file;
-    const command = (await require(filePath)).default as SlashCommand;
+    const command = (await import(filePath)).default as SlashCommand;
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
     } else {
@@ -48,7 +48,7 @@ import type { BotEvent, SlashCommand } from "./types.d.ts";
   const eventFiles = readdirSync("./events");
   for (const file of eventFiles) {
     const filePath = "./events/" + file;
-    const event = (await require(filePath)).default as BotEvent<unknown>;
+    const event = (await import(filePath)).default as BotEvent<unknown>;
     if (event.once) {
       client.once(event.name, (arg) => event.execute(arg));
     } else {
