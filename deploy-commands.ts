@@ -2,8 +2,9 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { readdirSync } from "node:fs";
-import { REST, Routes } from "discord.js";
+import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
 import { initializeApp } from "firebase/app";
+import { SlashCommand } from "./types";
 
 (async () => {
   initializeApp({
@@ -12,12 +13,12 @@ import { initializeApp } from "firebase/app";
     projectId: process.env.projectId,
   });
 
-  const commands = [];
+  const commands: Array<RESTPostAPIChatInputApplicationCommandsJSONBody> = [];
 
   const commandFiles = readdirSync("./commands");
   for (const file of commandFiles) {
     const filePath = "./commands/" + file;
-    const command = (await import(filePath)).default;
+    const command = require(filePath).default as SlashCommand;
     if ("data" in command && "execute" in command) {
       commands.push(command.data.toJSON());
     } else {
@@ -25,12 +26,14 @@ import { initializeApp } from "firebase/app";
     }
   }
 
-  const rest = new REST().setToken(process.env.token);
+  const rest = new REST().setToken(process.env.token!);
 
   try {
     console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
-    const data = await rest.put(Routes.applicationCommands(process.env.clientId), { body: commands });
+    const data = (await rest.put(Routes.applicationCommands(process.env.clientId!), {
+      body: commands,
+    })) as Array<unknown>;
 
     console.log(`Successfully reloaded ${data.length} application (/) commands.`);
   } catch (error) {

@@ -1,6 +1,7 @@
-import { Events } from "discord.js";
+import { Events, Message } from "discord.js";
+import { BotEvent } from "../types";
 
-export default {
+const event: BotEvent<Message> = {
   name: Events.MessageCreate,
   async execute(message) {
     if (
@@ -8,7 +9,9 @@ export default {
         new RegExp(`^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${message.client.user.displayName}(>)?|alle|sammen|,| )*$`, "i"),
       )
     ) {
-      message.channel.send(`natta ${message.author.displayName}!`);
+      await message.channel.send(`natta ${message.author.displayName}!`);
     }
   },
 };
+
+export default event;

@@ -1,10 +1,12 @@
 {
   "name": "linkbot",
   "version": "1.0.0",
-  "description": "A simple Discord bot written in node",
-  "exports": "./index.js",
-  "type": "module",
+  "description": "A simple Discord bot written in javascript",
+  "main": "build/index.js",
   "dependencies": {
+    "@types/node": "^20.6.0",
+    "@types/node-cron": "^3.0.8",
+    "@types/node-geocoder": "^4.2.1",
     "chrono-node": "^2.7.0",
     "date-fns": "^2.30.0",
     "discord.js": "^14.13.0",
@@ -12,16 +14,17 @@
     "firebase": "^10.3.1",
     "node-cron": "^3.0.2",
     "node-geocoder": "^4.2.0",
-    "normalize-url": "^8.0.0"
+    "normalize-url": "^8.0.0",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.4.9",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.3"
   },
   "scripts": {
-    "start": "node ."
+    "start": "node build/index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

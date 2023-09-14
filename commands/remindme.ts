@@ -2,21 +2,22 @@ import { addDoc, getFirestore, collection } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import * as chrono from "chrono-node";
 import { formatDistanceToNow } from "date-fns";
+import { SlashCommand } from "../types";
 
 const db = getFirestore();
 
-export default {
+const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("remindme")
     .setDescription("Set a reminder")
     .addStringOption((option) =>
-      option.setName("when").setDescription("when do you want to be reminded?").setRequired(true)
+      option.setName("when").setDescription("when do you want to be reminded?").setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("what").setDescription("what do you want to remember").setRequired(true)
+      option.setName("what").setDescription("what do you want to remember").setRequired(true),
     ),
   async execute(interaction) {
-    const when = chrono.parseDate(interaction.options.getString("when"));
+    const when = chrono.parseDate(interaction.options.getString("when")!);
     const what = interaction.options.getString("what");
 
     if (!when) {
@@ -30,7 +31,9 @@ export default {
         when: when,
       });
 
-      interaction.reply(`Got it! I'll remind you "${what}" in ${formatDistanceToNow(when)}`);
+      await interaction.reply(`Got it! I'll remind you "${what}" in ${formatDistanceToNow(when)}`);
     }
   },
 };
+
+export default command;

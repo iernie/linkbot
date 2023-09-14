@@ -1,7 +1,8 @@
 import { formatDistanceToNow } from "date-fns";
 import normalizeUrl from "normalize-url";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import { Events } from "discord.js";
+import { Events, Message } from "discord.js";
+import { BotEvent } from "../types";
 
 const db = getFirestore();
 
@@ -12,19 +13,22 @@ const pattern = new RegExp(
     "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
     "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
     "(\\#[-a-z\\d_]*)?",
-  "ig"
+  "ig",
 ); // fragment locator
 
-export default {
+const event: BotEvent<Message> = {
   name: Events.MessageCreate,
-  execute(message) {
+  async execute(message) {
+    if (!message.member || message.member.user.bot) return;
+    if (!message.guild) return;
+
     const matches = message.content.match(pattern);
     if (matches && !message.author.bot) {
       matches
         .map((url) => new URL(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
         .filter((url) => url.pathname && url.pathname !== "/")
         .forEach(async (url) => {
-          const docRef = doc(db, message.guildId, message.channelId, "url", url.href.replace(/\//gi, ""));
+          const docRef = doc(db, message.guildId!, message.channelId, "url", url.href.replace(/\//gi, ""));
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
@@ -45,3 +49,5 @@ export default {
     }
   },
 };
+
+export default event;

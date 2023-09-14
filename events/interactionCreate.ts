@@ -1,6 +1,7 @@
-import { Events } from "discord.js";
+import { Events, Interaction } from "discord.js";
+import { BotEvent } from "../types";
 
-export default {
+const event: BotEvent<Interaction> = {
   name: Events.InteractionCreate,
   async execute(interaction) {
     if (!interaction.isChatInputCommand()) return;
@@ -24,3 +25,4 @@ export default {
     }
   },
 };
+export default event;

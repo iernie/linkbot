@@ -1,9 +1,11 @@
 import { doc, getDoc, getDocs, collection, getFirestore } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
+import { SlashCommand } from "../types";
 
 const db = getFirestore();
+type KarmaType = { user: string; count: number };
 
-export default {
+const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("karma")
     .setDescription("Check all or someones karma")
@@ -13,44 +15,44 @@ export default {
 
     if (user) {
       if (user.id === interaction.user.id) {
-        interaction.reply("Tsk, tsk! You cannot /good yourself. 👼");
+        await interaction.reply("Tsk, tsk! You cannot /good yourself. 👼");
       } else {
-        const goodRef = doc(db, interaction.guildId, "counters", "good", user.id);
+        const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);
         const goodSnap = await getDoc(goodRef);
         const good = goodSnap.exists() ? goodSnap.data().count : 0;
 
-        const badRef = doc(db, interaction.guildId, "counters", "bad", user.id);
+        const badRef = doc(db, interaction.guildId!, "counters", "bad", user.id);
         const badSnap = await getDoc(badRef);
         const bad = badSnap.exists() ? badSnap.data().count : 0;
 
-        interaction.reply(`${user.displayName} has ${good - bad} karma points`);
+        await interaction.reply(`${user.displayName} has ${good - bad} karma points`);
       }
     } else {
-      const karma = {};
+      const karma: { [key: string]: KarmaType } = {};
 
-      const goodRef = collection(db, interaction.guildId, "counters", "good");
+      const goodRef = collection(db, interaction.guildId!, "counters", "good");
       const goodSnap = await getDocs(goodRef);
 
       goodSnap.forEach((doc) => {
-        karma[doc.id] = { user: doc.data().user, count: doc.data().count };
+        karma[doc.id] = { user: (doc.data() as KarmaType).user, count: (doc.data() as KarmaType).count };
       });
 
-      const badRef = collection(db, interaction.guildId, "counters", "bad");
+      const badRef = collection(db, interaction.guildId!, "counters", "bad");
       const badSnap = await getDocs(badRef);
 
       badSnap.forEach((doc) => {
         karma[doc.id] = {
           user: doc.data().user,
-          count: karma[doc.id] ?? 0 - doc.data().count,
+          count: karma[doc.id].count ?? 0 - (doc.data() as KarmaType).count,
         };
       });
 
       if (Object.keys(karma).length === 0) {
-        interaction.reply("No karma have been collected so far");
+        await interaction.reply("No karma have been collected so far");
       } else {
         const list = Object.keys(karma).reduce(
           (acc, curr) => [...acc, { user: karma[curr].user, count: karma[curr].count }],
-          [],
+          [] as Array<KarmaType>,
         );
         const top = list
           .filter((t) => t.count > 0)
@@ -76,8 +78,10 @@ export default {
           output.push(`${u.count}`.padEnd(padding, " ") + `${u.user}`);
         });
 
-        interaction.reply(output.join("\n"));
+        await interaction.reply(output.join("\n"));
       }
     }
   },
 };
+
+export default command;

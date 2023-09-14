@@ -1,16 +1,19 @@
 import { SlashCommandBuilder } from "discord.js";
+import { SlashCommand } from "../types";
 
-export default {
+const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("8ball")
     .setDescription("Choose a decision")
     .addStringOption((option) => option.setName("choices").setDescription("what are your choices?").setRequired(true)),
   async execute(interaction) {
     const queries = interaction.options
-      .getString("choices")
+      .getString("choices")!
       .split(/\|| or | eller /i)
       .map((val) => val.replace(/\?$/, "").trim());
     const random = Math.floor(Math.random() * queries.length);
-    interaction.reply(queries[random]);
+    await interaction.reply(queries[random]);
   },
 };
+
+export default command;
