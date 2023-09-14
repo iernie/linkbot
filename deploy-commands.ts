@@ -4,7 +4,7 @@ dotenv.config();
 import { readdirSync } from "node:fs";
 import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
 import { initializeApp } from "firebase/app";
-import { SlashCommand } from "./types";
+import type { SlashCommand } from "./types.d.ts";
 
 (async () => {
   initializeApp({
@@ -18,7 +18,7 @@ import { SlashCommand } from "./types";
   const commandFiles = readdirSync("./commands");
   for (const file of commandFiles) {
     const filePath = "./commands/" + file;
-    const command = require(filePath).default as SlashCommand;
+    const command = (await import(filePath)).default as SlashCommand;
     if ("data" in command && "execute" in command) {
       commands.push(command.data.toJSON());
     } else {

@@ -2,7 +2,7 @@ import { addDoc, getFirestore, collection } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import * as chrono from "chrono-node";
 import { formatDistanceToNow } from "date-fns";
-import { SlashCommand } from "../types";
+import type { SlashCommand } from "../types.d.ts";
 
 const db = getFirestore();
 

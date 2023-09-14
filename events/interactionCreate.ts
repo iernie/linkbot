@@ -1,5 +1,5 @@
 import { Events, Interaction } from "discord.js";
-import { BotEvent } from "../types";
+import type { BotEvent } from "../types.d.ts";
 
 const event: BotEvent<Interaction> = {
   name: Events.InteractionCreate,

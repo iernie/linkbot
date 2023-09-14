@@ -2,11 +2,11 @@
   "name": "linkbot",
   "version": "1.0.0",
   "description": "A simple Discord bot written in javascript",
-  "main": "index.js",
+  "exports": "./index.js",
+  "type": "module",
   "dependencies": {
     "@types/node": "^20.6.0",
     "@types/node-cron": "^3.0.8",
-    "@types/node-geocoder": "^4.2.1",
     "chrono-node": "^2.7.0",
     "date-fns": "^2.30.0",
     "discord.js": "^14.13.0",

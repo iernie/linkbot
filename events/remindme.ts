@@ -1,8 +1,8 @@
 import { isAfter, isEqual, startOfMinute } from "date-fns";
 import { doc, getFirestore, collection, deleteDoc, onSnapshot } from "firebase/firestore";
-import { Events, Client, Channel, TextBasedChannel } from "discord.js";
+import { Events, Client, TextBasedChannel } from "discord.js";
 import * as cron from "node-cron";
-import { BotEvent } from "../types";
+import type { BotEvent } from "../types.d.ts";
 
 const db = getFirestore();
 

@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext"],
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "./build"
+    "outDir": "./build",
+    "isolatedModules": true
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
   }
 }

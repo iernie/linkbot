@@ -1,7 +1,7 @@
 import { formatDistanceToNow, getMonth, getDate, getYear } from "date-fns";
 import { Events, Message } from "discord.js";
 import nb from "date-fns/locale/nb/index.js";
-import { BotEvent } from "../types";
+import type { BotEvent } from "../types.d.ts";
 
 const event: BotEvent<Message> = {
   name: Events.MessageCreate,

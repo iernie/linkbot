@@ -1,6 +1,6 @@
 import { doc, getDoc, getDocs, collection, getFirestore } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
-import { SlashCommand } from "../types";
+import type { SlashCommand } from "../types.d.ts";
 
 const db = getFirestore();
 type KarmaType = { user: string; count: number };

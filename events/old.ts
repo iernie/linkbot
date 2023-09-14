@@ -2,7 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import normalizeUrl from "normalize-url";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { Events, Message } from "discord.js";
-import { BotEvent } from "../types";
+import type { BotEvent } from "../types.d.ts";
 
 const db = getFirestore();
 

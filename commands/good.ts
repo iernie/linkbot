@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { doc, updateDoc, getDoc, setDoc, getFirestore, increment } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
-import { SlashCommand } from "../types";
+import type { SlashCommand } from "../types.d.ts";
 
 const db = getFirestore();
 
@@ -54,7 +54,9 @@ const command: SlashCommand = {
       if (docSnap.exists()) {
         const result = docSnap.data();
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
-        await interaction.reply(`${user!.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`);
+        await interaction.reply(
+          `${user!.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`,
+        );
       } else {
         await interaction.reply(`${user!.displayName} has no recorded good :/`);
       }
