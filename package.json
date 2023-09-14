@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A simple Discord bot written in javascript",
   "main": "index.js",
-  "type": "module",
   "dependencies": {
     "@types/node": "^20.6.0",
     "@types/node-cron": "^3.0.8",
@@ -24,7 +23,7 @@
     "prettier": "^3.0.3"
   },
   "scripts": {
-    "start": "npx --yes ts-node index.ts",
+    "start": "npm run build && node build",
     "build": "tsc"
   },
   "repository": {

@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./build"
