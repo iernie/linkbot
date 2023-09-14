@@ -14,10 +14,11 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-COPY . .
-
 FROM base
 
-COPY --from=build /app /app
+COPY package-lock.json package.json ./
+RUN npm ci --production
 
-CMD [ "npm", "start" ]
+COPY --from=build /app/build ./
+
+CMD [ "node", "index.js" ]
