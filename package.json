@@ -19,6 +19,7 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@sentry/cli": "^2.21.2",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.3"
@@ -26,7 +27,7 @@
   "scripts": {
     "start": "npm run build && node build",
     "build": "tsc && npm run sentry:sourcemaps",
-    "sentry:sourcemaps": "npx sentry-cli sourcemaps inject --org kwarkbit --project linkbot build && sentry-cli sourcemaps upload --org kwarkbit --project linkbot build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org kwarkbit --project linkbot build && sentry-cli sourcemaps upload --org kwarkbit --project linkbot build"
   },
   "repository": {
     "type": "git",
