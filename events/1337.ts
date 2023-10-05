@@ -31,6 +31,11 @@ const event: BotEvent<Message> = {
               streak: increment(1),
               lastModified: new Date(),
             });
+            try {
+              await message.react("💯");
+            } catch (e) {
+              console.log(e);
+            }
           }
         } else {
           await setDoc(docRef, {
@@ -39,6 +44,17 @@ const event: BotEvent<Message> = {
             lastModified: new Date(),
             createdAt: new Date(),
           });
+          try {
+            await message.react("💯");
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      } else {
+        try {
+          await message.react("402781659621228556");
+        } catch (e) {
+          console.log(e);
         }
       }
     }
