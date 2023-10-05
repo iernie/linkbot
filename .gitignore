@@ -1,3 +1,5 @@
 .env
 node_modules
 build/
+# Sentry Auth Token
+.sentryclirc

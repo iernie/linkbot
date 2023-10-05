@@ -7,7 +7,10 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./build",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/"
   },
   "ts-node": {
     "transpileOnly": true,

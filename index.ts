@@ -8,6 +8,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import type { BotEvent, SlashCommand } from "./types.d.ts";
 
+import * as Sentry from "@sentry/node";
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+});
+
 (async () => {
   const app = initializeApp({
     apiKey: process.env.apiKey,
