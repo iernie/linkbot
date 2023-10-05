@@ -27,7 +27,7 @@
   "scripts": {
     "start": "npm run build && node build",
     "build": "tsc && npm run sentry:sourcemaps",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org kwarkbit --project linkbot build && sentry-cli sourcemaps upload --org kwarkbit --project linkbot build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org kwarkbit --project linkbot ./build && sentry-cli sourcemaps upload --org kwarkbit --project linkbot ./build"
   },
   "repository": {
     "type": "git",
