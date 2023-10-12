@@ -9,25 +9,8 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[[services]]
-  protocol = "tcp"
-  internal_port = 3000
-  auto_stop_machines = false
-  auto_start_machines = true
-  min_machines_running = 1
-  processes = ["app"]
-
 [env]
-  NODE_ENV="production"
 
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
-
-[checks]
-  [checks.app]
-    grace_period = "30s"
-    interval = "15s"
-    port = 3000
-    timeout = "10s"
-    type = "tcp"
