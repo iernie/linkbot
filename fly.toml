@@ -24,3 +24,11 @@ services = []
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
+
+[checks]
+  [checks.app]
+    grace_period = "30s"
+    interval = "15s"
+    port = 3000
+    timeout = "10s"
+    type = "tcp"
