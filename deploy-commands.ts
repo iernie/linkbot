@@ -17,7 +17,7 @@ import type { SlashCommand } from "./types.d.ts";
   const commands: Array<RESTPostAPIChatInputApplicationCommandsJSONBody> = [];
 
   const commandFiles = readdirSync("./commands");
-  for (const file of commandFiles.filter((el) => path.extname(el) === ".ts")) {
+  for (const file of commandFiles.filter((el) => path.extname(el) === ".js")) {
     const filePath = "./commands/" + file;
     const command = (await import(filePath)).default as SlashCommand;
     if ("data" in command && "execute" in command) {

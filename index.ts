@@ -42,7 +42,7 @@ Sentry.init({
   client.commands = new Collection<string, SlashCommand>();
 
   const commandFiles = readdirSync("./commands");
-  for (const file of commandFiles.filter((el) => path.extname(el) === ".ts")) {
+  for (const file of commandFiles.filter((el) => path.extname(el) === ".js")) {
     const filePath = "./commands/" + file;
     const command = (await import(filePath)).default as SlashCommand;
     if ("data" in command && "execute" in command) {
@@ -53,7 +53,7 @@ Sentry.init({
   }
 
   const eventFiles = readdirSync("./events");
-  for (const file of eventFiles.filter((el) => path.extname(el) === ".ts")) {
+  for (const file of eventFiles.filter((el) => path.extname(el) === ".js")) {
     const filePath = "./events/" + file;
     const event = (await import(filePath)).default as BotEvent<unknown>;
     if (event.once) {
