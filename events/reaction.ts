@@ -3,7 +3,7 @@ import type { BotEvent } from "../types.js";
 
 const event: BotEvent<MessageReaction> = {
   name: Events.MessageReactionAdd,
-  async execute(reaction, ...user) {
+  async execute(reaction) {
     if (reaction.partial) {
       try {
         await reaction.fetch();
@@ -13,9 +13,12 @@ const event: BotEvent<MessageReaction> = {
       }
     }
 
-    console.log(user);
-
-    console.log(reaction.client.user.id, reaction.message.author?.id, null, reaction.message.interaction?.user.id);
+    console.log(
+      reaction.client.user.id,
+      reaction.message.author?.id,
+      reaction.users.cache,
+      reaction.message.interaction?.user.id,
+    );
     if (reaction.emoji.name === "❌" && reaction.client.user.id === reaction.message.author?.id) {
       await reaction.message.delete();
     }
