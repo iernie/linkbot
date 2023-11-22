@@ -3,7 +3,7 @@ import type { BotEvent } from "../types.js";
 
 const event: BotEvent<MessageReaction> = {
   name: Events.MessageReactionAdd,
-  async execute(reaction, user) {
+  async execute(reaction) {
     if (reaction.partial) {
       try {
         await reaction.fetch();
@@ -13,12 +13,10 @@ const event: BotEvent<MessageReaction> = {
       }
     }
 
-    console.log(user);
-
-    // Now the message has been cached and is fully available
-    console.log(`${reaction.message.author}'s message "${reaction.message.content}" gained a reaction!`);
-    // The reaction is now also fully available and the properties will be reflected accurately:
-    console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
+    console.log(reaction.client.user.id, reaction.message.author?.id);
+    if (reaction.client.user.id === reaction.message.author?.id) {
+      await reaction.message.delete();
+    }
   },
 };
 export default event;
