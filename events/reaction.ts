@@ -13,12 +13,9 @@ const event: BotEvent<MessageReaction> = {
       }
     }
 
-    console.log(
-      reaction.client.user.id,
-      reaction.message.author?.id,
-      reaction.users.cache,
-      reaction.message.interaction?.user.id,
-    );
+    const users = await reaction.users.fetch();
+
+    console.log(reaction.client.user.id, reaction.message.author?.id, users, reaction.message.interaction?.user.id);
     if (reaction.emoji.name === "❌" && reaction.client.user.id === reaction.message.author?.id) {
       await reaction.message.delete();
     }
