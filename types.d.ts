@@ -8,7 +8,7 @@ export interface SlashCommand {
 export interface BotEvent<T> {
   name: string;
   once?: boolean;
-  execute: (arg: T) => Promise<void>;
+  execute: (arg: T, ...args: any) => Promise<void>;
 }
 
 declare module "discord.js" {
