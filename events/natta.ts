@@ -6,7 +6,10 @@ const event: BotEvent<Message> = {
   async execute(message) {
     if (
       message.content.match(
-        new RegExp(`^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${message.client.user.displayName}(>)?|alle|sammen|,| )*$`, "i"),
+        new RegExp(
+          `^.{0,5}((go+d ?)?nat+a?)(!|(<@)?${message.client.user.displayName}(>)?|dere|alle|sammen|,| )*$`,
+          "i",
+        ),
       )
     ) {
       await message.channel.send(`natta ${message.author.displayName}!`);

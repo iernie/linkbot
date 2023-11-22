@@ -3,7 +3,7 @@ dotenv.config();
 
 import path from "node:path";
 import { readdirSync } from "node:fs";
-import { Client, Collection, GatewayIntentBits } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -32,6 +32,7 @@ Sentry.init({
     });
 
   const client = new Client({
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
