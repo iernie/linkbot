@@ -15,13 +15,11 @@ const event: BotEvent<MessageReaction> = {
 
     const users = await reaction.users.fetch();
 
-    console.log(
-      reaction.client.user.id,
-      reaction.message.author?.id,
-      users.find((u) => u.id === reaction.message.interaction?.user.id),
-      reaction.message.interaction?.user.id,
-    );
-    if (reaction.emoji.name === "❌" && reaction.client.user.id === reaction.message.author?.id) {
+    if (
+      reaction.emoji.name === "❌" &&
+      reaction.client.user.id === reaction.message.author?.id &&
+      users.some((u) => u.id === reaction.message.interaction?.user.id)
+    ) {
       await reaction.message.delete();
     }
   },
