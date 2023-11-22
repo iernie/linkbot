@@ -6,6 +6,7 @@ import { readdirSync } from "node:fs";
 import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import type { BotEvent, SlashCommand } from "./types.d.ts";
 
@@ -21,9 +22,9 @@ Sentry.init({
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
   });
+  getFirestore(app);
 
-  const auth = getAuth(app);
-  signInWithEmailAndPassword(auth, process.env.email!, process.env.password!)
+  signInWithEmailAndPassword(getAuth(app), process.env.email!, process.env.password!)
     .then(() => {
       console.log("Logged into firebase");
     })

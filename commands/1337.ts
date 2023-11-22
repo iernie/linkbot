@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, collection, getFirestore, Timestamp } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, getFirestore } from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
 
