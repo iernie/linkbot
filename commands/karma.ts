@@ -14,19 +14,15 @@ const command: SlashCommand = {
     const user = interaction.options.getUser("user");
 
     if (user) {
-      if (user.id === interaction.user.id) {
-        await interaction.reply("Tsk, tsk! You cannot /good yourself. 👼");
-      } else {
-        const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);
-        const goodSnap = await getDoc(goodRef);
-        const good = goodSnap.exists() ? goodSnap.data().count : 0;
+      const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);
+      const goodSnap = await getDoc(goodRef);
+      const good = goodSnap.exists() ? goodSnap.data().count : 0;
 
-        const badRef = doc(db, interaction.guildId!, "counters", "bad", user.id);
-        const badSnap = await getDoc(badRef);
-        const bad = badSnap.exists() ? badSnap.data().count : 0;
+      const badRef = doc(db, interaction.guildId!, "counters", "bad", user.id);
+      const badSnap = await getDoc(badRef);
+      const bad = badSnap.exists() ? badSnap.data().count : 0;
 
-        await interaction.reply(`${user.displayName} has ${good - bad} karma points`);
-      }
+      await interaction.reply(`${user.displayName} has ${good - bad} karma points`);
     } else {
       const karma: { [key: string]: KarmaType } = {};
 
@@ -43,7 +39,7 @@ const command: SlashCommand = {
       badSnap.forEach((doc) => {
         karma[doc.id] = {
           user: doc.data().user,
-          count: karma[doc.id].count ?? 0 - (doc.data() as KarmaType).count,
+          count: karma[doc.id]?.count ?? 0 - (doc.data() as KarmaType).count,
         };
       });
 
