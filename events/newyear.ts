@@ -1,11 +1,14 @@
 import { formatDistanceToNow, getMonth, getDate, getYear } from "date-fns";
 import { Events, Message } from "discord.js";
-import nb from "date-fns/locale/nb/index.js";
+import { nb } from "date-fns/locale";
 import type { BotEvent } from "../types.d.ts";
 
 const event: BotEvent<Message> = {
   name: Events.MessageCreate,
   async execute(message) {
+    if (!message.member || message.member.user.bot) return;
+    if (!message.guild) return;
+
     const time = new Date(message.createdTimestamp);
     const match = message.content.match(new RegExp("^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$", "i"));
     if (match && match[0] !== "") {

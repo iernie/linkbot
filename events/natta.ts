@@ -4,6 +4,9 @@ import type { BotEvent } from "../types.d.ts";
 const event: BotEvent<Message> = {
   name: Events.MessageCreate,
   async execute(message) {
+    if (!message.member || message.member.user.bot) return;
+    if (!message.guild) return;
+    
     if (
       message.content.match(
         new RegExp(
