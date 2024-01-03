@@ -26,7 +26,11 @@ const event: BotEvent<MessageReaction> = {
         reaction.client.user.id === reaction.message.author?.id &&
         users.some((u) => u.id === reaction.message.interaction?.user.id)
       ) {
-        await reaction.message.delete();
+        try {
+          await reaction.message.delete();
+        } catch (error) {
+          console.error("Something went wrong deleting the message:", error);
+        }
       }
     }
   },
