@@ -5,15 +5,15 @@
   "exports": "./index.js",
   "type": "module",
   "dependencies": {
-    "@sentry/cli": "^2.23.1",
-    "@sentry/node": "^7.91.0",
-    "@types/node": "^20.10.6",
+    "@sentry/cli": "^2.26.0",
+    "@sentry/node": "^7.94.1",
+    "@types/node": "^20.11.5",
     "@types/node-cron": "^3.0.11",
-    "chrono-node": "^2.7.4",
-    "date-fns": "^3.0.6",
+    "chrono-node": "^2.7.5",
+    "date-fns": "^3.3.1",
     "discord.js": "^14.14.1",
-    "dotenv": "^16.3.1",
-    "firebase": "^10.7.1",
+    "dotenv": "^16.3.2",
+    "firebase": "^10.7.2",
     "node-cron": "^3.0.3",
     "node-geocoder": "^4.2.0",
     "normalize-url": "^8.0.0",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.1.1"
+    "prettier": "^3.2.4"
   },
   "scripts": {
     "start": "npm run build && node build",
