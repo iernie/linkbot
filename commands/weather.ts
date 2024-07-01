@@ -13,7 +13,17 @@ const command: SlashCommand = {
       option.setName("location").setDescription("location for temperature").setRequired(true),
     ),
   async execute(interaction) {
-    const location = await geocoder.geocode(interaction.options.getString("location")!.trim());
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${interaction.options.getString("location")!.trim().replace(" ", "+")}&format=json`,
+    );
+    const location = (await response.json()) as [
+      {
+        latitude: string;
+        longitude: string;
+        city: string;
+      },
+    ];
+
     const data = (await fetch(
       `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location[0].latitude}&lon=${location[0].longitude}`,
       {
