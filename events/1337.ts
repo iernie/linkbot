@@ -34,7 +34,7 @@ const event: BotEvent<Message> = {
             try {
               await message.react("💯");
             } catch (e) {
-              console.log(e);
+              console.error(e);
             }
           }
         } else {
@@ -47,14 +47,14 @@ const event: BotEvent<Message> = {
           try {
             await message.react("💯");
           } catch (e) {
-            console.log(e);
+            console.error(e);
           }
         }
       } else {
         try {
           await message.react("402781659621228556");
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       }
     }

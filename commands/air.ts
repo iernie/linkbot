@@ -15,15 +15,15 @@ const command: SlashCommand = {
     );
     const location = (await response.json()) as [
       {
-        latitude: string;
-        longitude: string;
+        lat: string;
+        lon: string;
         city: string;
       },
     ];
 
     if (location && location.length > 0) {
       const data = (await fetch(
-        `https://api.met.no/weatherapi/airqualityforecast/0.1/?lat=${location[0].latitude}&lon=${location[0].longitude}&filter_vars=AQI`,
+        `https://api.met.no/weatherapi/airqualityforecast/0.1/?lat=${location[0].lat}&lon=${location[0].lon}&filter_vars=AQI`,
         {
           headers: { "User-Agent": "linkbot" },
         },

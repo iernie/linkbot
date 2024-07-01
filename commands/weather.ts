@@ -14,20 +14,21 @@ const command: SlashCommand = {
     );
     const location = (await response.json()) as [
       {
-        latitude: string;
-        longitude: string;
+        lat: string;
+        lon: string;
         city: string;
       },
     ];
 
     const data = (await fetch(
-      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location[0].latitude}&lon=${location[0].longitude}`,
+      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location[0].lat}&lon=${location[0].lon}`,
       {
         headers: { "User-Agent": "linkbot" },
       },
     ).then((res) => res.json())) as {
       properties: { timeseries: Array<{ data: { instant: { details: { air_temperature: number } } } }> };
     };
+
     if (data && data.properties && data.properties.timeseries && data.properties.timeseries.length > 0) {
       const city =
         location[0].city !== undefined ? location[0].city : interaction.options.getString("location")!.trim();
