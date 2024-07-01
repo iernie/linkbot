@@ -15,7 +15,6 @@
     "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "node-cron": "^3.0.3",
-    "node-geocoder": "^4.3.0",
     "normalize-url": "^8.0.1",
     "typescript": "^5.5.3"
   },

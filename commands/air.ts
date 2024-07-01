@@ -1,10 +1,6 @@
-// @ts-ignore
-import nodeGeocoder from "node-geocoder";
 import { isAfter, parseISO } from "date-fns";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
-
-const geocoder = nodeGeocoder({ provider: "openstreetmap" });
 
 const command: SlashCommand = {
   data: new SlashCommandBuilder()
@@ -14,7 +10,17 @@ const command: SlashCommand = {
       option.setName("location").setDescription("location for air quality").setRequired(true),
     ),
   async execute(interaction) {
-    const location = await geocoder.geocode(interaction.options.getString("location")!.trim());
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${interaction.options.getString("location")!.trim().replace(" ", "+")}&format=json`,
+    );
+    const location = (await response.json()) as [
+      {
+        latitude: string;
+        longitude: string;
+        city: string;
+      },
+    ];
+
     if (location && location.length > 0) {
       const data = (await fetch(
         `https://api.met.no/weatherapi/airqualityforecast/0.1/?lat=${location[0].latitude}&lon=${location[0].longitude}&filter_vars=AQI`,

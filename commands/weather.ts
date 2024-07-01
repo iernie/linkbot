@@ -1,9 +1,5 @@
-// @ts-ignore
-import nodeGeocoder from "node-geocoder";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
-
-const geocoder = nodeGeocoder({ provider: "openstreetmap" });
 
 const command: SlashCommand = {
   data: new SlashCommandBuilder()
