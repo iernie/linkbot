@@ -29,7 +29,7 @@ Sentry.init({
     console.log("Logged into firebase");
 
     const client = new Client({
-      partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+      partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.ThreadMember],
       intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,

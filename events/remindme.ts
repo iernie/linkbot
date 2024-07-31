@@ -35,10 +35,10 @@ const event: BotEvent<Client> = {
           try {
             const channel = await client.channels.fetch(data.channelId);
             await (channel as TextBasedChannel)?.send(`<@${data.user}>: ${data.what}`);
-            await deleteDoc(doc(db, "reminders", data.id));
           } catch (e) {
             console.error(`Something went wrong when sending reminder: ${e}`);
           }
+          await deleteDoc(doc(db, "reminders", data.id));
         }
       });
     });
