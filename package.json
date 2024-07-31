@@ -5,23 +5,23 @@
   "exports": "./index.js",
   "type": "module",
   "dependencies": {
-    "@sentry/cli": "^2.32.1",
-    "@sentry/node": "^8.13.0",
-    "@types/node": "^20.14.9",
+    "@sentry/cli": "^2.33.0",
+    "@sentry/node": "^8.21.0",
+    "@types/node": "^22.0.0",
     "@types/node-cron": "^3.0.11",
     "chrono-node": "^2.7.6",
     "date-fns": "^3.6.0",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
-    "firebase": "^10.12.2",
+    "firebase": "^10.12.4",
     "node-cron": "^3.0.3",
     "normalize-url": "^8.0.1",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "eslint": "^9.6.0",
+    "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.2"
+    "prettier": "^3.3.3"
   },
   "scripts": {
     "start": "npm run build && node build",
