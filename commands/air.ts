@@ -61,12 +61,8 @@ const command: SlashCommand = {
         const city =
           location[0].city !== undefined ? location[0].city : interaction.options.getString("location")!.trim();
 
-        console.log(level);
-        console.log(city);
-        console.log(level);
-
         const desc = description.variables.AQI.aqis.find(
-          (d) => level >= (d.from ?? d.to + 1) && level <= (d.to ?? d.from - 1),
+          (d) => level >= (d.from ?? 0) && level <= (d.to ?? Number.MAX_SAFE_INTEGER),
         );
 
         if (desc) {
