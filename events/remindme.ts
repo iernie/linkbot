@@ -1,6 +1,6 @@
 import { isAfter, isEqual, startOfMinute } from "date-fns";
 import { doc, getFirestore, collection, deleteDoc, onSnapshot } from "firebase/firestore";
-import { Events, Client, TextBasedChannel } from "discord.js";
+import { Events, Client, TextChannel } from "discord.js";
 import * as cron from "node-cron";
 import type { BotEvent } from "../types.d.ts";
 
@@ -34,7 +34,7 @@ const event: BotEvent<Client> = {
         ) {
           try {
             const channel = await client.channels.fetch(data.channelId);
-            await (channel as TextBasedChannel)?.send(`<@${data.user}>: ${data.what}`);
+            await (channel as TextChannel)?.send(`<@${data.user}>: ${data.what}`);
           } catch (e) {
             console.error(`Something went wrong when sending reminder: ${e}`);
           }
