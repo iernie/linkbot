@@ -61,11 +61,19 @@ const command: SlashCommand = {
         const city =
           location[0].city !== undefined ? location[0].city : interaction.options.getString("location")!.trim();
 
+        console.log(level);
+        console.log(city);
+        console.log(level);
+
         const desc = description.variables.AQI.aqis.find(
           (d) => level >= (d.from ?? d.to + 1) && level <= (d.to ?? d.from - 1),
-        )!;
+        );
 
-        await interaction.reply(`${city}: ${desc.description_EN} (${desc.short_description_EN})`);
+        if (desc) {
+          await interaction.reply(`${city}: ${desc.description_EN} (${desc.short_description_EN})`);
+        } else {
+          await interaction.reply("Air quality not found 🤷");
+        }
       } else {
         await interaction.reply("Air quality not found 🤷");
       }
