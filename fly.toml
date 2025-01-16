@@ -8,9 +8,11 @@ primary_region = "ams"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
-auto_start_machines = true
-auto_stop_machines = false
-min_machines_running = 1
+
+[[services]]
+  auto_start_machines = true
+  auto_stop_machines = "off"
+  min_machines_running = 1
 
 [env]
 
