@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { readdirSync } from "node:fs";
 import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
@@ -9,6 +10,9 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import type { BotEvent, SlashCommand } from "./types.d.ts";
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 (async () => {
   const app = initializeApp({
@@ -26,17 +30,20 @@ import type { BotEvent, SlashCommand } from "./types.d.ts";
   }
 
   const client = new Client({
-    partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.ThreadMember],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.ThreadMember, Partials.User],
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.MessageContent,
       GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.DirectMessageReactions,
     ],
   });
   client.commands = new Collection<string, SlashCommand>();
 
-  const commandFiles = readdirSync("./commands");
+  const commandPath = path.join(__dirname, "commands");
+  const commandFiles = readdirSync(commandPath);
   for (const file of commandFiles.filter((el) => path.extname(el) === ".js")) {
     const filePath = "./commands/" + file;
     const command = (await import(filePath)).default as SlashCommand;
@@ -47,7 +54,8 @@ import type { BotEvent, SlashCommand } from "./types.d.ts";
     }
   }
 
-  const eventFiles = readdirSync("./events");
+  const eventsPath = path.join(__dirname, "events");
+  const eventFiles = readdirSync(eventsPath);
   for (const file of eventFiles.filter((el) => path.extname(el) === ".js")) {
     const filePath = "./events/" + file;
     const event = (await import(filePath)).default as BotEvent<unknown>;

@@ -1,4 +1,4 @@
-import { Events, Message, TextChannel } from "discord.js";
+import { Events, Message, MessageType, TextChannel } from "discord.js";
 import type { BotEvent } from "../types.d.ts";
 
 const event: BotEvent<Message> = {
@@ -6,6 +6,7 @@ const event: BotEvent<Message> = {
   async execute(message) {
     if (!message.member || message.member.user.bot) return;
     if (!message.guild) return;
+    if (message.type === MessageType.Reply) return;
 
     if (
       message.content.match(
@@ -15,7 +16,7 @@ const event: BotEvent<Message> = {
         ),
       )
     ) {
-      await (message.channel as TextChannel).send(`natta ${message.author.displayName}!`);
+      await (message.channel as TextChannel).send(`natta ${message.member.nickname ?? message.author.displayName}!`);
     }
   },
 };

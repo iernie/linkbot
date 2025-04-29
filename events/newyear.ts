@@ -13,10 +13,12 @@ const event: BotEvent<Message> = {
     const match = message.content.match(new RegExp("^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$", "i"));
     if (match && match[0] !== "") {
       if (getMonth(time) === 0) {
-        await (message.channel as TextChannel).send(`Godt nytt år ${message.author.displayName}!`);
+        await (message.channel as TextChannel).send(
+          `Godt nytt år ${message.member.nickname ?? message.author.displayName}!`,
+        );
       } else if (getMonth(time) === 11 && getDate(time) === 31) {
         await (message.channel as TextChannel).send(
-          `Godt nytt år ${message.author.displayName}! Det er ${formatDistanceToNow(
+          `Godt nytt år ${message.member.nickname ?? message.author.displayName}! Det er ${formatDistanceToNow(
             new Date(getYear(time) + 1, 0, 1, 0, 0, 0, 0),
             { includeSeconds: true, locale: nb },
           )} igjen til midnatt!`,

@@ -8,8 +8,9 @@ const command: SlashCommand = {
     .addUserOption((option) => option.setName("user").setDescription("the user").setRequired(true)),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
+    const users = await interaction.guild?.members.fetch();
     await interaction.reply(
-      `${interaction.user.displayName} slaps ${user?.displayName} around a bit with a large trout`,
+      `${users?.find((u) => u.id === interaction.user.id)?.nickname ?? interaction.user.displayName} slaps ${users?.find((u) => u.id === user!.id)?.nickname ?? user?.displayName} around a bit with a large trout`,
     );
   },
 };

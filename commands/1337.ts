@@ -15,13 +15,16 @@ const command: SlashCommand = {
     .addUserOption((option) => option.setName("user").setDescription("the user")),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
+    const users = await interaction.guild?.members.fetch();
 
     if (user) {
       const docRef = doc(db, interaction.guildId!, "counters", "1337", user.id);
       const docSnap = await getDoc(docRef);
       const streak = docSnap.exists() ? (docSnap.data() as LeetType).streak : 0;
 
-      await interaction.reply(`${user.displayName} has participated ${streak} times`);
+      await interaction.reply(
+        `${users?.find((u) => u.id === user.id)?.nickname ?? user.displayName} has participated ${streak} times`,
+      );
     } else {
       const streaks: { [key: string]: LeetType } = {};
 
@@ -36,7 +39,10 @@ const command: SlashCommand = {
         await interaction.reply("No 1337 have been collected so far");
       } else {
         const list = Object.keys(streaks).reduce(
-          (acc, curr) => [...acc, { user: streaks[curr].user, streak: streaks[curr].streak }],
+          (acc, curr) => [
+            ...acc,
+            { user: users?.find((u) => u.id === curr)?.nickname ?? streaks[curr].user, streak: streaks[curr].streak },
+          ],
           [] as Array<LeetType>,
         );
         const top = list.sort((a, b) => b.streak - a.streak).slice(0, 10);

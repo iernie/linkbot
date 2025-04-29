@@ -12,6 +12,7 @@ const command: SlashCommand = {
     .addUserOption((option) => option.setName("user").setDescription("the user")),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
+    const users = await interaction.guild?.members.fetch();
 
     if (user) {
       const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);
@@ -22,7 +23,9 @@ const command: SlashCommand = {
       const badSnap = await getDoc(badRef);
       const bad = badSnap.exists() ? badSnap.data().count : 0;
 
-      await interaction.reply(`${user.displayName} has ${good - bad} karma points`);
+      await interaction.reply(
+        `${users?.find((u) => u.id === user.id)?.nickname ?? user.displayName} has ${good - bad} karma points`,
+      );
     } else {
       const karma: { [key: string]: KarmaType } = {};
 
@@ -46,10 +49,12 @@ const command: SlashCommand = {
       if (Object.keys(karma).length === 0) {
         await interaction.reply("No karma have been collected so far");
       } else {
-        const list = Object.keys(karma).reduce(
-          (acc, curr) => [...acc, { user: karma[curr].user, count: karma[curr].count }],
-          [] as Array<KarmaType>,
-        );
+        const list = Object.keys(karma).reduce((acc, curr) => {
+          return [
+            ...acc,
+            { user: users?.find((u) => u.id === curr)?.nickname ?? karma[curr].user, count: karma[curr].count },
+          ];
+        }, [] as Array<KarmaType>);
         const top = list
           .filter((t) => t.count > 0)
           .sort((a, b) => b.count - a.count)
@@ -64,7 +69,6 @@ const command: SlashCommand = {
         const paddingTop = top.length > 0 ? `${top[0].count}`.length + 4 : 5;
         const paddingBottom = bottom.length > 0 ? `${bottom[0].count}`.length + 4 : 5;
         const padding = Math.max(paddingTop, paddingBottom);
-
         output.push("Scoreboard");
         top.forEach((u) => {
           output.push(`${u.count}`.padEnd(padding, " ") + `${u.user}`);

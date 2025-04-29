@@ -17,6 +17,7 @@ const command: SlashCommand = {
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");
+    const users = await interaction.guild?.members.fetch(user!.id);
 
     if (reason) {
       const ownRef = doc(db, interaction.guildId!, "counters", "bad", interaction.user.id);
@@ -69,9 +70,11 @@ const command: SlashCommand = {
       if (docSnap.exists()) {
         const result = docSnap.data();
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
-        await interaction.reply(`${user!.displayName} was last bad ${days} ago; "${result.reason}" –${result.author}.`);
+        await interaction.reply(
+          `${users?.nickname ?? user!.displayName} was last bad ${days} ago; "${result.reason}" –${result.author}.`,
+        );
       } else {
-        await interaction.reply(`${user!.displayName} has been good so far :)`);
+        await interaction.reply(`${users?.nickname ?? user!.displayName} has been good so far :)`);
       }
     }
   },

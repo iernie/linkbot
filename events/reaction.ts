@@ -17,10 +17,10 @@ const event: BotEvent<MessageReaction> = {
     try {
       users = await reaction.users.fetch();
     } catch {
-      users = reaction.users.cache;
+      users = reaction.users?.cache;
     }
 
-    if (users.size > 0) {
+    if (users && users.size > 0) {
       if (
         reaction.emoji.name === "❌" &&
         reaction.client.user.id === reaction.message.author?.id &&

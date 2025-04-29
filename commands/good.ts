@@ -17,6 +17,7 @@ const command: SlashCommand = {
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");
+    const users = await interaction.guild?.members.fetch(user!.id);
 
     if (reason) {
       if (user!.id === interaction.user.id) {
@@ -55,10 +56,10 @@ const command: SlashCommand = {
         const result = docSnap.data();
         const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
         await interaction.reply(
-          `${user!.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`,
+          `${users?.nickname ?? user!.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`,
         );
       } else {
-        await interaction.reply(`${user!.displayName} has no recorded good :/`);
+        await interaction.reply(`${users?.nickname ?? user!.displayName} has no recorded good :/`);
       }
     }
   },
