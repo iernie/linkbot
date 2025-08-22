@@ -11,6 +11,7 @@ Sentry.init({
     Sentry.httpIntegration({
       trackIncomingRequestsAsSessions: false, // default: true
     }),
+    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
   ],
   enableLogs: true,
   sendDefaultPii: true,
