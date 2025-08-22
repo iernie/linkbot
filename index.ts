@@ -1,6 +1,9 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+// Require this first!
+import "./instrument";
+
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdirSync } from "node:fs";
