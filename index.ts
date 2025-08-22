@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 // Require this first!
-import "./instrument";
+import "./instruments";
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
