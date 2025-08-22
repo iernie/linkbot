@@ -2,7 +2,19 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 // Require this first!
-import "./instruments";
+import * as Sentry from "@sentry/node";
+
+// Ensure to call this before importing any other modules!
+Sentry.init({
+  tracesSampleRate: 1.0,
+  integrations: [
+    Sentry.httpIntegration({
+      trackIncomingRequestsAsSessions: false, // default: true
+    }),
+  ],
+  enableLogs: true,
+  sendDefaultPii: true,
+});
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
