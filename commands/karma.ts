@@ -12,7 +12,10 @@ const command: SlashCommand = {
     .addUserOption((option) => option.setName("user").setDescription("the user")),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
-    const users = await interaction.guild?.members.fetch();
+    let users = null;
+    try {
+      users = await interaction.guild?.members.fetch();
+    } catch (e) {}
 
     if (user) {
       const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);

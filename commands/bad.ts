@@ -17,7 +17,10 @@ const command: SlashCommand = {
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");
-    const users = await interaction.guild?.members.fetch(user!.id);
+    let users = null;
+    try {
+      users = await interaction.guild?.members.fetch(user!.id);
+    } catch (e) {}
 
     if (reason) {
       const ownRef = doc(db, interaction.guildId!, "counters", "bad", interaction.user.id);
