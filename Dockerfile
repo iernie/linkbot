@@ -4,6 +4,8 @@ LABEL fly_launch_runtime="Node.js"
 
 WORKDIR /app
 
+ARG SENTRY_AUTH_TOKEN
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 ENV NODE_ENV="production"
 
 FROM base as build
