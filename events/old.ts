@@ -35,7 +35,11 @@ const event: BotEvent<Message> = {
             const result = docSnap.data();
             if (result.user !== message.author.id) {
               const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true });
-              await message.reply(`old! This was posted by <@${result.user}> ${days} ago.`);
+              try {
+                await message.reply(`old! This was posted by <@${result.user}> ${days} ago.`);
+              } catch (e) {
+                console.error(e);
+              }
             }
           } else {
             await setDoc(docRef, {
