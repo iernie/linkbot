@@ -1,4 +1,10 @@
-import { doc, getDoc, getDocs, collection, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  getFirestore,
+} from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
 
@@ -9,7 +15,9 @@ const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("karma")
     .setDescription("Check all or someones karma")
-    .addUserOption((option) => option.setName("user").setDescription("the user")),
+    .addUserOption((option) =>
+      option.setName("user").setDescription("the user"),
+    ),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     let users = null;
@@ -18,7 +26,13 @@ const command: SlashCommand = {
     } catch (e) {}
 
     if (user) {
-      const goodRef = doc(db, interaction.guildId!, "counters", "good", user.id);
+      const goodRef = doc(
+        db,
+        interaction.guildId!,
+        "counters",
+        "good",
+        user.id,
+      );
       const goodSnap = await getDoc(goodRef);
       const good = goodSnap.exists() ? goodSnap.data().count : 0;
 
@@ -36,7 +50,10 @@ const command: SlashCommand = {
       const goodSnap = await getDocs(goodRef);
 
       goodSnap.forEach((doc) => {
-        karma[doc.id] = { user: (doc.data() as KarmaType).user, count: (doc.data() as KarmaType).count };
+        karma[doc.id] = {
+          user: (doc.data() as KarmaType).user,
+          count: (doc.data() as KarmaType).count,
+        };
       });
 
       const badRef = collection(db, interaction.guildId!, "counters", "bad");
@@ -55,7 +72,11 @@ const command: SlashCommand = {
         const list = Object.keys(karma).reduce((acc, curr) => {
           return [
             ...acc,
-            { user: users?.find((u) => u.id === curr)?.nickname ?? karma[curr].user, count: karma[curr].count },
+            {
+              user:
+                users?.find((u) => u.id === curr)?.nickname ?? karma[curr].user,
+              count: karma[curr].count,
+            },
           ];
         }, [] as Array<KarmaType>);
         const top = list
@@ -70,7 +91,8 @@ const command: SlashCommand = {
 
         const output = [];
         const paddingTop = top.length > 0 ? `${top[0].count}`.length + 4 : 5;
-        const paddingBottom = bottom.length > 0 ? `${bottom[0].count}`.length + 4 : 5;
+        const paddingBottom =
+          bottom.length > 0 ? `${bottom[0].count}`.length + 4 : 5;
         const padding = Math.max(paddingTop, paddingBottom);
         output.push("Scoreboard");
         top.forEach((u) => {

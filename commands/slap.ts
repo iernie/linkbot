@@ -5,7 +5,9 @@ const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("slap")
     .setDescription("Slap someone")
-    .addUserOption((option) => option.setName("user").setDescription("the user").setRequired(true)),
+    .addUserOption((option) =>
+      option.setName("user").setDescription("the user").setRequired(true),
+    ),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     let users = null;

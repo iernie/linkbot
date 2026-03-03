@@ -6,7 +6,10 @@ const command: SlashCommand = {
     .setName("temp")
     .setDescription("Provides temperature")
     .addStringOption((option) =>
-      option.setName("location").setDescription("location for temperature").setRequired(true),
+      option
+        .setName("location")
+        .setDescription("location for temperature")
+        .setRequired(true),
     ),
   async execute(interaction) {
     const response = await fetch(
@@ -26,13 +29,26 @@ const command: SlashCommand = {
         headers: { "User-Agent": "linkbot" },
       },
     ).then((res) => res.json())) as {
-      properties: { timeseries: Array<{ data: { instant: { details: { air_temperature: number } } } }> };
+      properties: {
+        timeseries: Array<{
+          data: { instant: { details: { air_temperature: number } } };
+        }>;
+      };
     };
 
-    if (data && data.properties && data.properties.timeseries && data.properties.timeseries.length > 0) {
+    if (
+      data &&
+      data.properties &&
+      data.properties.timeseries &&
+      data.properties.timeseries.length > 0
+    ) {
       const city =
-        location[0].city !== undefined ? location[0].city : interaction.options.getString("location")!.trim();
-      await interaction.reply(`${city}: ${data.properties.timeseries[0].data.instant.details.air_temperature}°C`);
+        location[0].city !== undefined
+          ? location[0].city
+          : interaction.options.getString("location")!.trim();
+      await interaction.reply(
+        `${city}: ${data.properties.timeseries[0].data.instant.details.air_temperature}°C`,
+      );
     } else {
       await interaction.reply("🤷");
     }

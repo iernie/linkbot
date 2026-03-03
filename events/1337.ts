@@ -1,5 +1,13 @@
 import { getHours, getMinutes, isToday } from "date-fns";
-import { doc, updateDoc, getDoc, setDoc, getFirestore, increment, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  getDoc,
+  setDoc,
+  getFirestore,
+  increment,
+  Timestamp,
+} from "firebase/firestore";
 import { Events, Message } from "discord.js";
 import type { BotEvent } from "../types.d.ts";
 
@@ -17,9 +25,18 @@ const event: BotEvent<Message> = {
     if (!message.guild) return;
 
     const time = new Date(message.createdTimestamp);
-    if (!message.author.bot && message.content.match(new RegExp("^1337$", "i"))) {
+    if (
+      !message.author.bot &&
+      message.content.match(new RegExp("^1337$", "i"))
+    ) {
       if (getHours(time) === 13 && getMinutes(time) === 37) {
-        const docRef = doc(db, message.guildId!, "counters", "1337", message.author.id);
+        const docRef = doc(
+          db,
+          message.guildId!,
+          "counters",
+          "1337",
+          message.author.id,
+        );
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

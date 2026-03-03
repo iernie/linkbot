@@ -5,7 +5,12 @@ const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("8ball")
     .setDescription("Choose a decision")
-    .addStringOption((option) => option.setName("choices").setDescription("what are your choices?").setRequired(true)),
+    .addStringOption((option) =>
+      option
+        .setName("choices")
+        .setDescription("what are your choices?")
+        .setRequired(true),
+    ),
   async execute(interaction) {
     const queries = interaction.options
       .getString("choices")!

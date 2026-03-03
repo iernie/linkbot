@@ -11,17 +11,26 @@ const command: SlashCommand = {
     .setName("remindme")
     .setDescription("Set a reminder")
     .addStringOption((option) =>
-      option.setName("when").setDescription("when do you want to be reminded?").setRequired(true),
+      option
+        .setName("when")
+        .setDescription("when do you want to be reminded?")
+        .setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("what").setDescription("what do you want to remember").setRequired(true),
+      option
+        .setName("what")
+        .setDescription("what do you want to remember")
+        .setRequired(true),
     ),
   async execute(interaction) {
     const when = chrono.parseDate(interaction.options.getString("when")!);
     const what = interaction.options.getString("what");
 
     if (!when) {
-      await interaction.reply({ content: "I did not understand when you wanted it", ephemeral: true });
+      await interaction.reply({
+        content: "I did not understand when you wanted it",
+        ephemeral: true,
+      });
     } else {
       await addDoc(collection(db, "reminders"), {
         user: interaction.user.id,
@@ -31,7 +40,9 @@ const command: SlashCommand = {
         when: when,
       });
 
-      await interaction.reply(`Got it! I'll remind you "${what}" in ${formatDistanceToNow(when)}`);
+      await interaction.reply(
+        `Got it! I'll remind you "${what}" in ${formatDistanceToNow(when)}`,
+      );
     }
   },
 };

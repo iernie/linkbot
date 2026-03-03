@@ -16,7 +16,9 @@ const event: BotEvent<Message> = {
         ),
       )
     ) {
-      await (message.channel as TextChannel).send(`natta ${message.member.nickname ?? message.author.displayName}!`);
+      await (message.channel as TextChannel).send(
+        `natta ${message.member.nickname ?? message.author.displayName}!`,
+      );
     }
   },
 };

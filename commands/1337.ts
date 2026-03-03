@@ -1,4 +1,10 @@
-import { doc, getDoc, getDocs, collection, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  getFirestore,
+} from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
 
@@ -12,7 +18,9 @@ const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("1337")
     .setDescription("Check 1337 status")
-    .addUserOption((option) => option.setName("user").setDescription("the user")),
+    .addUserOption((option) =>
+      option.setName("user").setDescription("the user"),
+    ),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     let users = null;
@@ -35,7 +43,10 @@ const command: SlashCommand = {
       const docSnap = await getDocs(docRef);
 
       docSnap.forEach((doc) => {
-        streaks[doc.id] = { user: (doc.data() as LeetType).user, streak: (doc.data() as LeetType).streak };
+        streaks[doc.id] = {
+          user: (doc.data() as LeetType).user,
+          streak: (doc.data() as LeetType).streak,
+        };
       });
 
       if (Object.keys(streaks).length === 0) {
@@ -44,7 +55,12 @@ const command: SlashCommand = {
         const list = Object.keys(streaks).reduce(
           (acc, curr) => [
             ...acc,
-            { user: users?.find((u) => u.id === curr)?.nickname ?? streaks[curr].user, streak: streaks[curr].streak },
+            {
+              user:
+                users?.find((u) => u.id === curr)?.nickname ??
+                streaks[curr].user,
+              streak: streaks[curr].streak,
+            },
           ],
           [] as Array<LeetType>,
         );

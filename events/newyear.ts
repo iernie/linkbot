@@ -10,7 +10,9 @@ const event: BotEvent<Message> = {
     if (!message.guild) return;
 
     const time = new Date(message.createdTimestamp);
-    const match = message.content.match(new RegExp("^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$", "i"));
+    const match = message.content.match(
+      new RegExp("^.{0,5}((godt ?nytt ?år)|(happy ?new ?year))(.*)?$", "i"),
+    );
     if (match && match[0] !== "") {
       if (getMonth(time) === 0) {
         await (message.channel as TextChannel).send(
@@ -25,10 +27,13 @@ const event: BotEvent<Message> = {
         );
       } else {
         await (message.channel as TextChannel).send(
-          `Du er for tidlig! Det er ${formatDistanceToNow(new Date(getYear(time) + 1, 0, 1, 0, 0, 0, 0), {
-            includeSeconds: true,
-            locale: nb,
-          })} igjen.`,
+          `Du er for tidlig! Det er ${formatDistanceToNow(
+            new Date(getYear(time) + 1, 0, 1, 0, 0, 0, 0),
+            {
+              includeSeconds: true,
+              locale: nb,
+            },
+          )} igjen.`,
         );
       }
     }

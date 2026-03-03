@@ -25,18 +25,36 @@ const event: BotEvent<Message> = {
     const matches = message.content.match(pattern);
     if (matches && !message.author.bot) {
       matches
-        .map((url) => new URL(normalizeUrl(url, { forceHttps: true, removeDirectoryIndex: true })))
+        .map(
+          (url) =>
+            new URL(
+              normalizeUrl(url, {
+                forceHttps: true,
+                removeDirectoryIndex: true,
+              }),
+            ),
+        )
         .filter((url) => url.pathname && url.pathname !== "/")
         .forEach(async (url) => {
-          const docRef = doc(db, message.guildId!, message.channelId, "url", url.href.replace(/\//gi, ""));
+          const docRef = doc(
+            db,
+            message.guildId!,
+            message.channelId,
+            "url",
+            url.href.replace(/\//gi, ""),
+          );
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
             const result = docSnap.data();
             if (result.user !== message.author.id) {
-              const days = formatDistanceToNow(result.createdAt.toDate(), { includeSeconds: true });
+              const days = formatDistanceToNow(result.createdAt.toDate(), {
+                includeSeconds: true,
+              });
               try {
-                await message.reply(`old! This was posted by <@${result.user}> ${days} ago.`);
+                await message.reply(
+                  `old! This was posted by <@${result.user}> ${days} ago.`,
+                );
               } catch (e) {
                 console.error(e);
               }

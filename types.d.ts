@@ -1,4 +1,8 @@
-import type { Collection, ChatInputCommandInteraction, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import type {
+  Collection,
+  ChatInputCommandInteraction,
+  SlashCommandOptionsOnlyBuilder,
+} from "discord.js";
 
 export interface SlashCommand {
   data: SlashCommandOptionsOnlyBuilder;

@@ -1,5 +1,12 @@
 import { formatDistanceToNow } from "date-fns";
-import { doc, updateDoc, getDoc, setDoc, getFirestore, increment } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  getDoc,
+  setDoc,
+  getFirestore,
+  increment,
+} from "firebase/firestore";
 import { SlashCommandBuilder } from "discord.js";
 import type { SlashCommand } from "../types.d.ts";
 
@@ -12,8 +19,12 @@ const command: SlashCommand = {
       no: "snill",
     })
     .setDescription("Check or set someones positive karma")
-    .addUserOption((option) => option.setName("user").setDescription("the good user").setRequired(true))
-    .addStringOption((option) => option.setName("reason").setDescription("set new reason")),
+    .addUserOption((option) =>
+      option.setName("user").setDescription("the good user").setRequired(true),
+    )
+    .addStringOption((option) =>
+      option.setName("reason").setDescription("set new reason"),
+    ),
   async execute(interaction) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");
@@ -26,7 +37,13 @@ const command: SlashCommand = {
       if (user!.id === interaction.user.id) {
         await interaction.reply("Tsk, tsk! You cannot /good yourself. 👼");
       } else {
-        const docRef = doc(db, interaction.guildId!, "counters", "good", user!.id);
+        const docRef = doc(
+          db,
+          interaction.guildId!,
+          "counters",
+          "good",
+          user!.id,
+        );
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -52,17 +69,27 @@ const command: SlashCommand = {
         await interaction.reply("Done! 👼");
       }
     } else {
-      const docRef = doc(db, interaction.guildId!, "counters", "good", user!.id);
+      const docRef = doc(
+        db,
+        interaction.guildId!,
+        "counters",
+        "good",
+        user!.id,
+      );
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         const result = docSnap.data();
-        const days = formatDistanceToNow(result.lastModified.toDate(), { includeSeconds: true });
+        const days = formatDistanceToNow(result.lastModified.toDate(), {
+          includeSeconds: true,
+        });
         await interaction.reply(
           `${users?.nickname ?? user!.displayName} was last good ${days} ago; "${result.reason}" –${result.author}.`,
         );
       } else {
-        await interaction.reply(`${users?.nickname ?? user!.displayName} has no recorded good :/`);
+        await interaction.reply(
+          `${users?.nickname ?? user!.displayName} has no recorded good :/`,
+        );
       }
     }
   },

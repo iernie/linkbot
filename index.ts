@@ -39,14 +39,24 @@ const __dirname = path.dirname(__filename); // get the name of the directory
   getFirestore(app);
 
   try {
-    await signInWithEmailAndPassword(getAuth(app), process.env.email!, process.env.password!);
+    await signInWithEmailAndPassword(
+      getAuth(app),
+      process.env.email!,
+      process.env.password!,
+    );
     console.log("Logged into firebase");
   } catch (error) {
     console.error(error);
   }
 
   const client = new Client({
-    partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.ThreadMember, Partials.User],
+    partials: [
+      Partials.Message,
+      Partials.Channel,
+      Partials.Reaction,
+      Partials.ThreadMember,
+      Partials.User,
+    ],
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
@@ -66,7 +76,9 @@ const __dirname = path.dirname(__filename); // get the name of the directory
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
     } else {
-      console.error(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+      console.error(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+      );
     }
   }
 

@@ -1,5 +1,11 @@
 import { isAfter, isEqual, startOfMinute } from "date-fns";
-import { doc, getFirestore, collection, deleteDoc, onSnapshot } from "firebase/firestore";
+import {
+  doc,
+  getFirestore,
+  collection,
+  deleteDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { Events, Client, TextChannel } from "discord.js";
 import * as cron from "node-cron";
 import type { BotEvent } from "../types.d.ts";
@@ -10,7 +16,13 @@ const event: BotEvent<Client> = {
   name: Events.ClientReady,
   once: true,
   async execute(client) {
-    let data: Array<{ id: string; when: Date; channelId: string; user: string; what: string }> = [];
+    let data: Array<{
+      id: string;
+      when: Date;
+      channelId: string;
+      user: string;
+      what: string;
+    }> = [];
 
     onSnapshot(collection(db, "reminders"), (querySnapshot) => {
       data = [];
@@ -34,7 +46,9 @@ const event: BotEvent<Client> = {
         ) {
           try {
             const channel = await client.channels.fetch(data.channelId);
-            await (channel as TextChannel)?.send(`<@${data.user}>: ${data.what}`);
+            await (channel as TextChannel)?.send(
+              `<@${data.user}>: ${data.what}`,
+            );
           } catch (e) {
             console.error(`Something went wrong when sending reminder: ${e}`);
           }
