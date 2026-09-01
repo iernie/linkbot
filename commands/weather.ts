@@ -14,14 +14,20 @@ const command: SlashCommand = {
   async execute(interaction) {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${interaction.options.getString("location")!.trim().replace(" ", "+")}&format=json`,
-    );
-    const location = (await response.json()) as [
       {
-        lat: string;
-        lon: string;
-        city: string;
+        headers: { "User-Agent": "linkbot (a discord bot)" },
       },
-    ];
+    );
+    const location = (await response.json()) as Array<{
+      lat: string;
+      lon: string;
+      address?: { city?: string };
+    }>;
+
+    if (!response.ok || !location || location.length === 0) {
+      await interaction.reply("🤷");
+      return;
+    }
 
     const data = (await fetch(
       `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location[0].lat}&lon=${location[0].lon}`,
@@ -43,8 +49,8 @@ const command: SlashCommand = {
       data.properties.timeseries.length > 0
     ) {
       const city =
-        location[0].city !== undefined
-          ? location[0].city
+        location[0]?.address?.city !== undefined
+          ? location[0].address.city
           : interaction.options.getString("location")!.trim();
       await interaction.reply(
         `${city}: ${data.properties.timeseries[0].data.instant.details.air_temperature}°C`,

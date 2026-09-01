@@ -1,5 +1,5 @@
 import { addDoc, getFirestore, collection } from "firebase/firestore";
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import * as chrono from "chrono-node";
 import { formatDistanceToNow } from "date-fns";
 import type { SlashCommand } from "../types.d.ts";
@@ -29,7 +29,7 @@ const command: SlashCommand = {
     if (!when) {
       await interaction.reply({
         content: "I did not understand when you wanted it",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else {
       await addDoc(collection(db, "reminders"), {
