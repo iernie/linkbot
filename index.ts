@@ -20,7 +20,13 @@ Sentry.init({
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdirSync } from "node:fs";
-import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
+import {
+  Client,
+  Collection,
+  GatewayIntentBits,
+  Partials,
+  Status,
+} from "discord.js";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -29,6 +35,26 @@ import type { BotEvent, SlashCommand } from "./types.d.ts";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
+
+// Exit the process so Fly's restart policy takes over. Fly only restarts a
+// machine when the process actually exits, so anything fatal must kill it.
+let shuttingDown = false;
+const fatal = async (reason: string, error?: unknown) => {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.error(`FATAL: ${reason}`, error ?? "");
+  if (error) Sentry.captureException(error);
+  else Sentry.captureMessage(`FATAL: ${reason}`, "fatal");
+  try {
+    await Sentry.flush(2000);
+  } catch {
+    // ignore
+  }
+  process.exit(1);
+};
+
+process.on("uncaughtException", (error) => void fatal("uncaughtException", error));
+process.on("unhandledRejection", (error) => void fatal("unhandledRejection", error));
 
 (async () => {
   const app = initializeApp({
@@ -46,7 +72,8 @@ const __dirname = path.dirname(__filename); // get the name of the directory
     );
     console.log("Logged into firebase");
   } catch (error) {
-    console.error(error);
+    await fatal("could not log into firebase", error);
+    return;
   }
 
   const client = new Client({
@@ -67,6 +94,44 @@ const __dirname = path.dirname(__filename); // get the name of the directory
     ],
   });
   client.commands = new Collection<string, SlashCommand>();
+
+  const shardStuckTimeouts = new Map<number, NodeJS.Timeout>();
+  const STUCK_TIMEOUT_MS = 60_000;
+  client.on("shardReady", (shardId) => {
+    const timeout = shardStuckTimeouts.get(shardId);
+    if (timeout) {
+      clearTimeout(timeout);
+      shardStuckTimeouts.delete(shardId);
+    }
+  });
+  setInterval(() => {
+    if (client.ws.shards.size === 0) return;
+    for (const [, shard] of client.ws.shards) {
+      if (shard.status === Status.Ready) continue;
+
+      if (!shardStuckTimeouts.has(shard.id)) {
+        shardStuckTimeouts.set(
+          shard.id,
+          setTimeout(() => {
+            console.error(
+              `Shard ${shard.id} not ready for ${STUCK_TIMEOUT_MS}ms; exiting so Fly restarts`,
+            );
+            process.exit(1);
+          }, STUCK_TIMEOUT_MS),
+        );
+      }
+    }
+  }, 15_000);
+
+  client.on("invalidated", () => {
+    void fatal("session invalidated by Discord");
+  });
+  client.on("shardDisconnect", (event, shardId) => {
+    void fatal(
+      `shard ${shardId} disconnected (code ${event.code}) and will not reconnect`,
+    );
+  });
+
 
   const commandPath = path.join(__dirname, "commands");
   const commandFiles = readdirSync(commandPath);
@@ -94,5 +159,9 @@ const __dirname = path.dirname(__filename); // get the name of the directory
     }
   }
 
-  client.login(process.env.token!);
+  try {
+    await client.login(process.env.token!);
+  } catch (error) {
+    await fatal("could not log into Discord", error);
+  }
 })();
